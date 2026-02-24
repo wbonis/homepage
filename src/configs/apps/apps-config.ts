@@ -1,23 +1,18 @@
 import { create_app_config } from '🍎/helpers/create-app-config.ts';
 
+const finder = create_app_config({
+	title: 'Finder',
+	resizable: true,
+	height: 600,
+	width: 900,
+});
+
 const wallpapers = create_app_config({
 	title: 'Wallpapers',
 	resizable: true,
-
 	height: 600,
 	width: 800,
-
 	dock_breaks_before: true,
-});
-
-const calculator = create_app_config({
-	title: 'Calculator',
-
-	expandable: true,
-	resizable: false,
-
-	height: 250 * 1.414,
-	width: 250,
 });
 
 const calendar = create_app_config({
@@ -25,79 +20,90 @@ const calendar = create_app_config({
 	resizable: true,
 });
 
-const vscode = create_app_config({
-	title: 'VSCode',
-	resizable: true,
+const calculator = create_app_config({
+	title: 'Calculator',
+	expandable: true,
+	resizable: false,
+	height: 250 * 1.414,
+	width: 250,
+});
 
+const aboutMe = create_app_config({
+	title: 'About Me',
+	resizable: true,
 	height: 600,
 	width: 800,
 });
 
-const finder = create_app_config({
-	title: 'Finder',
+const projects = create_app_config({
+	title: 'Projects',
 	resizable: true,
+	height: 650,
+	width: 900,
+});
 
-	// dockBreaksBefore: true,
-	should_open_window: false,
+const contact = create_app_config({
+	title: 'Contact',
+	resizable: true,
+	height: 500,
+	width: 700,
+});
+
+const resume = create_app_config({
+	title: 'Resume',
+	resizable: true,
+	height: 700,
+	width: 600,
+});
+
+const terminal = create_app_config({
+	title: 'Terminal',
+	resizable: true,
+	height: 500,
+	width: 700,
 });
 
 const safari = create_app_config({
 	title: 'Safari',
 	resizable: true,
+	height: 700,
+	width: 1000,
 });
 
-const systemPreferences = create_app_config({
-	title: 'System Preferences',
+const blog = create_app_config({
+	title: 'Stylite Blog',
 	resizable: true,
-});
-
-const purusTwitter = create_app_config({
-	title: `About the Developer`,
-	resizable: true,
-
-	dock_breaks_before: true,
-
 	height: 600,
-	width: 800,
+	width: 700,
+});
+
+const github = create_app_config({
+	title: 'GitHub',
+	resizable: true,
+	height: 600,
+	width: 900,
 });
 
 const viewSource = create_app_config({
 	title: `View Source`,
 	resizable: true,
-
 	should_open_window: false,
-	external_action: () => window.open('https://github.com/puruvj/macos-web', '_blank'),
-});
-
-const vercel = create_app_config({
-	title: `Powered by Vercel`,
-	resizable: true,
-
-	should_open_window: false,
-	external_action: () =>
-		window.open('https://vercel.com/?utm_source=purus-projects&utm_campaign=oss', '_blank'),
-
+	external_action: () => window.open('https://github.com/WBonis', '_blank'),
 	dock_breaks_before: true,
-});
-
-const appstore = create_app_config({
-	title: 'App Store',
-	resizable: true,
 });
 
 export const apps_config = {
 	finder,
-	wallpapers,
-	calculator,
+	'about-me': aboutMe,
+	projects,
+	contact,
+	resume,
+	terminal,
+	safari,
+	blog,
+	github,
 	calendar,
-	vscode,
-	appstore,
-	// safari,
-
-	// 'system-preferences': systemPreferences,
-
-	'purus-twitter': purusTwitter,
+	calculator,
+	wallpapers,
 	'view-source': viewSource,
-
-	vercel,
 };

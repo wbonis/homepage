@@ -31,9 +31,14 @@
 
 	let windowEl = $state<HTMLElement>();
 
-	const { height, width } = apps_config[app_id];
+	const { height, width, resizable } = apps_config[app_id];
 
 	const remModifier = +height * 1.2 >= window.innerHeight ? 24 : 16;
+
+	// Clamp height to available viewport (minus top bar)
+	const maxHeightRem = (window.innerHeight - 28) / 16;
+	const rawHeightRem = +height / remModifier;
+	const clampedHeightRem = Math.min(rawHeightRem, maxHeightRem);
 
 	const randX = rand_int(-600, 600);
 	const randY = rand_int(-100, 100);
@@ -89,7 +94,7 @@
 			windowEl.style.transform = minimized_transform;
 
 			windowEl.style.width = `${+width / remModifier}rem`;
-			windowEl.style.height = `${+height / remModifier}rem`;
+			windowEl.style.height = `${clampedHeightRem}rem`;
 		}
 
 		is_maximized = !is_maximized;
@@ -115,6 +120,33 @@
 		apps.is_being_dragged = false;
 	}
 
+	function onResizeStart(e: PointerEvent) {
+		if (!resizable) return;
+		e.preventDefault();
+		e.stopPropagation();
+		focusApp();
+
+		const startX = e.clientX;
+		const startY = e.clientY;
+		const startW = windowEl.offsetWidth;
+		const startH = windowEl.offsetHeight;
+
+		function onPointerMove(ev: PointerEvent) {
+			const newW = Math.max(240, startW + (ev.clientX - startX));
+			const newH = Math.max(160, startH + (ev.clientY - startY));
+			windowEl.style.width = `${newW}px`;
+			windowEl.style.height = `${newH}px`;
+		}
+
+		function onPointerUp() {
+			window.removeEventListener('pointermove', onPointerMove);
+			window.removeEventListener('pointerup', onPointerUp);
+		}
+
+		window.addEventListener('pointermove', onPointerMove);
+		window.addEventListener('pointerup', onPointerUp);
+	}
+
 	onMount(() => windowEl?.focus());
 </script>
 
@@ -124,8 +156,9 @@
 	class="container"
 	class:dark={preferences.theme.scheme === 'dark'}
 	class:active={apps.active === app_id}
+	class:resizable
 	style:width="{+width / remModifier}rem"
-	style:height="{+height / remModifier}rem"
+	style:height="{clampedHeightRem}rem"
 	style:z-index={apps.z_indices[app_id]}
 	tabindex="-1"
 	bind:this={windowEl}
@@ -145,6 +178,11 @@
 	</div>
 
 	<AppNexus {app_id} is_being_dragged={apps.is_being_dragged} />
+
+	{#if resizable}
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="resize-handle" onpointerdown={onResizeStart}></div>
+	{/if}
 </section>
 
 <style>
@@ -172,6 +210,10 @@
 			--elevated-shadow: 0px 8.5px 10px rgba(0, 0, 0, 0.28), 0px 68px 80px rgba(0, 0, 0, 0.56);
 		}
 
+		&.resizable {
+			overflow: hidden;
+		}
+
 		&.dark {
 			& > :global(section),
 			& > :global(div) {
@@ -191,5 +233,15 @@
 
 		/* // Necessary, as `.container` tries to apply shadow on it */
 		box-shadow: none !important;
+	}
+
+	.resize-handle {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		width: 16px;
+		height: 16px;
+		cursor: nwse-resize;
+		z-index: 10;
 	}
 </style>

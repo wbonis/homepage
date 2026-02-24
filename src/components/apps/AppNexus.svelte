@@ -10,13 +10,45 @@
 	} = $props();
 </script>
 
-{#if app_id === 'calendar'}
+{#if app_id === 'finder'}
+	{#await import('./Finder/Finder.svelte') then module}
+		<module.default />
+	{/await}
+{:else if app_id === 'about-me'}
+	{#await import('./AboutMe/AboutMe.svelte') then { default: AboutMe }}
+		<AboutMe />
+	{/await}
+{:else if app_id === 'projects'}
+	{#await import('./Projects/Projects.svelte') then { default: Projects }}
+		<Projects />
+	{/await}
+{:else if app_id === 'contact'}
+	{#await import('./Contact/Contact.svelte') then { default: Contact }}
+		<Contact />
+	{/await}
+{:else if app_id === 'resume'}
+	{#await import('./Resume/Resume.svelte') then { default: Resume }}
+		<Resume />
+	{/await}
+{:else if app_id === 'terminal'}
+	{#await import('./Terminal/Terminal.svelte') then { default: Terminal }}
+		<Terminal />
+	{/await}
+{:else if app_id === 'safari'}
+	{#await import('./Safari/Safari.svelte') then { default: Safari }}
+		<Safari />
+	{/await}
+{:else if app_id === 'blog'}
+	{#await import('./Blog/Blog.svelte') then { default: Blog }}
+		<Blog />
+	{/await}
+{:else if app_id === 'github'}
+	{#await import('./GitHub/GitHub.svelte') then { default: GitHub }}
+		<GitHub />
+	{/await}
+{:else if app_id === 'calendar'}
 	{#await import('./Calendar/Calendar.svelte') then { default: Calendar }}
 		<Calendar />
-	{/await}
-{:else if app_id === 'vscode'}
-	{#await import('./VSCode/VSCode.svelte') then { default: VSCode }}
-		<VSCode {is_being_dragged} />
 	{/await}
 {:else if app_id === 'calculator'}
 	{#await import('./Calculator/Calculator.svelte') then { default: Calculator }}
@@ -25,10 +57,6 @@
 {:else if app_id === 'wallpapers'}
 	{#await import('./WallpaperApp/WallpaperSelectorApp.svelte') then { default: WallpaperSelector }}
 		<WallpaperSelector />
-	{/await}
-{:else if app_id === 'purus-twitter'}
-	{#await import('./PurusProfile/PurusProfile.svelte') then { default: PurusProfile }}
-		<PurusProfile />
 	{/await}
 {:else}
 	{#await import('./AppStore/AppStore.svelte') then { default: AppStore }}

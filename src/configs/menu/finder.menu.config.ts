@@ -2,18 +2,17 @@ import { create_menu_config } from '🍎/helpers/create-menu-config';
 
 export const finder_menu_config = create_menu_config({
 	default: {
-		title: 'Finder',
+		title: 'WBonis',
 		menu: {
-			'about-finder': {
-				title: 'About Finder',
+			'about-site': {
+				title: 'About This Site',
 				breakAfter: true,
 			},
-			preferences: {
-				title: 'Preferences',
-				breakAfter: true,
+			'contact-me': {
+				title: 'Contact Me',
 			},
-			'empty-trash': {
-				title: 'Empty Trash',
+			'view-resume': {
+				title: 'View Resume',
 				breakAfter: true,
 			},
 			'hide-finder': {

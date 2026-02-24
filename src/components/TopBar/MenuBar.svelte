@@ -1,8 +1,28 @@
 <script lang="ts">
-	import AppleIcon from '~icons/mdi/apple';
+	import AppleIcon from '~icons/mdi/laptop';
 	import { click_outside, elevation, focus_outside } from '🍎/actions';
 	import { menubar_state } from '🍎/state/menubar.svelte';
+	import { apps } from '🍎/state/apps.svelte';
+	import type { AppID } from '🍎/state/apps.svelte';
 	import Menu from './Menu.svelte';
+
+	function handle_menu_action(key: string) {
+		menubar_state.active = '';
+
+		const action_map: Record<string, () => void> = {
+			'about-site': () => open_app('about-me'),
+			'contact-me': () => open_app('contact'),
+			'view-resume': () => open_app('resume'),
+			'new-finder-window': () => open_app('finder'),
+		};
+
+		action_map[key]?.();
+	}
+
+	function open_app(id: AppID) {
+		apps.open[id] = true;
+		apps.active = id;
+	}
 </script>
 
 <div
@@ -35,7 +55,7 @@
 				style:visibility={menubar_state.active === menuID ? 'visible' : 'hidden'}
 				use:elevation={'menubar-menu-parent'}
 			>
-				<Menu menu={menuConfig.menu} />
+				<Menu menu={menuConfig.menu} onaction={handle_menu_action} />
 			</div>
 		</div>
 	{/each}

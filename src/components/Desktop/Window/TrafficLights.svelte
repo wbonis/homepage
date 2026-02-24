@@ -65,6 +65,14 @@
 		box-shadow: 0 0 0 0.5px var(--border-color);
 
 		transition: transform 100ms ease-in;
+
+		position: relative;
+
+		&::before {
+			content: '';
+			position: absolute;
+			inset: -0.4rem;
+		}
 	}
 
 	.close-light {

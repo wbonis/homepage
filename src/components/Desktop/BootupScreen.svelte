@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { quintInOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
-	import AppleIcon from '~icons/mdi/apple';
+	import LaptopIcon from '~icons/mdi/laptop';
 	import { elevation } from '🍎/actions';
 	import { fade_out } from '🍎/helpers/fade.ts';
 	import { sleep } from '🍎/helpers/sleep';
@@ -19,7 +19,7 @@
 
 {#if !(hidden_splash_screen || import.meta.env.DEV)}
 	<div out:fade_out={{ duration: 500 }} class="splash-screen" use:elevation={'bootup-screen'}>
-		<AppleIcon />
+		<LaptopIcon />
 
 		<div
 			class="progress"

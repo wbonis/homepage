@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(git clone https://github.com/PuruVJ/macos-web.git .)",
+      "Bash(corepack enable)",
+      "Bash(pnpm install)",
+      "mcp__Claude_Preview__preview_start",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:blog.stylite.de)",
+      "Bash(cwebp -q 80 /Users/bonis/src/macosx-homepage/public/app-icons/blog/256.png -o /Users/bonis/src/macosx-homepage/public/app-icons/blog/256.webp)",
+      "Bash(cwebp -q 80 /Users/bonis/src/macosx-homepage/public/app-icons/blog/128.png -o /Users/bonis/src/macosx-homepage/public/app-icons/blog/128.webp)",
+      "Bash(pnpm build)"
+    ]
+  }
+}
