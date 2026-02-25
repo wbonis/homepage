@@ -4,7 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A macOS desktop experience recreated in the browser as a personal portfolio site. Built with **Svelte 5** (runes), **TypeScript**, and **Vite**. Deployed on Vercel/Cloudflare Pages.
+A macOS desktop experience recreated in the browser as a personal portfolio site. Built with **Svelte 5** (runes), **TypeScript**, and **Vite**. Hosted on **Cloudflare Pages** under **https://www.bonis.de**.
+
+- **GitHub:** https://github.com/wbonis/homepage
+- **LinkedIn:** https://www.linkedin.com/in/wbonis/
+
+## Contact
+
+- **Private:** bonis@bonis.de
+- **Business:** wb@stylite.de
 
 ## Commands
 
@@ -43,6 +51,15 @@ Reusable Svelte actions: `click-outside`, `focus-outside`, `elevation`, `trap-fo
 ### Helpers (`src/helpers/`)
 Small utilities: `create-app-config`, `create-menu-config`, `fade`, `sleep`, `random`.
 
+## Custom Vite Plugins
+
+- **`prefetch-plugin.ts`** — Injects `<link rel="prefetch">` tags for all build chunks (excluding `.webp`) into `index.html` at build time
+- **`blog-seo-plugin.ts`** — Fetches blog posts from `https://blog.stylite.de/blog/index.xml` (RSS) at build time, injects them as `<noscript>` HTML for SEO, and generates `sitemap.xml`
+
+## Images
+
+Wallpapers and assets are optimized via `vite-imagetools`. Import images with query params (e.g. `?w=800&format=webp`) to get optimized variants at build time.
+
 ## Key Conventions
 
 - **Path alias:** `🍎/*` resolves to `./src/*` (configured in tsconfig and Vite)
@@ -54,3 +71,4 @@ Small utilities: `create-app-config`, `create-menu-config`, `fade`, `sleep`, `ra
 - **PWA:** Configured via `vite-plugin-pwa` with workbox service worker
 - **Node version:** 20 (see `.node-version`)
 - **Package manager:** pnpm 10.12.3
+- **Browser targets:** `defaults, not IE 11, not IE_Mob 11, not dead` (via browserslist + Lightning CSS)
