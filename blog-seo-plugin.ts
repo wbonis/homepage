@@ -133,30 +133,17 @@ ${items}
 				</section>`;
 }
 
-function buildSitemapXml(posts: BlogPost[]): string {
-	const blogEntries = posts
-		.map(
-			(p) => `	<url>
-		<loc>${p.url}</loc>${p.date ? `\n\t\t<lastmod>${formatDate(p.date)}</lastmod>` : ''}
-		<changefreq>monthly</changefreq>
-		<priority>0.6</priority>
-	</url>`,
-		)
-		.join('\n');
+function buildSitemapXml(): string {
+	const today = new Date().toISOString().split('T')[0];
 
 	return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
 		<loc>https://www.bonis.de/</loc>
+		<lastmod>${today}</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
 	</url>
-	<url>
-		<loc>https://blog.stylite.de/blog/</loc>
-		<changefreq>weekly</changefreq>
-		<priority>0.8</priority>
-	</url>
-${blogEntries}
 </urlset>
 `;
 }
@@ -205,7 +192,7 @@ export function blogSeo(): Plugin {
 		},
 
 		generateBundle() {
-			const sitemap = buildSitemapXml(blogPosts);
+			const sitemap = buildSitemapXml();
 
 			this.emitFile({
 				type: 'asset',
