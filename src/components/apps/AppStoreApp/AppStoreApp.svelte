@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { trackEvent } from '🍎/helpers/tracking';
 	import { preferences } from '🍎/state/preferences.svelte.ts';
 	import GlobeIcon from '~icons/mdi/web';
 	import GithubIcon from '~icons/mdi/github';
@@ -22,6 +23,7 @@
 		if (e.key === konami_code[konami_progress]) {
 			konami_progress++;
 			if (konami_progress === konami_code.length) {
+				trackEvent('EasterEgg', 'found', 'konami-code');
 				show_nyan = true;
 				konami_progress = 0;
 				setTimeout(() => (show_nyan = false), 5000);
@@ -35,6 +37,7 @@
 		e.stopPropagation();
 		e.preventDefault();
 		download_clicks[id] = (download_clicks[id] || 0) + 1;
+		trackEvent('AppStore', 'download', id);
 		window.open(url, '_blank');
 	}
 
@@ -163,7 +166,7 @@
 				<button
 					class="nav-btn"
 					class:active={active_category === cat.id}
-					onclick={() => (active_category = cat.id)}
+					onclick={() => { active_category = cat.id; trackEvent('AppStore', 'category_changed', cat.id); }}
 				>
 					<cat.icon /> {cat.label}
 				</button>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { trackEvent } from '🍎/helpers/tracking';
 	import RssIcon from '~icons/mdi/rss';
 	import OpenIcon from '~icons/mdi/open-in-new';
 	import RefreshIcon from '~icons/mdi/refresh';
@@ -59,6 +60,7 @@
 	fetchFeed();
 
 	function openBlog() {
+		trackEvent('Blog', 'open_external', 'https://blog.stylite.de/blog/');
 		window.open('https://blog.stylite.de/blog/', '_blank');
 	}
 </script>
@@ -74,7 +76,7 @@
 			<h2>Stylite AG Blog</h2>
 		</div>
 		<div class="toolbar-right">
-			<button class="icon-btn" onclick={fetchFeed} title="Aktualisieren">
+			<button class="icon-btn" onclick={() => { trackEvent('Blog', 'refresh'); fetchFeed(); }} title="Aktualisieren">
 				<RefreshIcon />
 			</button>
 			<button class="open-btn" onclick={openBlog}>

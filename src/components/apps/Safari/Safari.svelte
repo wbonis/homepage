@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { trackEvent } from '🍎/helpers/tracking';
+
 	let url = $state('https://stylite.de');
 	let inputUrl = $state('https://stylite.de');
 	let loading = $state(true);
@@ -8,6 +10,7 @@
 		if (!target.startsWith('http')) {
 			target = 'https://' + target;
 		}
+		trackEvent('Safari', 'navigate', target);
 		url = target;
 		loading = true;
 	}

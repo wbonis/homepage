@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { trackEvent } from '🍎/helpers/tracking';
 	import FolderIcon from '~icons/mdi/folder';
 	import RepoIcon from '~icons/mdi/source-repository';
 	import StarIcon from '~icons/mdi/star';
@@ -96,6 +97,7 @@
 	}
 
 	function openRepo(url: string) {
+		trackEvent('GitHub', 'repo_opened', url);
 		window.open(url, '_blank');
 	}
 </script>

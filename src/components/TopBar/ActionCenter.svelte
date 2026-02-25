@@ -6,6 +6,7 @@
 	import TransitionMaskedIcon from '~icons/mdi/transition-masked';
 	import NotchIcon from '~icons/pepicons/smartphone-notch';
 
+	import { trackEvent } from '🍎/helpers/tracking';
 	import { colors } from '🍎/configs/theme/colors.config';
 	import { wallpapers_config } from '🍎/configs/wallpapers/wallpaper.config';
 	import { apps } from '🍎/state/apps.svelte.ts';
@@ -31,14 +32,17 @@
 		}
 
 		preferences.theme.scheme = preferences.theme.scheme === 'light' ? 'dark' : 'light';
+		trackEvent('Preference', 'theme_toggled', preferences.theme.scheme);
 	}
 
 	function toggleNotch() {
 		should_show_notch.value = !should_show_notch.value;
+		trackEvent('Preference', 'notch_toggled', should_show_notch.value ? 'on' : 'off');
 	}
 
 	function toggleMotionPreference() {
 		preferences.reduced_motion = !preferences.reduced_motion;
+		trackEvent('Preference', 'animations_toggled', preferences.reduced_motion ? 'off' : 'on');
 	}
 
 	function openWallpapersApp() {
@@ -101,7 +105,7 @@
 						<button
 							style:--color-hsl={hsl}
 							style:--color-contrast-hsl={contrastHsl}
-							onclick={() => (preferences.theme.primaryColor = colorID)}
+							onclick={() => { preferences.theme.primaryColor = colorID; trackEvent('Preference', 'color_changed', colorID); }}
 						>
 							{#if preferences.theme.primaryColor === colorID}
 								<CheckedIcon />

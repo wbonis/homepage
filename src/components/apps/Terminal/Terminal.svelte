@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { tick } from 'svelte';
+	import { trackEvent } from '🍎/helpers/tracking';
 
 	interface HistoryEntry {
 		command: string;
@@ -77,12 +78,15 @@ LinkedIn: linkedin.com/in/wbonis`,
 			if (cmd === '') {
 				output = '';
 			} else if (cmd === 'clear') {
+				trackEvent('Terminal', 'command', 'clear');
 				history = [];
 				currentInput = '';
 				return;
 			} else if (commands[cmd]) {
+				trackEvent('Terminal', 'command', cmd);
 				output = commands[cmd]();
 			} else {
+				trackEvent('Terminal', 'command_unknown', cmd);
 				output = `zsh: command not found: ${cmd}\nType "help" for available commands.`;
 			}
 

@@ -16,6 +16,7 @@
 	import { apps_config } from '🍎/configs/apps/apps-config.ts';
 	import { rand_int } from '🍎/helpers/random.ts';
 	import { sleep } from '🍎/helpers/sleep';
+	import { trackEvent } from '🍎/helpers/tracking';
 	import { apps, type AppID } from '🍎/state/apps.svelte.ts';
 	import { preferences } from '🍎/state/preferences.svelte.ts';
 
@@ -107,6 +108,7 @@
 	}
 
 	function closeApp() {
+		trackEvent('App', 'close', app_id);
 		apps.open[app_id] = false;
 		apps.fullscreen[app_id] = false;
 	}

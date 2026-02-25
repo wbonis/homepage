@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { trackEvent } from '🍎/helpers/tracking';
 	import { preferences } from '🍎/state/preferences.svelte.ts';
 	import EmailIcon from '~icons/mdi/email-outline';
 	import GithubIcon from '~icons/mdi/github';
@@ -13,6 +14,7 @@
 
 	function handleSubmit(e: Event) {
 		e.preventDefault();
+		trackEvent('Contact', 'form_submitted', subject);
 		// Open mailto link as fallback
 		const mailtoLink = `mailto:contact@wbonis.dev?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`;
 		window.open(mailtoLink);
@@ -33,13 +35,13 @@
 
 	<aside class:light={preferences.theme.scheme === 'light'}>
 		<nav>
-			<button class="subject-btn active" onclick={() => { subject = 'Job Opportunity'; }}>
+			<button class="subject-btn active" onclick={() => { subject = 'Job Opportunity'; trackEvent('Contact', 'subject_selected', 'Job Opportunity'); }}>
 				<EmailIcon /> Job Opportunity
 			</button>
-			<button class="subject-btn" onclick={() => { subject = 'Freelance Work'; }}>
+			<button class="subject-btn" onclick={() => { subject = 'Freelance Work'; trackEvent('Contact', 'subject_selected', 'Freelance Work'); }}>
 				<EmailIcon /> Freelance Work
 			</button>
-			<button class="subject-btn" onclick={() => { subject = 'Just Saying Hi'; }}>
+			<button class="subject-btn" onclick={() => { subject = 'Just Saying Hi'; trackEvent('Contact', 'subject_selected', 'Just Saying Hi'); }}>
 				<EmailIcon /> Just Saying Hi
 			</button>
 

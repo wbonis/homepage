@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { trackEvent } from '🍎/helpers/tracking';
 	import RepoIcon from '~icons/mdi/source-repository';
 	import ArrowLeft from '~icons/mdi/arrow-left';
 
@@ -78,6 +79,7 @@
 	groups.forEach(fetchRepos);
 
 	function openRepo(full_name: string) {
+		trackEvent('VSCode', 'repo_opened', full_name);
 		selectedRepo = full_name;
 	}
 

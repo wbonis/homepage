@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { trackEvent } from '🍎/helpers/tracking';
 	import { wallpapers_config, type WallpaperID } from '🍎/configs/wallpapers/wallpaper.config.ts';
 	import { preferences } from '🍎/state/preferences.svelte.ts';
 
@@ -13,6 +14,7 @@
 	const current_wallpaper_thumb = $derived(`url(${preferences.wallpaper.image})`);
 
 	function change_wallpaper(wallpaperName: WallpaperID) {
+		trackEvent('Preference', 'wallpaper_changed', wallpaperName);
 		preferences.wallpaper.id = wallpaperName;
 	}
 

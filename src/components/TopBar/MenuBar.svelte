@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AppleIcon from '~icons/mdi/apple';
 	import { click_outside, elevation, focus_outside } from '🍎/actions';
+	import { trackEvent } from '🍎/helpers/tracking';
 	import { menubar_state } from '🍎/state/menubar.svelte';
 	import { apps } from '🍎/state/apps.svelte';
 	import type { AppID } from '🍎/state/apps.svelte';
@@ -46,6 +47,7 @@
 			'bring-all-to-front': () => reset_z_indices(),
 		};
 
+		trackEvent('Menu', 'click', key);
 		action_map[key]?.();
 	}
 
@@ -73,6 +75,7 @@
 	];
 
 	function show_clippy() {
+		trackEvent('EasterEgg', 'found', 'clippy');
 		clippy_visible = true;
 	}
 
