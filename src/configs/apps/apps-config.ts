@@ -42,15 +42,22 @@ const projects = create_app_config({
 	width: 900,
 });
 
-const contact = create_app_config({
-	title: 'Contact',
+const mail = create_app_config({
+	title: 'Mail',
 	resizable: true,
 	height: 500,
 	width: 700,
 });
 
-const resume = create_app_config({
-	title: 'Resume',
+const contact = create_app_config({
+	title: 'Contact',
+	resizable: true,
+	height: 500,
+	width: 400,
+});
+
+const notes = create_app_config({
+	title: 'Notes',
 	resizable: true,
 	height: 700,
 	width: 600,
@@ -109,17 +116,18 @@ const viewSource = create_app_config({
 export const apps_config = {
 	finder,
 	'about-me': aboutMe,
-	projects,
 	contact,
-	resume,
+	github,
+	blog,
+	vscode,
+	appstore,
+	projects,
+	mail,
+	notes,
 	terminal,
 	safari,
-	blog,
-	github,
 	calendar,
 	calculator,
 	wallpapers,
-	vscode,
-	appstore,
 	'view-source': viewSource,
 };

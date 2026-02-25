@@ -135,7 +135,7 @@
 			items: [
 				{ name: 'Work', icon: FolderIcon, kind: 'folder', target: 'documents-work' },
 				{ name: 'Personal', icon: FolderIcon, kind: 'folder', target: 'documents-personal' },
-				{ name: 'resume.pdf', icon: FileIcon, kind: 'file', opens: 'resume', preview: '📄 resume.pdf\n\nDoppelklick um den\nResume zu öffnen.' },
+				{ name: 'notes.txt', icon: FileIcon, kind: 'file', opens: 'notes', preview: '📝 notes.txt\n\nDoppelklick um die\nNotes zu öffnen.' },
 				{ name: 'cover-letter.docx', icon: FileIcon, kind: 'file', preview: 'Sehr geehrte Damen und Herren,\n\nhiermit bewerbe ich mich als\nVollzeit-Easter-Egg-Verstecker.\n\nIch bringe 10+ Jahre Erfahrung\nim Verstecken unnötiger Texte\nin Software mit.\n\nMit freundlichen Grüßen' },
 			],
 		},

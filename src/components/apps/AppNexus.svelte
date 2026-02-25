@@ -22,13 +22,17 @@
 	{#await import('./Projects/Projects.svelte') then { default: Projects }}
 		<Projects />
 	{/await}
+{:else if app_id === 'mail'}
+	{#await import('./Mail/Mail.svelte') then { default: Mail }}
+		<Mail />
+	{/await}
 {:else if app_id === 'contact'}
 	{#await import('./Contact/Contact.svelte') then { default: Contact }}
 		<Contact />
 	{/await}
-{:else if app_id === 'resume'}
-	{#await import('./Resume/Resume.svelte') then { default: Resume }}
-		<Resume />
+{:else if app_id === 'notes'}
+	{#await import('./Notes/Notes.svelte') then { default: Notes }}
+		<Notes />
 	{/await}
 {:else if app_id === 'terminal'}
 	{#await import('./Terminal/Terminal.svelte') then { default: Terminal }}

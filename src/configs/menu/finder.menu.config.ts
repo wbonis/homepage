@@ -11,8 +11,8 @@ export const finder_menu_config = create_menu_config({
 			'contact-me': {
 				title: 'Contact Me',
 			},
-			'view-resume': {
-				title: 'View Resume',
+			'view-notes': {
+				title: 'View Notes',
 				breakAfter: true,
 			},
 			'hide-finder': {

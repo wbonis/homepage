@@ -15,7 +15,7 @@
 			// Default menu (WBonis)
 			'about-site': () => open_app('about-me'),
 			'contact-me': () => open_app('contact'),
-			'view-resume': () => open_app('resume'),
+			'view-notes': () => open_app('notes'),
 
 			// File menu
 			'new-finder-window': () => open_app('finder'),
