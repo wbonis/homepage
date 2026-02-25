@@ -23,25 +23,32 @@
 		status = 'idle';
 		errorMessage = '';
 
+		const payload = { name, email, subject, message };
+		console.log('[Contact] Sending...', payload);
+
 		try {
 			const res = await fetch('/api/contact', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name, email, subject, message }),
+				body: JSON.stringify(payload),
 			});
 
+			console.log('[Contact] Response status:', res.status);
 			const data = await res.json();
+			console.log('[Contact] Response body:', data);
 
 			if (!res.ok) {
 				throw new Error(data.error || 'Failed to send message.');
 			}
 
+			console.log('[Contact] Success!');
 			status = 'success';
 			name = '';
 			email = '';
 			subject = '';
 			message = '';
 		} catch (err) {
+			console.error('[Contact] Error:', err);
 			status = 'error';
 			errorMessage = err instanceof Error ? err.message : 'Something went wrong.';
 		} finally {
