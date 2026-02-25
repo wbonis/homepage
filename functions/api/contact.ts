@@ -79,7 +79,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
 		await sendMail(
 			{
-				host: 'mail.stylite.de',
+				host: 'mail.stylite.eu',
 				port: 465,
 				username: env.SMTP_USER,
 				password: env.SMTP_PASS,
