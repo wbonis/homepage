@@ -96,9 +96,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
 		return new Response(JSON.stringify({ ok: true }), { status: 200, headers });
 	} catch (err) {
-		console.error('SMTP send failed:', err);
+		const detail = err instanceof Error ? err.message : String(err);
+		console.error('SMTP send failed:', detail, err);
 		return new Response(
-			JSON.stringify({ error: 'Failed to send email. Please try again later.' }),
+			JSON.stringify({ error: `Failed to send email: ${detail}` }),
 			{ status: 500, headers },
 		);
 	}
