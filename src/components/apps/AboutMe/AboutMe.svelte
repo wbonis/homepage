@@ -61,7 +61,11 @@
 			<span class="skill-tag">Security</span>
 			<span class="skill-tag">Linux</span>
 			<span class="skill-tag">Docker</span>
-			<span class="skill-tag">Kubernetes</span>
+			<span class="skill-tag">ZFS</span>
+			<span class="skill-tag">TrueNAS</span>
+			<span class="skill-tag">Open-E</span>
+			<span class="skill-tag">Virtualisierung</span>
+			<span class="skill-tag">AI</span>
 		</div>
 
 		<br />

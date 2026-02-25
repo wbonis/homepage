@@ -3,7 +3,7 @@
 		{
 			name: 'Cloud Infrastructure Platform',
 			description: 'Scalable multi-cloud infrastructure management platform with automated provisioning and monitoring.',
-			tags: ['AWS', 'Terraform', 'Kubernetes'],
+			tags: ['AWS', 'Terraform', 'Docker'],
 			icon: '🏗️',
 		},
 		{

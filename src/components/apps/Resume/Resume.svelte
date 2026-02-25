@@ -32,7 +32,7 @@
 					<ul>
 						<li>Designed and implemented cloud-native microservices architecture serving 1M+ users</li>
 						<li>Led migration from monolithic to distributed systems, reducing deployment time by 80%</li>
-						<li>Established infrastructure-as-code practices using Terraform and Kubernetes</li>
+						<li>Established infrastructure-as-code practices using Terraform and Docker</li>
 					</ul>
 				</div>
 
@@ -67,7 +67,15 @@
 				<div class="skills-grid">
 					<div>
 						<h4>Infrastructure</h4>
-						<p>AWS, Azure, GCP, Terraform, Kubernetes, Docker, Linux</p>
+						<p>AWS, Azure, GCP, Terraform, Docker, Linux</p>
+					</div>
+					<div>
+						<h4>Storage</h4>
+						<p>ZFS, TrueNAS, Open-E</p>
+					</div>
+					<div>
+						<h4>Virtualisierung</h4>
+						<p>Proxmox, VMware, Docker</p>
 					</div>
 					<div>
 						<h4>Languages</h4>
@@ -80,6 +88,10 @@
 					<div>
 						<h4>Architecture</h4>
 						<p>Microservices, Event-Driven, Domain-Driven Design, CQRS</p>
+					</div>
+					<div>
+						<h4>AI</h4>
+						<p>AI-Benutzer, Prompt Engineering, LLM Integration</p>
 					</div>
 				</div>
 			</div>
