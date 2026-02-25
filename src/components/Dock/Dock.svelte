@@ -104,7 +104,6 @@
 
 		height: 100%;
 		max-width: calc(100vw - 1.6rem);
-		overflow-x: auto;
 
 		display: flex;
 		align-items: flex-end;
