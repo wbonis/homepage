@@ -88,7 +88,7 @@ const viewSource = create_app_config({
 	title: `View Source`,
 	resizable: true,
 	should_open_window: false,
-	external_action: () => window.open('https://github.com/WBonis', '_blank'),
+	external_action: () => window.open('https://github.com/wbonis/homepage', '_blank'),
 	dock_breaks_before: true,
 });
 
