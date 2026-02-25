@@ -34,20 +34,36 @@
 
 	const { height, width, resizable } = apps_config[app_id];
 
-	const remModifier = +height * 1.2 >= window.innerHeight ? 24 : 16;
+	const vw = window.innerWidth;
+	const vh = window.innerHeight;
+	const is_mobile = vw < 768;
+	const is_tablet = vw >= 768 && vw < 1024;
+
+	const remModifier = +height * 1.2 >= vh ? 24 : 16;
 
 	// Clamp height to available viewport (minus top bar)
-	const maxHeightRem = (window.innerHeight - 28) / 16;
+	const maxHeightRem = (vh - 28) / 16;
 	const rawHeightRem = +height / remModifier;
 	const clampedHeightRem = Math.min(rawHeightRem, maxHeightRem);
 
-	const randX = rand_int(-600, 600);
-	const randY = rand_int(-100, 100);
+	// Clamp width to viewport on smaller screens
+	const rawWidthRem = +width / remModifier;
+	const maxWidthRem = (vw - 16) / 16;
+	const clampedWidthRem = is_mobile ? maxWidthRem : Math.min(rawWidthRem, maxWidthRem);
 
-	let defaultPosition = {
-		x: (document.body.clientWidth / 2 + randX) / 2,
-		y: (100 + randY) / 2,
-	};
+	// Reduce random spread on smaller screens, eliminate on mobile
+	const spreadX = is_mobile ? 0 : is_tablet ? 50 : 600;
+	const spreadY = is_mobile ? 0 : is_tablet ? 30 : 100;
+	const randX = rand_int(-spreadX, spreadX);
+	const randY = rand_int(-spreadY, spreadY);
+
+	// On mobile, position at origin (will be maximized). On tablet, center within viewport.
+	let defaultPosition = is_mobile
+		? { x: 0, y: 0 }
+		: {
+				x: Math.max(8, Math.min((vw / 2 + randX) / 2, vw - clampedWidthRem * 16 - 8)),
+				y: Math.max(30, (100 + randY) / 2),
+			};
 
 	const disabledComp = Compartment.of(() => disabled(!dragging_enabled));
 
@@ -94,7 +110,7 @@
 			dragging_enabled = true;
 			windowEl.style.transform = minimized_transform;
 
-			windowEl.style.width = `${+width / remModifier}rem`;
+			windowEl.style.width = `${clampedWidthRem}rem`;
 			windowEl.style.height = `${clampedHeightRem}rem`;
 		}
 
@@ -149,7 +165,19 @@
 		window.addEventListener('pointerup', onPointerUp);
 	}
 
-	onMount(() => windowEl?.focus());
+	onMount(() => {
+		windowEl?.focus();
+
+		// Auto-maximize on mobile
+		if (is_mobile && windowEl) {
+			dragging_enabled = false;
+			is_maximized = true;
+			apps.fullscreen[app_id] = true;
+			windowEl.style.transform = `translate(0px, 0px)`;
+			windowEl.style.width = `100%`;
+			windowEl.style.height = 'calc(100vh - 1.7rem)';
+		}
+	});
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
@@ -159,14 +187,20 @@
 	class:dark={preferences.theme.scheme === 'dark'}
 	class:active={apps.active === app_id}
 	class:resizable
-	style:width="{+width / remModifier}rem"
+	style:width="{clampedWidthRem}rem"
 	style:height="{clampedHeightRem}rem"
 	style:z-index={apps.z_indices[app_id]}
 	tabindex="-1"
 	bind:this={windowEl}
 	{@attach draggable(() => [
 		controls({ allow: ControlFrom.selector('.app-window-drag-handle') }),
-		bounds(BoundsFrom.viewport({ bottom: -6000, top: 27.2, left: -6000, right: -6000 })),
+		bounds(
+			BoundsFrom.viewport(
+				is_tablet
+					? { bottom: -200, top: 27.2, left: -100, right: -100 }
+					: { bottom: -6000, top: 27.2, left: -6000, right: -6000 },
+			),
+		),
 		disabledComp,
 		position({ default: defaultPosition }),
 		events({ onDragStart: onAppDragStart, onDragEnd: onAppDragEnd }),
