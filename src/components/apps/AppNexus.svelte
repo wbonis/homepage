@@ -58,6 +58,10 @@
 	{#await import('./WallpaperApp/WallpaperSelectorApp.svelte') then { default: WallpaperSelector }}
 		<WallpaperSelector />
 	{/await}
+{:else if app_id === 'vscode'}
+	{#await import('./VSCode/VSCode.svelte') then { default: VSCode }}
+		<VSCode {is_being_dragged} />
+	{/await}
 {:else}
 	{#await import('./AppStore/AppStore.svelte') then { default: AppStore }}
 		<AppStore {app_id} />

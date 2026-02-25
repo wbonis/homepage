@@ -4,7 +4,7 @@ export type AppID = keyof typeof apps_config;
 
 export const apps = $state({
 	open: {
-		finder: true,
+		finder: false,
 		'about-me': false,
 		projects: false,
 		contact: false,
@@ -16,7 +16,8 @@ export const apps = $state({
 		calendar: false,
 		calculator: false,
 		wallpapers: false,
-		'view-source': true,
+		vscode: false,
+		'view-source': false,
 	} as Record<AppID, boolean>,
 
 	active: 'finder' satisfies AppID,
@@ -40,6 +41,7 @@ export const apps = $state({
 		calendar: 0,
 		calculator: 0,
 		wallpapers: 0,
+		vscode: 0,
 		'view-source': 0,
 	} as Record<AppID, number>,
 
@@ -58,6 +60,7 @@ export const apps = $state({
 		calendar: false,
 		calculator: false,
 		wallpapers: false,
+		vscode: false,
 		'view-source': false,
 	} as Record<AppID, boolean>,
 });

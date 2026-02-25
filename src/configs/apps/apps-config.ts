@@ -84,6 +84,13 @@ const github = create_app_config({
 	width: 900,
 });
 
+const vscode = create_app_config({
+	title: 'VS Code',
+	resizable: true,
+	height: 700,
+	width: 1000,
+});
+
 const viewSource = create_app_config({
 	title: `View Source`,
 	resizable: true,
@@ -105,5 +112,6 @@ export const apps_config = {
 	calendar,
 	calculator,
 	wallpapers,
+	vscode,
 	'view-source': viewSource,
 };
