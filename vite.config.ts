@@ -7,11 +7,13 @@ import { browserslistToTargets } from 'lightningcss';
 import browserslist from 'browserslist';
 
 import { prefetch } from './prefetch-plugin';
+import { blogSeo } from './blog-seo-plugin';
 
 export default defineConfig({
 	plugins: [
 		svelte(),
 		prefetch(),
+		blogSeo(),
 
 		UnpluginIcons({ autoInstall: true, compiler: 'svelte' }),
 		VitePWA({
