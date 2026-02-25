@@ -2,6 +2,7 @@
  * Minimal SMTP client using Cloudflare Workers connect() TCP API.
  * Sends a single email over an SSL/TLS connection (port 465).
  */
+import { connect } from 'cloudflare:sockets';
 
 interface SmtpOptions {
 	host: string;
@@ -26,8 +27,11 @@ async function readResponse(reader: ReadableStreamDefaultReader<Uint8Array>): Pr
 		const { value, done } = await reader.read();
 		if (done) break;
 		response += decoder.decode(value, { stream: true });
-		// SMTP responses end with \r\n — check if we have a complete line
-		if (response.includes('\r\n')) break;
+		// Multiline SMTP responses use "250-..." for continuation lines
+		// and "250 ..." (space) for the final line. Wait until we have a final line.
+		const lines = response.split('\r\n');
+		const lastComplete = lines.length > 1 ? lines[lines.length - 2] : null;
+		if (lastComplete && lastComplete.length >= 4 && lastComplete[3] === ' ') break;
 	}
 
 	return response.trim();
@@ -43,7 +47,10 @@ async function sendCommand(
 	await writer.write(encoder.encode(command + '\r\n'));
 
 	const response = await readResponse(reader);
-	const code = parseInt(response.substring(0, 3), 10);
+	// For multiline responses, parse the code from the last line
+	const lines = response.split('\r\n').filter(Boolean);
+	const lastLine = lines[lines.length - 1] || response;
+	const code = parseInt(lastLine.substring(0, 3), 10);
 
 	if (code !== expectedCode) {
 		throw new Error(`SMTP error: expected ${expectedCode}, got "${response}"`);
@@ -61,7 +68,6 @@ function escapeHeader(value: string): string {
 }
 
 export async function sendMail(smtp: SmtpOptions, mail: MailOptions): Promise<void> {
-	// @ts-expect-error — connect() is a Cloudflare Workers runtime global
 	const socket = connect(`${smtp.host}:${smtp.port}`, { secureTransport: 'on' });
 
 	const writer = socket.writable.getWriter();
