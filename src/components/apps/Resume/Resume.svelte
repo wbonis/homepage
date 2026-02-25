@@ -32,7 +32,7 @@
 					<ul>
 						<li>Designed and implemented cloud-native microservices architecture serving 1M+ users</li>
 						<li>Led migration from monolithic to distributed systems, reducing deployment time by 80%</li>
-						<li>Established infrastructure-as-code practices using Terraform and Docker</li>
+						<li>Established infrastructure-as-code practices using Docker and CI/CD pipelines</li>
 					</ul>
 				</div>
 
@@ -45,7 +45,7 @@
 					<ul>
 						<li>Built CI/CD pipelines reducing release cycles from weeks to hours</li>
 						<li>Implemented monitoring and alerting infrastructure with Prometheus and Grafana</li>
-						<li>Managed AWS and Azure cloud environments with 99.99% uptime SLA</li>
+						<li>Managed Azure cloud environments with 99.99% uptime SLA</li>
 					</ul>
 				</div>
 
@@ -67,7 +67,7 @@
 				<div class="skills-grid">
 					<div>
 						<h4>Infrastructure</h4>
-						<p>AWS, Azure, GCP, Terraform, Docker, Linux</p>
+						<p>Azure, GCP, Docker, Linux</p>
 					</div>
 					<div>
 						<h4>Storage</h4>

@@ -37,7 +37,7 @@ systems since 2017.`,
 
 		skills: () => `Technical Skills
 ━━━━━━━━━━━━━━━━
-Infrastructure : AWS, Azure, GCP, Terraform, Docker
+Infrastructure : Azure, GCP, Docker, Linux
 Storage        : ZFS, TrueNAS, Open-E
 Virtualisierung: Proxmox, VMware, Docker
 Languages      : Go, Python, TypeScript, Rust
@@ -48,7 +48,7 @@ AI             : AI-Benutzer, Prompt Engineering`,
 
 		projects: () => `Projects
 ━━━━━━━━
-[1] Cloud Infrastructure Platform  - AWS/Terraform/Docker
+[1] Cloud Infrastructure Platform  - Cloud/Docker/Linux
 [2] Microservices Framework         - Go/gRPC/Docker
 [3] Security Audit Tool             - Python/CI/CD
 [4] Real-time Monitoring Dashboard  - React/Grafana
