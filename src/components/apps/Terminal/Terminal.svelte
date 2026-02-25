@@ -37,14 +37,14 @@ systems since 2017.`,
 
 		skills: () => `Technical Skills
 ━━━━━━━━━━━━━━━━
-Infrastructure : Azure, GCP, Docker, Linux
+Infrastructure : Docker, Linux
 Storage        : ZFS, TrueNAS, Open-E
 Virtualisierung: Proxmox, VMware, Docker
-Languages      : Go, Python, TypeScript, Rust
-DevOps         : GitLab CI, ArgoCD, Docker
+Languages      : Go, Python, TypeScript, Rust, Perl
+DevOps         : Docker, CI/CD
 Monitoring     : Prometheus, Grafana, ELK
-Architecture   : Microservices, Event-Driven, DDD
-AI             : AI-Benutzer, Prompt Engineering`,
+Architecture   : Systemanalyse, Systemdesign, Microservices, Monitoring, Debugging
+AI             : AI-Benutzer`,
 
 		projects: () => `Projects
 ━━━━━━━━
@@ -53,7 +53,7 @@ AI             : AI-Benutzer, Prompt Engineering`,
 [3] Security Audit Tool             - Python/CI/CD
 [4] Real-time Monitoring Dashboard  - React/Grafana
 [5] API Gateway                     - Rust/Redis/OAuth
-[6] DevOps Pipeline                 - GitLab CI/ArgoCD`,
+[6] DevOps Pipeline                 - CI/CD`,
 
 		contact: () => `Contact Info
 ━━━━━━━━━━━━

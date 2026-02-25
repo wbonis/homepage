@@ -45,7 +45,7 @@
 					<ul>
 						<li>Built CI/CD pipelines reducing release cycles from weeks to hours</li>
 						<li>Implemented monitoring and alerting infrastructure with Prometheus and Grafana</li>
-						<li>Managed Azure cloud environments with 99.99% uptime SLA</li>
+						<li>Managed cloud environments with 99.99% uptime SLA</li>
 					</ul>
 				</div>
 
@@ -67,7 +67,7 @@
 				<div class="skills-grid">
 					<div>
 						<h4>Infrastructure</h4>
-						<p>Azure, GCP, Docker, Linux</p>
+						<p>Docker, Linux</p>
 					</div>
 					<div>
 						<h4>Storage</h4>
@@ -79,19 +79,19 @@
 					</div>
 					<div>
 						<h4>Languages</h4>
-						<p>Go, Python, TypeScript, Rust, Bash</p>
+						<p>Go, Python, TypeScript, Rust, Perl, Bash</p>
 					</div>
 					<div>
 						<h4>Tools</h4>
-						<p>GitLab CI, ArgoCD, Prometheus, Grafana, Vault, Consul</p>
+						<p>Prometheus, Grafana, Vault, Consul</p>
 					</div>
 					<div>
 						<h4>Architecture</h4>
-						<p>Microservices, Event-Driven, Domain-Driven Design, CQRS</p>
+						<p>Systemanalyse, Systemdesign, Microservices, Monitoring, Debugging, CQRS</p>
 					</div>
 					<div>
 						<h4>AI</h4>
-						<p>AI-Benutzer, Prompt Engineering, LLM Integration</p>
+						<p>AI-Benutzer</p>
 					</div>
 				</div>
 			</div>

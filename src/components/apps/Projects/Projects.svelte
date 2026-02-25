@@ -33,7 +33,7 @@
 		{
 			name: 'DevOps Pipeline',
 			description: 'End-to-end CI/CD pipeline with automated testing, deployment, and rollback capabilities.',
-			tags: ['GitLab CI', 'ArgoCD', 'Helm'],
+			tags: ['CI/CD', 'Docker'],
 			icon: '⚙️',
 		},
 	];
