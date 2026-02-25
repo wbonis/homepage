@@ -91,6 +91,13 @@ const vscode = create_app_config({
 	width: 1300,
 });
 
+const appstore = create_app_config({
+	title: 'App Store',
+	resizable: true,
+	height: 650,
+	width: 900,
+});
+
 const viewSource = create_app_config({
 	title: `View Source`,
 	resizable: true,
@@ -113,5 +120,6 @@ export const apps_config = {
 	calculator,
 	wallpapers,
 	vscode,
+	appstore,
 	'view-source': viewSource,
 };

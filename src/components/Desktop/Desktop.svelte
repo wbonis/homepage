@@ -4,6 +4,7 @@
 	import Wallpaper from '../apps/WallpaperApp/Wallpaper.svelte';
 	import BootupScreen from './BootupScreen.svelte';
 	import ContextMenu from './ContextMenu.svelte';
+	import ScreenOverlay from './ScreenOverlay.svelte';
 	import SystemUpdate from './SystemUpdate.svelte';
 	import WindowsArea from './Window/WindowsArea.svelte';
 
@@ -30,6 +31,7 @@
 
 	<Wallpaper />
 	<BootupScreen />
+	<ScreenOverlay />
 	<SystemUpdate />
 
 	<ContextMenu target_element={mainEl} />

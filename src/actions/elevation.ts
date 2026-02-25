@@ -1,5 +1,6 @@
 const z_index_config = {
 	wallpaper: -1,
+	'screen-overlay': 105,
 	'bootup-screen': 110,
 	'context-menu': 100,
 	'window-traffic-lights': 10,

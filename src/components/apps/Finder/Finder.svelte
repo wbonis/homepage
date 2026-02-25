@@ -354,7 +354,7 @@
 					class:active={active_folder === key}
 					onclick={() => sidebar_navigate(key)}
 				>
-					<svelte:component this={entry.icon} />
+					<span class="sidebar-icon"><svelte:component this={entry.icon} /></span>
 					{entry.label}
 				</button>
 			{/each}
@@ -546,9 +546,12 @@
 	}
 
 	.sidebar-item {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1.25rem 1fr;
 		gap: 0.4rem;
 		align-items: center;
+		text-align: left;
+		justify-items: start;
 
 		color: hsla(var(--system-color-dark-hsl), 0.9);
 		font-weight: 400;
@@ -569,9 +572,14 @@
 			color: var(--system-color-primary-contrast);
 		}
 
-		:global(svg) {
-			font-size: 1rem;
-			flex-shrink: 0;
+		.sidebar-icon {
+			display: grid;
+			place-items: center;
+			overflow: hidden;
+
+			:global(svg) {
+				font-size: 1rem;
+			}
 		}
 	}
 

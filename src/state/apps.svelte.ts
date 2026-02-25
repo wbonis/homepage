@@ -17,6 +17,7 @@ export const apps = $state({
 		calculator: false,
 		wallpapers: false,
 		vscode: false,
+		appstore: false,
 		'view-source': false,
 	} as Record<AppID, boolean>,
 
@@ -42,6 +43,7 @@ export const apps = $state({
 		calculator: 0,
 		wallpapers: 0,
 		vscode: 0,
+		appstore: 0,
 		'view-source': 0,
 	} as Record<AppID, number>,
 
@@ -61,6 +63,7 @@ export const apps = $state({
 		calculator: false,
 		wallpapers: false,
 		vscode: false,
+		appstore: false,
 		'view-source': false,
 	} as Record<AppID, boolean>,
 });

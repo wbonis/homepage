@@ -62,6 +62,10 @@
 	{#await import('./VSCode/VSCode.svelte') then { default: VSCode }}
 		<VSCode {is_being_dragged} />
 	{/await}
+{:else if app_id === 'appstore'}
+	{#await import('./AppStoreApp/AppStoreApp.svelte') then { default: AppStoreApp }}
+		<AppStoreApp />
+	{/await}
 {:else}
 	{#await import('./AppStore/AppStore.svelte') then { default: AppStore }}
 		<AppStore {app_id} />
