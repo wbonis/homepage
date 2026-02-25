@@ -5,21 +5,48 @@
 	import GithubIcon from '~icons/mdi/github';
 	import LinkedInIcon from '~icons/mdi/linkedin';
 	import SendIcon from '~icons/mdi/send';
+	import AlertIcon from '~icons/mdi/alert-circle-outline';
 
 	let name = $state('');
 	let email = $state('');
 	let subject = $state('');
 	let message = $state('');
-	let sent = $state(false);
+	let sending = $state(false);
+	let status = $state<'idle' | 'success' | 'error'>('idle');
+	let errorMessage = $state('');
 
-	function handleSubmit(e: Event) {
+	async function handleSubmit(e: Event) {
 		e.preventDefault();
 		trackEvent('Contact', 'form_submitted', subject);
-		// Open mailto link as fallback
-		const mailtoLink = `mailto:contact@wbonis.dev?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`;
-		window.open(mailtoLink);
-		sent = true;
-		setTimeout(() => { sent = false; }, 3000);
+
+		sending = true;
+		status = 'idle';
+		errorMessage = '';
+
+		try {
+			const res = await fetch('/api/contact', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ name, email, subject, message }),
+			});
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				throw new Error(data.error || 'Failed to send message.');
+			}
+
+			status = 'success';
+			name = '';
+			email = '';
+			subject = '';
+			message = '';
+		} catch (err) {
+			status = 'error';
+			errorMessage = err instanceof Error ? err.message : 'Something went wrong.';
+		} finally {
+			sending = false;
+		}
 	}
 
 	function external(node: HTMLAnchorElement) {
@@ -57,32 +84,44 @@
 	</aside>
 
 	<section class="content">
-		{#if sent}
+		{#if status === 'success'}
 			<div class="sent-message">
 				<SendIcon />
-				<h2>Message prepared!</h2>
-				<p>Your email client should have opened.</p>
+				<h2>Message sent!</h2>
+				<p>Thanks for reaching out. I'll get back to you soon.</p>
+				<button class="send-btn" onclick={() => { status = 'idle'; }}>
+					Send another
+				</button>
 			</div>
 		{:else}
 			<form onsubmit={handleSubmit}>
+				{#if status === 'error'}
+					<div class="error-message">
+						<AlertIcon /> {errorMessage}
+					</div>
+				{/if}
 				<div class="field">
 					<label for="name">Name</label>
-					<input id="name" type="text" bind:value={name} placeholder="Your name" required />
+					<input id="name" type="text" bind:value={name} placeholder="Your name" required disabled={sending} />
 				</div>
 				<div class="field">
 					<label for="email">Email</label>
-					<input id="email" type="email" bind:value={email} placeholder="your@email.com" required />
+					<input id="email" type="email" bind:value={email} placeholder="your@email.com" required disabled={sending} />
 				</div>
 				<div class="field">
 					<label for="subject">Subject</label>
-					<input id="subject" type="text" bind:value={subject} placeholder="What's this about?" />
+					<input id="subject" type="text" bind:value={subject} placeholder="What's this about?" disabled={sending} />
 				</div>
 				<div class="field">
 					<label for="message">Message</label>
-					<textarea id="message" bind:value={message} placeholder="Your message..." rows="5" required></textarea>
+					<textarea id="message" bind:value={message} placeholder="Your message..." rows="5" required disabled={sending}></textarea>
 				</div>
-				<button type="submit" class="send-btn">
-					<SendIcon /> Send Message
+				<button type="submit" class="send-btn" disabled={sending}>
+					{#if sending}
+						Sending…
+					{:else}
+						<SendIcon /> Send Message
+					{/if}
 				</button>
 			</form>
 		{/if}
@@ -265,6 +304,28 @@
 		&:hover {
 			opacity: 0.85;
 		}
+	}
+
+	.error-message {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.7rem 1rem;
+		border-radius: 0.5rem;
+		background-color: hsla(0, 70%, 50%, 0.1);
+		color: hsl(0, 70%, 45%);
+		font-size: 0.85rem;
+		font-weight: 500;
+
+		:global(svg) {
+			flex-shrink: 0;
+			font-size: 1.1rem;
+		}
+	}
+
+	.send-btn:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
 	}
 
 	.sent-message {
