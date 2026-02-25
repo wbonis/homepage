@@ -1,6 +1,7 @@
 import { sendMail } from '../../src/helpers/smtp';
 
 interface Env {
+	SMTP_SERVER: string;
 	SMTP_USER: string;
 	SMTP_PASS: string;
 }
@@ -61,7 +62,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 		});
 	}
 
-	if (!env.SMTP_USER || !env.SMTP_PASS) {
+	if (!env.SMTP_SERVER || !env.SMTP_USER || !env.SMTP_PASS) {
 		console.error('SMTP credentials not configured');
 		return new Response(JSON.stringify({ error: 'Server configuration error.' }), {
 			status: 500,
@@ -79,7 +80,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
 		await sendMail(
 			{
-				host: 'mail.stylite.eu',
+				host: env.SMTP_SERVER,
 				port: 465,
 				username: env.SMTP_USER,
 				password: env.SMTP_PASS,
