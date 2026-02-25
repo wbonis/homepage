@@ -81,7 +81,7 @@
 		selectedRepo = full_name;
 	}
 
-	$inspect(is_being_dragged);
+
 </script>
 
 <section class="container">
@@ -98,9 +98,13 @@
 
 	{#if selectedRepo}
 		<div class="editor">
+			{#if is_being_dragged}
+				<div class="drag-overlay"></div>
+			{/if}
 			<iframe
-				src="https://stackblitz.com/github/{selectedRepo}?embed=1&hideNavigation=1&theme=dark&view=editor"
+				src="https://stackblitz.com/github/{selectedRepo}?embed=1&hideNavigation=0&theme=dark&view=editor"
 				title="VS Code — {selectedRepo}"
+				allow="cross-origin-isolated"
 			></iframe>
 		</div>
 	{:else}
@@ -193,6 +197,13 @@
 
 	.editor {
 		min-height: 0;
+		position: relative;
+	}
+
+	.drag-overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
 	}
 
 	iframe {

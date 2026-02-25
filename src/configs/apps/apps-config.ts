@@ -88,7 +88,7 @@ const vscode = create_app_config({
 	title: 'VS Code',
 	resizable: true,
 	height: 700,
-	width: 1000,
+	width: 1300,
 });
 
 const viewSource = create_app_config({
