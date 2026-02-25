@@ -7,7 +7,7 @@
 	import { system_needs_update } from '🍎/state/system.svelte';
 	import { is_dock_hidden } from '🍎/state/dock.svelte';
 	import DockItem from './DockItem.svelte';
-	import { untrack } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 
 	let dock_mouse_x = $state<number | null>(null);
 
@@ -16,6 +16,18 @@
 	let mouseY = $state(0);
 
 	let dockContainerEl = $state<HTMLElement>();
+	let dockElRef = $state<HTMLElement>();
+	let dockScale = $state(1);
+
+	onMount(() => {
+		if (dockElRef) {
+			const dockWidth = dockElRef.scrollWidth;
+			const availableWidth = window.innerWidth - 16;
+			if (dockWidth > availableWidth) {
+				dockScale = availableWidth / dockWidth;
+			}
+		}
+	});
 
 	$effect(() => {
 		// Due to how pointer-events: none works, if dock auto opens, you move away, it won't close automatically.
@@ -56,6 +68,9 @@
 	<div
 		class="dock-el"
 		class:hidden={is_dock_hidden.value}
+		class:scaled={dockScale < 1}
+		bind:this={dockElRef}
+		style:--dock-scale={dockScale}
 		onmousemove={(event) => (dock_mouse_x = event.x)}
 		onmouseleave={() => (dock_mouse_x = null)}
 	>
@@ -88,6 +103,12 @@
 		}
 	}
 
+	@media (max-width: 768px) {
+		.dock-container {
+			height: 3.5rem;
+		}
+	}
+
 	.dock-el {
 		background-color: hsla(var(--system-color-light-hsl), 0.4);
 
@@ -103,19 +124,23 @@
 		border-radius: 1.2rem;
 
 		height: 100%;
-		max-width: calc(100vw - 1.6rem);
 
 		display: flex;
 		align-items: flex-end;
 
 		transition: transform 0.3s ease;
 
+		&.scaled {
+			transform: scale(var(--dock-scale));
+			transform-origin: center bottom;
+		}
+
 		&:not(.hidden) {
 			pointer-events: auto;
 		}
 
 		&.hidden {
-			transform: translate3d(0, 200%, 0);
+			transform: scale(var(--dock-scale, 1)) translate3d(0, 200%, 0);
 
 			&::before {
 				width: calc(100% - 2px);

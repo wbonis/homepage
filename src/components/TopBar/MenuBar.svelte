@@ -104,7 +104,7 @@
 	use:focus_outside={() => (menubar_state.active = '')}
 >
 	{#each Object.entries(menubar_state.menus) as [menuID, menuConfig]}
-		<div>
+		<div class:secondary-menu={!['apple', 'default', 'file'].includes(menuID)}>
 			<div style:height="100%">
 				<button
 					class="menu-button"
@@ -154,6 +154,14 @@
 
 		display: flex;
 		position: relative;
+		overflow: hidden;
+		min-width: 0;
+	}
+
+	@media (max-width: 576px) {
+		.secondary-menu {
+			display: none;
+		}
 	}
 
 	.menu-parent {

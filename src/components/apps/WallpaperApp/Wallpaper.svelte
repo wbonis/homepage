@@ -100,7 +100,7 @@
 	}
 
 	.background-cover {
-		height: 100%;
+		height: 100dvh;
 		width: 100%;
 
 		position: fixed;

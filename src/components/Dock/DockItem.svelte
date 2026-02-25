@@ -165,8 +165,6 @@
 <style>
 	img {
 		will-change: width;
-		max-width: 100%;
-		height: auto;
 	}
 
 	button {
@@ -174,8 +172,6 @@
 		flex-direction: column;
 		justify-content: flex-end;
 		position: relative;
-		min-width: 0;
-		flex-shrink: 1;
 
 		border-radius: 0.5rem;
 

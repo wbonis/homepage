@@ -49,8 +49,9 @@
     // top: 1.75rem; */
 		height: 100%;
 
-		width: 100vw;
+		width: 100%;
 
 		justify-self: center;
+		overflow: hidden;
 	}
 </style>

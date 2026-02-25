@@ -6,6 +6,20 @@
 	const time = create_interval(1000);
 </script>
 
-<div style:margin="0 0.5rem">
-	{format(time.value, 'EEE dd. MMM', { locale: de })}&nbsp; {format(time.value, 'HH:mm')}
+<div class="time-display">
+	<span class="date-part">{format(time.value, 'EEE dd. MMM', { locale: de })}</span>
+	&nbsp;{format(time.value, 'HH:mm')}
 </div>
+
+<style>
+	.time-display {
+		margin: 0 0.5rem;
+		white-space: nowrap;
+	}
+
+	@media (max-width: 480px) {
+		.date-part {
+			display: none;
+		}
+	}
+</style>

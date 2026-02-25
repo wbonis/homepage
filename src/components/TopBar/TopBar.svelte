@@ -20,14 +20,25 @@
 		</div>
 	{/if}
 
-	<ActionCenterToggle />
+	<span class="right-section">
+		<ActionCenterToggle />
 
-	<button>
-		<TopBarTime />
-	</button>
+		<button>
+			<TopBarTime />
+		</button>
+	</span>
 </header>
 
 <style>
+	.right-section {
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+		height: 100%;
+		position: relative;
+		z-index: 1;
+	}
+
 	header {
 		display: flex;
 		align-items: center;
@@ -36,6 +47,8 @@
 
 		width: 100%;
 		height: 1.8rem;
+		flex-shrink: 0;
+		isolation: isolate;
 
 		background-color: hsla(var(--system-color-light-hsl), 0.3);
 
@@ -54,6 +67,12 @@
 			height: 100%;
 
 			text-shadow: 0 0 1px hsla(0, 0%, 0%, 0.1);
+		}
+	}
+
+	@media (max-width: 576px) {
+		.notch {
+			display: none;
 		}
 	}
 
@@ -116,7 +135,7 @@
 		left: 0;
 		top: 0;
 
-		z-index: 0;
+		z-index: -1;
 		backdrop-filter: blur(12px);
 	}
 

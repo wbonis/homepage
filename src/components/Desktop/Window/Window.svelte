@@ -105,7 +105,7 @@
 
 			windowEl.style.width = `100%`;
 			// windowEl.style.height = 'calc(100vh - 1.7rem - 5.25rem)';
-			windowEl.style.height = 'calc(100vh - 1.7rem)';
+			windowEl.style.height = 'calc(100dvh - 1.7rem)';
 		} else {
 			dragging_enabled = true;
 			windowEl.style.transform = minimized_transform;
@@ -175,7 +175,7 @@
 			apps.fullscreen[app_id] = true;
 			windowEl.style.transform = `translate(0px, 0px)`;
 			windowEl.style.width = `100%`;
-			windowEl.style.height = 'calc(100vh - 1.7rem)';
+			windowEl.style.height = 'calc(100dvh - 1.7rem)';
 		}
 	});
 </script>
