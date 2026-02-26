@@ -63,5 +63,6 @@
 
 	.device-screen {
 		overflow: hidden;
+		position: relative;
 	}
 </style>
