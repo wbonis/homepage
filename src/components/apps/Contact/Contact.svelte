@@ -12,7 +12,7 @@
 <section class="container" class:light={preferences.theme.scheme === 'light'}>
 	{#if !ios_mode}
 		<header class="titlebar app-window-drag-handle">
-			<span>Contact</span>
+			<span>Kontakt</span>
 		</header>
 	{/if}
 
@@ -25,19 +25,19 @@
 
 		<div class="details">
 			<div class="row">
-				<span class="label">email (private)</span>
+				<span class="label">E-Mail (privat)</span>
 				<a href="mailto:bonis@bonis.de">bonis@bonis.de</a>
 			</div>
 			<div class="row">
-				<span class="label">email (business)</span>
+				<span class="label">E-Mail (geschäftlich)</span>
 				<a href="mailto:wb@stylite.de">wb@stylite.de</a>
 			</div>
 			<div class="row">
-				<span class="label">blog</span>
+				<span class="label">Blog</span>
 				<a href="https://blog.stylite.de" use:external>blog.stylite.de</a>
 			</div>
 			<div class="row">
-				<span class="label">company</span>
+				<span class="label">Firma</span>
 				<a href="https://stylite.de" use:external>stylite.de</a>
 			</div>
 			<div class="row">

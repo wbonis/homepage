@@ -72,14 +72,14 @@
 
 		<aside class:light={preferences.theme.scheme === 'light'}>
 			<nav>
-				<button class="subject-btn active" onclick={() => { subject = 'Job Opportunity'; trackEvent('Contact', 'subject_selected', 'Job Opportunity'); }}>
-					<EmailIcon /> Job Opportunity
+				<button class="subject-btn active" onclick={() => { subject = 'Jobangebot'; trackEvent('Contact', 'subject_selected', 'Jobangebot'); }}>
+					<EmailIcon /> Jobangebot
 				</button>
-				<button class="subject-btn" onclick={() => { subject = 'Freelance Work'; trackEvent('Contact', 'subject_selected', 'Freelance Work'); }}>
-					<EmailIcon /> Freelance Work
+				<button class="subject-btn" onclick={() => { subject = 'Freelance-Arbeit'; trackEvent('Contact', 'subject_selected', 'Freelance-Arbeit'); }}>
+					<EmailIcon /> Freelance-Arbeit
 				</button>
-				<button class="subject-btn" onclick={() => { subject = 'Just Saying Hi'; trackEvent('Contact', 'subject_selected', 'Just Saying Hi'); }}>
-					<EmailIcon /> Just Saying Hi
+				<button class="subject-btn" onclick={() => { subject = 'Einfach Hallo sagen'; trackEvent('Contact', 'subject_selected', 'Einfach Hallo sagen'); }}>
+					<EmailIcon /> Einfach Hallo sagen
 				</button>
 
 				<hr />
@@ -94,9 +94,9 @@
 		</aside>
 	{:else}
 		<div class="ios-subject-bar">
-			<button class="ios-subject-btn" onclick={() => { subject = 'Job Opportunity'; }}>Job</button>
-			<button class="ios-subject-btn" onclick={() => { subject = 'Freelance Work'; }}>Freelance</button>
-			<button class="ios-subject-btn" onclick={() => { subject = 'Just Saying Hi'; }}>Say Hi</button>
+			<button class="ios-subject-btn" onclick={() => { subject = 'Jobangebot'; }}>Job</button>
+			<button class="ios-subject-btn" onclick={() => { subject = 'Freelance-Arbeit'; }}>Freelance</button>
+			<button class="ios-subject-btn" onclick={() => { subject = 'Einfach Hallo sagen'; }}>Hallo</button>
 		</div>
 	{/if}
 
@@ -104,10 +104,10 @@
 		{#if status === 'success'}
 			<div class="sent-message">
 				<SendIcon />
-				<h2>Message sent!</h2>
-				<p>Thanks for reaching out. I'll get back to you soon.</p>
+				<h2>Nachricht gesendet!</h2>
+				<p>Danke für deine Nachricht. Ich melde mich bald.</p>
 				<button class="send-btn" onclick={() => { status = 'idle'; }}>
-					Send another
+					Weitere senden
 				</button>
 			</div>
 		{:else}
@@ -119,25 +119,25 @@
 				{/if}
 				<div class="field">
 					<label for="name">Name</label>
-					<input id="name" type="text" bind:value={name} placeholder="Your name" required disabled={sending} />
+					<input id="name" type="text" bind:value={name} placeholder="Dein Name" required disabled={sending} />
 				</div>
 				<div class="field">
-					<label for="email">Email</label>
-					<input id="email" type="email" bind:value={email} placeholder="your@email.com" required disabled={sending} />
+					<label for="email">E-Mail</label>
+					<input id="email" type="email" bind:value={email} placeholder="deine@email.de" required disabled={sending} />
 				</div>
 				<div class="field">
-					<label for="subject">Subject</label>
-					<input id="subject" type="text" bind:value={subject} placeholder="What's this about?" disabled={sending} />
+					<label for="subject">Betreff</label>
+					<input id="subject" type="text" bind:value={subject} placeholder="Worum geht es?" disabled={sending} />
 				</div>
 				<div class="field">
-					<label for="message">Message</label>
-					<textarea id="message" bind:value={message} placeholder="Your message..." rows="5" required disabled={sending}></textarea>
+					<label for="message">Nachricht</label>
+					<textarea id="message" bind:value={message} placeholder="Deine Nachricht..." rows="5" required disabled={sending}></textarea>
 				</div>
 				<button type="submit" class="send-btn" disabled={sending}>
 					{#if sending}
-						Sending…
+						Wird gesendet…
 					{:else}
-						<SendIcon /> Send Message
+						<SendIcon /> Nachricht senden
 					{/if}
 				</button>
 			</form>

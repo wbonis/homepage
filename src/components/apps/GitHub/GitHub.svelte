@@ -115,13 +115,13 @@
 		{#if !ios_mode}
 			<aside class="sidebar">
 				<div class="sidebar-section">
-					<span class="sidebar-label">Favorites</span>
+					<span class="sidebar-label">Favoriten</span>
 					<div class="sidebar-item active">
 						<FolderIcon style="color: #54aef0;" /> src
 					</div>
 				</div>
 				<div class="sidebar-section">
-					<span class="sidebar-label">Locations</span>
+					<span class="sidebar-label">Orte</span>
 					{#each groups as group}
 						<a class="sidebar-item" href={group.url} target="_blank" rel="noopener noreferrer">
 							<RepoIcon /> {group.name}
@@ -158,16 +158,16 @@
 							{#if group.loading}
 								...
 							{:else}
-								{group.repos.length} items
+								{group.repos.length} Objekte
 							{/if}
 						</span>
 					</div>
 
 					{#if expandedGroups[group.name]}
 						{#if group.loading}
-							<div class="loading-row">Loading repos...</div>
+							<div class="loading-row">Lade Repos...</div>
 						{:else if group.error}
-							<div class="loading-row error">Failed to load: {group.error}</div>
+							<div class="loading-row error">Fehler beim Laden: {group.error}</div>
 						{/if}
 						{#each group.repos as repo}
 							<div

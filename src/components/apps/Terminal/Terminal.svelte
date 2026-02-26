@@ -8,7 +8,7 @@
 	}
 
 	let history: HistoryEntry[] = $state([
-		{ command: '', output: 'Welcome to WBonis Terminal v1.0\nType "help" for available commands.\n' },
+		{ command: '', output: 'Willkommen im WBonis Terminal v1.0\nTippe "help" für verfügbare Befehle.\n' },
 	]);
 	let currentInput = $state('');
 	const { ios_mode = false }: { ios_mode?: boolean } = $props();
@@ -16,39 +16,39 @@
 	let terminalEl: HTMLDivElement | undefined = $state();
 
 	const commands: Record<string, () => string> = {
-		help: () => `Available commands:
-  whoami      - Who am I?
-  about       - About me
-  skills      - My technical skills
-  projects    - List my projects
-  contact     - Contact information
-  neofetch    - System info
-  clear       - Clear terminal
-  help        - Show this help`,
+		help: () => `Verfügbare Befehle:
+  whoami      - Wer bin ich?
+  about       - Über mich
+  skills      - Technische Fähigkeiten
+  projects    - Meine Projekte
+  contact     - Kontaktdaten
+  neofetch    - Systeminfo
+  clear       - Terminal leeren
+  help        - Diese Hilfe anzeigen`,
 
 		whoami: () => 'WBonis - System Architekt',
 
 		about: () => `WBonis - System Architekt
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-Experienced System Architect specializing in
-cloud infrastructure, distributed systems,
-and modern development workflows.
+Erfahrener System Architekt mit Spezialisierung
+auf Cloud-Infrastruktur, verteilte Systeme
+und moderne Entwicklungs-Workflows.
 
-Building scalable, secure, and efficient
-systems since 2017.`,
+Baut skalierbare, sichere und effiziente
+Systeme seit 2017.`,
 
-		skills: () => `Technical Skills
-━━━━━━━━━━━━━━━━
-Infrastructure : Docker, Linux
+		skills: () => `Technische Fähigkeiten
+━━━━━━━━━━━━━━━━━━━━━━
+Infrastruktur  : Docker, Linux
 Storage        : ZFS, TrueNAS, Open-E
 Virtualisierung: Proxmox, VMware, Docker
-Languages      : Go, Python, TypeScript, Rust, Perl
+Sprachen       : Go, Python, TypeScript, Rust, Perl
 DevOps         : Docker, CI/CD
 Monitoring     : Prometheus, Grafana, ELK
-Architecture   : Systemanalyse, Systemdesign, Microservices, Monitoring, Debugging
+Architektur    : Systemanalyse, Systemdesign, Microservices, Monitoring, Debugging
 AI             : AI-Benutzer`,
 
-		projects: () => `Projects
+		projects: () => `Projekte
 ━━━━━━━━
 [1] Cloud Infrastructure Platform  - Cloud/Docker/Linux
 [2] Microservices Framework         - Go/gRPC/Docker
@@ -57,7 +57,7 @@ AI             : AI-Benutzer`,
 [5] API Gateway                     - Rust/Redis/OAuth
 [6] DevOps Pipeline                 - CI/CD`,
 
-		contact: () => `Contact Info
+		contact: () => `Kontaktdaten
 ━━━━━━━━━━━━
 Email  : contact@wbonis.dev
 GitHub : github.com/WBonis
@@ -92,7 +92,7 @@ LinkedIn: linkedin.com/in/wbonis`,
 				output = commands[cmd]();
 			} else {
 				trackEvent('Terminal', 'command_unknown', cmd);
-				output = `zsh: command not found: ${cmd}\nType "help" for available commands.`;
+				output = `zsh: Befehl nicht gefunden: ${cmd}\nTippe "help" für verfügbare Befehle.`;
 			}
 
 			history = [...history, { command: currentInput, output }];

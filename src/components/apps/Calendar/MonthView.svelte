@@ -43,12 +43,12 @@
 			<div class="events">
 				{#each day_events.slice(0, 2) as event}
 					<div class="event-label" class:all-day={event.allDay} style="--event-color: {event.color}">
-						<span class="event-time">{event.allDay ? 'all day' : event.time ?? ''}</span>
+						<span class="event-time">{event.allDay ? 'Ganztägig' : event.time ?? ''}</span>
 						<span class="event-title">{event.title}</span>
 					</div>
 				{/each}
 				{#if day_events.length > 2}
-					<div class="event-more">+{day_events.length - 2} more</div>
+					<div class="event-more">+{day_events.length - 2} weitere</div>
 				{/if}
 			</div>
 		</div>
@@ -61,12 +61,12 @@
 			<div class="events">
 				{#each day_events.slice(0, 2) as event}
 					<div class="event-label" class:all-day={event.allDay} style="--event-color: {event.color}">
-						<span class="event-time">{event.allDay ? 'all day' : event.time ?? ''}</span>
+						<span class="event-time">{event.allDay ? 'Ganztägig' : event.time ?? ''}</span>
 						<span class="event-title">{event.title}</span>
 					</div>
 				{/each}
 				{#if day_events.length > 2}
-					<div class="event-more">+{day_events.length - 2} more</div>
+					<div class="event-more">+{day_events.length - 2} weitere</div>
 				{/if}
 			</div>
 		</div>
@@ -79,12 +79,12 @@
 			<div class="events">
 				{#each day_events.slice(0, 2) as event}
 					<div class="event-label" class:all-day={event.allDay} style="--event-color: {event.color}">
-						<span class="event-time">{event.allDay ? 'all day' : event.time ?? ''}</span>
+						<span class="event-time">{event.allDay ? 'Ganztägig' : event.time ?? ''}</span>
 						<span class="event-title">{event.title}</span>
 					</div>
 				{/each}
 				{#if day_events.length > 2}
-					<div class="event-more">+{day_events.length - 2} more</div>
+					<div class="event-more">+{day_events.length - 2} weitere</div>
 				{/if}
 			</div>
 		</div>

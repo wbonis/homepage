@@ -30,18 +30,18 @@
 
 		<div class="toolbar">
 			<div class="nav-buttons">
-				<button class="nav-btn" disabled title="Back">‹</button>
-				<button class="nav-btn" disabled title="Forward">›</button>
+				<button class="nav-btn" disabled title="Zurück">‹</button>
+				<button class="nav-btn" disabled title="Vor">›</button>
 			</div>
 			<form class="url-bar" onsubmit={(e) => { e.preventDefault(); navigate(); }}>
 				<input
 					type="text"
 					bind:value={inputUrl}
-					placeholder="Enter URL..."
+					placeholder="URL eingeben..."
 					spellcheck="false"
 				/>
 			</form>
-			<a class="external-btn" href={url} target="_blank" rel="noopener noreferrer" title="Open in new tab">↗</a>
+			<a class="external-btn" href={url} target="_blank" rel="noopener noreferrer" title="In neuem Tab öffnen">↗</a>
 		</div>
 	{/if}
 
@@ -63,7 +63,7 @@
 				<input
 					type="text"
 					bind:value={inputUrl}
-					placeholder="Search or enter URL"
+					placeholder="Suchen oder URL eingeben"
 					spellcheck="false"
 				/>
 			</form>

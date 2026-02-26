@@ -47,32 +47,32 @@
 		{
 			id: 'stylite',
 			name: 'Stylite',
-			subtitle: 'Digital Agency',
-			description: 'Full-service digital agency for web development, design and consulting.',
+			subtitle: 'Digitalagentur',
+			description: 'Full-Service Digitalagentur für Webentwicklung, Design und Beratung.',
 			url: 'https://stylite.de',
 			icon: '🏢',
 			rating: 5,
-			category: 'Business',
+			category: 'Wirtschaft',
 		},
 		{
 			id: 'stylite-blog',
 			name: 'Stylite Blog',
-			subtitle: 'Tech & Insights',
-			description: 'Articles about web development, technology and digital trends.',
+			subtitle: 'Tech & Einblicke',
+			description: 'Artikel über Webentwicklung, Technologie und digitale Trends.',
 			url: 'https://blog.stylite.de',
 			icon: '📝',
 			rating: 5,
-			category: 'Education',
+			category: 'Bildung',
 		},
 		{
 			id: 'bonis-de',
 			name: 'bonis.de',
-			subtitle: 'This very site!',
-			description: 'The macOS portfolio experience you are currently browsing. Very meta.',
+			subtitle: 'Diese Seite hier!',
+			description: 'Das macOS-Portfolio-Erlebnis, das du gerade durchstöberst. Sehr meta.',
 			url: 'https://www.bonis.de',
 			icon: '🍎',
 			rating: 5,
-			category: 'Entertainment',
+			category: 'Unterhaltung',
 		},
 	];
 
@@ -81,7 +81,7 @@
 			id: 'homepage',
 			name: 'homepage',
 			subtitle: 'wbonis/homepage',
-			description: 'This macOS-style portfolio website. Built with Svelte 5, TypeScript and Vite.',
+			description: 'Diese macOS-Portfolio-Website. Gebaut mit Svelte 5, TypeScript und Vite.',
 			url: 'https://github.com/wbonis/homepage',
 			icon: '🖥️',
 			stars: '~',
@@ -91,7 +91,7 @@
 			id: 'wbonis',
 			name: 'WBonis',
 			subtitle: 'GitHub Profile',
-			description: 'All public repositories and open source contributions.',
+			description: 'Alle öffentlichen Repositories und Open-Source-Beiträge.',
 			url: 'https://github.com/WBonis',
 			icon: '👤',
 			stars: '~',
@@ -135,7 +135,7 @@
 	];
 
 	const categories: { id: Category; label: string; icon: typeof GlobeIcon }[] = [
-		{ id: 'featured', label: 'Featured', icon: SparklesIcon },
+		{ id: 'featured', label: 'Empfohlen', icon: SparklesIcon },
 		{ id: 'websites', label: 'Websites', icon: GlobeIcon },
 		{ id: 'github', label: 'GitHub', icon: GithubIcon },
 		{ id: 'easter-eggs', label: 'Easter Eggs', icon: CoffeeIcon },
@@ -163,7 +163,7 @@
 		</header>
 
 		<aside class:light={preferences.theme.scheme === 'light'}>
-			<div class="sidebar-section-title">Discover</div>
+			<div class="sidebar-section-title">Entdecken</div>
 			<nav>
 				{#each categories as cat}
 					<button
@@ -202,13 +202,13 @@
 		{#if active_category === 'featured'}
 			<div class="featured-banner">
 				<div class="banner-content">
-					<span class="banner-tag">PORTFOLIO COLLECTION</span>
-					<h1>Welcome to the App Store</h1>
-					<p>Discover Wolfgang Bonis' websites, open source projects, and a few hidden surprises.</p>
+					<span class="banner-tag">PORTFOLIO-KOLLEKTION</span>
+					<h1>Willkommen im App Store</h1>
+					<p>Entdecke Wolfgang Bonis' Websites, Open-Source-Projekte und ein paar versteckte Überraschungen.</p>
 				</div>
 			</div>
 
-			<h2 class="section-title">Websites</h2>
+			<h2 class="section-title">Webseiten</h2>
 			<div class="app-grid">
 				{#each websites as site}
 					<a href={site.url} target="_blank" rel="noopener noreferrer" class="app-card">
@@ -246,7 +246,7 @@
 		{/if}
 
 		{#if active_category === 'websites'}
-			<h2 class="section-title"><GlobeIcon /> Websites & Services</h2>
+			<h2 class="section-title"><GlobeIcon /> Webseiten & Dienste</h2>
 			{#each websites as site}
 				<a href={site.url} target="_blank" rel="noopener noreferrer" class="app-detail-card">
 					<div class="app-icon-xlarge">{site.icon}</div>
@@ -272,7 +272,7 @@
 		{/if}
 
 		{#if active_category === 'github'}
-			<h2 class="section-title"><GithubIcon /> GitHub Repositories</h2>
+			<h2 class="section-title"><GithubIcon /> GitHub-Repositories</h2>
 			{#each github_repos as repo}
 				<a href={repo.url} target="_blank" rel="noopener noreferrer" class="app-detail-card">
 					<div class="app-icon-xlarge">{repo.icon}</div>

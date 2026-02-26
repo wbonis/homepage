@@ -51,11 +51,11 @@
 			icon: HomeIcon,
 			items: [
 				{ name: 'Desktop', icon: FolderIcon, kind: 'folder', target: 'desktop' },
-				{ name: 'Documents', icon: FolderIcon, kind: 'folder', target: 'documents' },
+				{ name: 'Dokumente', icon: FolderIcon, kind: 'folder', target: 'documents' },
 				{ name: 'Downloads', icon: FolderIcon, kind: 'folder', target: 'downloads' },
-				{ name: 'Pictures', icon: ImageIcon, kind: 'folder', target: 'pictures' },
-				{ name: 'Music', icon: MusicIcon, kind: 'folder', target: 'music' },
-				{ name: 'Movies', icon: MovieIcon, kind: 'folder', target: 'movies' },
+				{ name: 'Bilder', icon: ImageIcon, kind: 'folder', target: 'pictures' },
+				{ name: 'Musik', icon: MusicIcon, kind: 'folder', target: 'music' },
+				{ name: 'Filme', icon: MovieIcon, kind: 'folder', target: 'movies' },
 				{ name: 'Open Source', icon: GithubIcon, kind: 'folder', opens: 'github' },
 				{ name: '.secret', icon: LockIcon, kind: 'folder', target: 'secret' },
 			],
@@ -129,7 +129,7 @@
 		},
 
 		documents: {
-			label: 'Documents',
+			label: 'Dokumente',
 			icon: FileIcon,
 			parent: 'home',
 			items: [
@@ -174,7 +174,7 @@
 		},
 
 		pictures: {
-			label: 'Pictures',
+			label: 'Bilder',
 			icon: ImageIcon,
 			parent: 'home',
 			items: [
@@ -206,7 +206,7 @@
 		},
 
 		music: {
-			label: 'Music',
+			label: 'Musik',
 			icon: MusicIcon,
 			parent: 'home',
 			items: [
@@ -228,7 +228,7 @@
 		},
 
 		movies: {
-			label: 'Movies',
+			label: 'Filme',
 			icon: MovieIcon,
 			parent: 'home',
 			items: [
@@ -238,7 +238,7 @@
 		},
 
 		applications: {
-			label: 'Applications',
+			label: 'Programme',
 			icon: AppsIcon,
 			parent: 'home',
 			items: [
@@ -254,7 +254,7 @@
 		},
 
 		recents: {
-			label: 'Recents',
+			label: 'Zuletzt benutzt',
 			icon: ClockIcon,
 			items: [
 				{ name: 'todo.txt', icon: FileIcon, kind: 'file', preview: '[ ] Weltherrschaft\n[ ] Kaffee kaufen\n[x] macOS Homepage bauen\n[ ] Schlaf nachholen' },
@@ -345,7 +345,7 @@
 	</header>
 
 	<aside class:light={preferences.theme.scheme === 'light'}>
-		<div class="sidebar-section-title">Favorites</div>
+		<div class="sidebar-section-title">Favoriten</div>
 		<nav>
 			{#each sidebar_entries as key}
 				{@const entry = fs[key]}
@@ -399,9 +399,9 @@
 		</div>
 
 		<div class="status-bar">
-			{fs[active_folder]?.items.length ?? 0} items
+			{fs[active_folder]?.items.length ?? 0} Objekte
 			{#if selected_item}
-				— "{selected_item}" selected
+				— „{selected_item}" ausgewählt
 			{/if}
 		</div>
 	</section>

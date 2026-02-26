@@ -133,7 +133,7 @@
 	});
 </script>
 
-<button onclick={openApp} aria-label="Launch {title} app" class="dock-open-app-button {app_id}">
+<button onclick={openApp} aria-label="{title} öffnen" class="dock-open-app-button {app_id}">
 	<p
 		class="tooltip"
 		class:tooltip-enabled={!apps.is_being_dragged}

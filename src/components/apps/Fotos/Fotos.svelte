@@ -35,7 +35,7 @@
 		<header class="titlebar app-window-drag-handle">
 			<span>Fotos</span>
 			{#if photos.length > 0}
-				<span class="count">{photos.length} Photos</span>
+				<span class="count">{photos.length} Fotos</span>
 			{/if}
 		</header>
 	{/if}
@@ -43,8 +43,8 @@
 	<section class="main-area">
 		{#if photos.length === 0}
 			<div class="empty">
-				<p>No Photos</p>
-				<p class="hint">Add images to <code>public/photos/</code> to see them here.</p>
+				<p>Keine Fotos</p>
+				<p class="hint">Bilder in <code>public/photos/</code> ablegen, um sie hier zu sehen.</p>
 			</div>
 		{:else}
 			<div class="grid">
@@ -60,7 +60,7 @@
 	{#if selected}
 		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 		<div class="lightbox" role="dialog" tabindex="-1" onkeydown={(e) => e.key === 'Escape' && close_lightbox()}>
-			<button class="lightbox-close" onclick={close_lightbox} aria-label="Close">&times;</button>
+			<button class="lightbox-close" onclick={close_lightbox} aria-label="Schließen">&times;</button>
 			<div class="lightbox-scroll">
 				<img src="/photos/{selected}" alt={selected} />
 			</div>

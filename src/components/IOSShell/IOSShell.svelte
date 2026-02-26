@@ -33,7 +33,7 @@
 	{#if active_app}
 		<nav class="ios-nav-bar">
 			<button class="back-btn" onclick={go_home}>
-				<ChevronLeft /> Back
+				<ChevronLeft /> Zurück
 			</button>
 			<span class="nav-title">{active_title}</span>
 			<div class="nav-spacer"></div>

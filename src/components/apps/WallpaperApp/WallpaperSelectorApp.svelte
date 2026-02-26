@@ -34,7 +34,7 @@
 <section class="container">
 	{#if !ios_mode}
 		<header class="titlebar app-window-drag-handle">
-			<span>Wallpapers</span>
+			<span>Hintergründe</span>
 		</header>
 	{/if}
 
@@ -45,7 +45,7 @@
 			<div class="info">
 				<h2>{wallpapers_config[preferences.wallpaper.id].name}</h2>
 				<p class="wallpaper-type">
-					{wallpapers_config[preferences.wallpaper.id].type} wallpaper
+					{wallpapers_config[preferences.wallpaper.id].type === 'dynamic' ? 'Dynamischer' : 'Einzelner'} Hintergrund
 				</p>
 
 				<br /> <br />
@@ -53,7 +53,7 @@
 				{#if wallpapers_config[preferences.wallpaper.id].type !== 'standalone'}
 					<label>
 						<input type="checkbox" bind:checked={preferences.wallpaper.canControlTheme} />
-						Change dark/light mode as wallpapers change
+						Dunkel-/Hellmodus bei Hintergrundwechsel anpassen
 					</label>
 				{/if}
 			</div>
@@ -62,7 +62,7 @@
 		<br /><br /><br /><br />
 
 		<section class="dynamic-wallpapers">
-			<h2>Dynamic Wallpapers</h2>
+			<h2>Dynamische Hintergründe</h2>
 
 			<div class="wallpapers">
 				{#each dynamic_wallpapers as [id, { thumbnail, name, image }]}
@@ -79,7 +79,7 @@
 		<br /><br /><br />
 
 		<section class="standalone-wallpapers">
-			<h2>Standalone Wallpapers</h2>
+			<h2>Einzelne Hintergründe</h2>
 
 			<div class="wallpapers">
 				{#each standalone_wallpapers as [id, { thumbnail, name, image }]}

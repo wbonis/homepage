@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { addMonths, format } from 'date-fns';
+	import { de } from 'date-fns/locale';
 	import LeftArrow from '~icons/ic/round-chevron-left';
 	import RightArrow from '~icons/ic/round-chevron-right';
 	import { preferences } from '🍎/state/preferences.svelte.ts';
@@ -30,7 +31,7 @@
 	<section class="main-area">
 		<div class="calendar-header">
 			<div>
-				<span class="month">{format(selected_date, 'MMMM')}</span>
+				<span class="month">{format(selected_date, 'MMMM', { locale: de })}</span>
 				<span class="year">{format(selected_date, 'yyyy')}</span>
 			</div>
 
@@ -38,7 +39,7 @@
 				<button onclick={goPreviousMonth}>
 					<LeftArrow />
 				</button>
-				<button onclick={goToToday}>Today</button>
+				<button onclick={goToToday}>Heute</button>
 				<button onclick={goNextMonth}>
 					<RightArrow />
 				</button>

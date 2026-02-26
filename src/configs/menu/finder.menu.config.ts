@@ -5,380 +5,380 @@ export const finder_menu_config = create_menu_config({
 		title: 'WBonis',
 		menu: {
 			'about-site': {
-				title: 'About This Site',
+				title: 'Über diese Seite',
 				breakAfter: true,
 			},
 			'contact-me': {
-				title: 'Contact Me',
+				title: 'Kontakt',
 			},
 			'view-notes': {
-				title: 'View Notes',
+				title: 'Notizen anzeigen',
 				breakAfter: true,
 			},
 			'hide-finder': {
-				title: 'Hide Finder',
+				title: 'Finder ausblenden',
 			},
 			'hide-others': {
-				title: 'Hide Others',
+				title: 'Andere ausblenden',
 			},
 			'show-all': {
-				title: 'Show All',
+				title: 'Alle einblenden',
 				disabled: true,
 			},
 		},
 	},
 
 	file: {
-		title: 'File',
+		title: 'Ablage',
 		menu: {
 			'new-finder-window': {
-				title: 'New Finder Window',
+				title: 'Neues Finder-Fenster',
 			},
 			'new-folder': {
-				title: 'New Folder',
+				title: 'Neuer Ordner',
 			},
 			'new-folder-with-selection': {
-				title: 'New Folder with Selection',
+				title: 'Neuer Ordner mit Auswahl',
 				disabled: true,
 			},
 			'new-smart-folder': {
-				title: 'New Smart Folder',
+				title: 'Neuer intelligenter Ordner',
 			},
 			'new-tab': {
-				title: 'New tab',
+				title: 'Neuer Tab',
 			},
 			open: {
-				title: 'Open',
+				title: 'Öffnen',
 				disabled: true,
 			},
 			'open-with': {
-				title: 'Open With',
+				title: 'Öffnen mit',
 				disabled: true,
 			},
 			print: {
-				title: 'Print',
+				title: 'Drucken',
 				disabled: true,
 			},
 			'close-window': {
-				title: 'Close Window',
+				title: 'Fenster schließen',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			'get-info': {
-				title: 'Get Info',
+				title: 'Informationen',
 			},
 			rename: {
-				title: 'Rename',
+				title: 'Umbenennen',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			compress: {
-				title: 'Compress',
+				title: 'Komprimieren',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			duplicate: {
-				title: 'Duplicate',
+				title: 'Duplizieren',
 				disabled: true,
 			},
 			'make-alias': {
-				title: 'Make Alias',
+				title: 'Alias erzeugen',
 				disabled: true,
 			},
 			'quick-look': {
-				title: 'Quick Look',
+				title: 'Übersicht',
 				disabled: true,
 			},
 			'show-original': {
-				title: 'Show Original',
+				title: 'Original zeigen',
 				disabled: true,
 			},
 			'add-to-sidebar': {
-				title: 'Add to Sidebar',
+				title: 'Zur Seitenleiste hinzufügen',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			'move-to-trash': {
-				title: 'Move to Trash',
+				title: 'In den Papierkorb legen',
 				disabled: true,
 			},
 			eject: {
-				title: 'Eject',
+				title: 'Auswerfen',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			find: {
-				title: 'Find',
+				title: 'Suchen',
 				breakAfter: true,
 			},
 
 			tags: {
-				title: 'Tags...',
+				title: 'Tags …',
 				disabled: true,
 			},
 		},
 	},
 
 	edit: {
-		title: 'Edit',
+		title: 'Bearbeiten',
 		menu: {
 			undo: {
-				title: 'Undo',
+				title: 'Widerrufen',
 				disabled: true,
 			},
 			redo: {
-				title: 'Redo',
+				title: 'Wiederholen',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			cut: {
-				title: 'Cut',
+				title: 'Ausschneiden',
 				disabled: true,
 			},
 			copy: {
-				title: 'Copy',
+				title: 'Kopieren',
 				disabled: true,
 			},
 			paste: {
-				title: 'Paste',
+				title: 'Einsetzen',
 				disabled: true,
 			},
 			'select-all': {
-				title: 'Select All',
+				title: 'Alles auswählen',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			'show-clipboard': {
-				title: 'Show Clipboard',
+				title: 'Zwischenablage einblenden',
 				breakAfter: true,
 			},
 
 			'start-dictation': {
-				title: 'Start Dictation...',
+				title: 'Diktat starten …',
 			},
 			'emoji-and-symbols': {
-				title: 'Emoji & Symbols',
+				title: 'Emoji & Symbole',
 			},
 		},
 	},
 
 	view: {
-		title: 'View',
+		title: 'Darstellung',
 		menu: {
 			'as-icons': {
-				title: 'As Icons',
+				title: 'Als Symbole',
 				disabled: true,
 			},
 			'as-list': {
-				title: 'As List',
+				title: 'Als Liste',
 				disabled: true,
 			},
 			'as-columns': {
-				title: 'As Columns',
+				title: 'Als Spalten',
 				disabled: true,
 			},
 			'as-gallery': {
-				title: 'As Gallery',
+				title: 'Als Galerie',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			'use-stacks': {
-				title: 'Use Stacks',
+				title: 'Stapel verwenden',
 			},
 			'sort-by': {
-				title: 'Sort By',
+				title: 'Sortieren nach',
 				menu: {},
 			},
 			'clean-up': {
-				title: 'Clean Up',
+				title: 'Aufräumen',
 				disabled: true,
 			},
 			'clean-up-by': {
-				title: 'Clean Up By',
+				title: 'Aufräumen nach',
 				disabled: true,
 				breakAfter: true,
 				menu: {},
 			},
 
 			'hide-sidebar': {
-				title: 'Hide Sidebar',
+				title: 'Seitenleiste ausblenden',
 				disabled: true,
 			},
 			'show-preview': {
-				title: 'Show Preview',
+				title: 'Vorschau einblenden',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			'hide-toolbar': {
-				title: 'Hide Toolbar',
+				title: 'Symbolleiste ausblenden',
 				disabled: true,
 			},
 			'show-all-tabs': {
-				title: 'Show All Tabs',
+				title: 'Alle Tabs anzeigen',
 				disabled: true,
 			},
 			'show-tab-bar': {
-				title: 'Show Tab Bar',
+				title: 'Tab-Leiste einblenden',
 				disabled: true,
 			},
 			'show-path-bar': {
-				title: 'Show Path Bar',
+				title: 'Pfadleiste einblenden',
 				disabled: true,
 			},
 			'show-status-bar': {
-				title: 'Show Status Bar',
+				title: 'Statusleiste einblenden',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			'customize-toolbar': {
-				title: 'Customize Toolbar...',
+				title: 'Symbolleiste anpassen …',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			'show-view-options': {
-				title: 'Show View Options',
+				title: 'Darstellungsoptionen einblenden',
 			},
 			'show-preview-options': {
-				title: 'Show Preview Options',
+				title: 'Vorschauoptionen einblenden',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			'enter-full-screen': {
-				title: 'Enter Full Screen',
+				title: 'Vollbild',
 				disabled: true,
 			},
 		},
 	},
 
 	go: {
-		title: 'Go',
+		title: 'Gehe zu',
 		menu: {
 			back: {
-				title: 'Back',
+				title: 'Zurück',
 				disabled: true,
 			},
 			forward: {
-				title: 'Forward',
+				title: 'Vor',
 				disabled: true,
 			},
 			'enclosing-folder': {
-				title: 'Enclosing Folder',
+				title: 'Übergeordneter Ordner',
 				breakAfter: true,
 			},
 
 			recents: {
-				title: 'Recents',
+				title: 'Zuletzt benutzt',
 			},
 			documents: {
-				title: 'Documents',
+				title: 'Dokumente',
 			},
 			desktop: {
-				title: 'Desktop',
+				title: 'Schreibtisch',
 			},
 			downloads: {
 				title: 'Downloads',
 			},
 			home: {
-				title: 'Home',
+				title: 'Benutzerordner',
 			},
 			computer: {
 				title: 'Computer',
 			},
 			airdrop: {
-				title: 'Airdrop',
+				title: 'AirDrop',
 			},
 			network: {
-				title: 'Network',
+				title: 'Netzwerk',
 			},
 			'icloud-drive': {
 				title: 'iCloud Drive',
 			},
 			applications: {
-				title: 'Applications',
+				title: 'Programme',
 			},
 			utilities: {
-				title: 'Utilities',
+				title: 'Dienstprogramme',
 				breakAfter: true,
 			},
 
 			'go-to-folder': {
-				title: 'Go to Folder',
+				title: 'Gehe zum Ordner',
 			},
 			'connect-to-server': {
-				title: 'Connect to Server',
+				title: 'Mit Server verbinden',
 			},
 		},
 	},
 
 	window: {
-		title: 'Window',
+		title: 'Fenster',
 		menu: {
 			minimize: {
-				title: 'Minimize',
+				title: 'Im Dock ablegen',
 				disabled: true,
 			},
 			zoom: {
-				title: 'Zoom',
+				title: 'Zoomen',
 				disabled: true,
 			},
 			'move-window-to-left-side-of-screen': {
-				title: 'Move Window to Left Side of Screen',
+				title: 'Fenster links anordnen',
 				disabled: true,
 			},
 			'move-window-to-right-side-of-screen': {
-				title: 'Move Window to Right Side of Screen',
+				title: 'Fenster rechts anordnen',
 				disabled: true,
 			},
 			'cycle-through-windows': {
-				title: 'Cycle Through Windows',
+				title: 'Durch Fenster blättern',
 				breakAfter: true,
 			},
 
 			'show-previous-tab': {
-				title: 'Show Previous Tab',
+				title: 'Vorherigen Tab anzeigen',
 				disabled: true,
 			},
 			'show-next-tab': {
-				title: 'Show Next Tab',
+				title: 'Nächsten Tab anzeigen',
 				disabled: true,
 			},
 			'move-tab-to-new-window': {
-				title: 'Move Tab to New Window',
+				title: 'Tab in neues Fenster bewegen',
 				disabled: true,
 			},
 			'merge-all-windows': {
-				title: 'Merge all Windows',
+				title: 'Alle Fenster zusammenführen',
 				disabled: true,
 				breakAfter: true,
 			},
 
 			'bring-all-to-front': {
-				title: 'Bring All to Front',
+				title: 'Alle nach vorne bringen',
 			},
 		},
 	},
 
 	help: {
-		title: 'Help',
+		title: 'Hilfe',
 		menu: {
 			'send-finder-feedback': {
-				title: 'Send Finder Feedback',
+				title: 'Finder-Feedback senden',
 				breakAfter: true,
 			},
 			'macos-help': {
-				title: 'macOS Help',
+				title: 'macOS-Hilfe',
 			},
 		},
 	},

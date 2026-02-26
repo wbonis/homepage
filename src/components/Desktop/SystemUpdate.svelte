@@ -56,12 +56,12 @@
 			draggable="false"
 		/>
 
-		<h3>Updates Available</h3>
-		<p>Do you want to restart to install these updates now?</p>
+		<h3>Updates verfügbar</h3>
+		<p>Möchtest du jetzt neu starten, um die Updates zu installieren?</p>
 
 		<div class="buttons">
-			<button onclick={close}>Later</button>
-			<button class="confirm" onclick={handle_update_app}> Update </button>
+			<button onclick={close}>Später</button>
+			<button class="confirm" onclick={handle_update_app}> Aktualisieren </button>
 		</div>
 	</section>
 </SystemDialog>

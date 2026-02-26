@@ -15,7 +15,7 @@ const fotos = create_app_config({
 });
 
 const wallpapers = create_app_config({
-	title: 'Wallpapers',
+	title: 'Hintergründe',
 	resizable: true,
 	height: 600,
 	width: 800,
@@ -23,12 +23,12 @@ const wallpapers = create_app_config({
 });
 
 const calendar = create_app_config({
-	title: 'Calendar',
+	title: 'Kalender',
 	resizable: true,
 });
 
 const calculator = create_app_config({
-	title: 'Calculator',
+	title: 'Rechner',
 	expandable: true,
 	resizable: false,
 	height: 250 * 1.414,
@@ -36,14 +36,14 @@ const calculator = create_app_config({
 });
 
 const aboutMe = create_app_config({
-	title: 'About Me',
+	title: 'Über mich',
 	resizable: true,
 	height: 600,
 	width: 800,
 });
 
 const projects = create_app_config({
-	title: 'Projects',
+	title: 'Projekte',
 	resizable: true,
 	height: 650,
 	width: 900,
@@ -57,14 +57,14 @@ const mail = create_app_config({
 });
 
 const contact = create_app_config({
-	title: 'Contact',
+	title: 'Kontakt',
 	resizable: true,
 	height: 500,
 	width: 400,
 });
 
 const notes = create_app_config({
-	title: 'Notes',
+	title: 'Notizen',
 	resizable: true,
 	height: 700,
 	width: 600,
@@ -113,7 +113,7 @@ const appstore = create_app_config({
 });
 
 const viewSource = create_app_config({
-	title: `View Source`,
+	title: `Quellcode`,
 	resizable: true,
 	should_open_window: false,
 	external_action: () => window.open('https://github.com/wbonis/homepage', '_blank'),

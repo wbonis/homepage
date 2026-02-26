@@ -3,38 +3,38 @@
 
 	const projects = [
 		{
-			name: 'Cloud Infrastructure Platform',
-			description: 'Scalable multi-cloud infrastructure management platform with automated provisioning and monitoring.',
+			name: 'Cloud-Infrastruktur-Plattform',
+			description: 'Skalierbare Multi-Cloud-Infrastrukturverwaltung mit automatisierter Bereitstellung und Überwachung.',
 			tags: ['Cloud', 'Docker', 'Linux'],
 			icon: '🏗️',
 		},
 		{
-			name: 'Microservices Framework',
-			description: 'Custom microservices framework with service discovery, load balancing, and circuit breakers.',
+			name: 'Microservices-Framework',
+			description: 'Eigenes Microservices-Framework mit Service Discovery, Load Balancing und Circuit Breakern.',
 			tags: ['Go', 'gRPC', 'Docker'],
 			icon: '🔧',
 		},
 		{
-			name: 'Security Audit Tool',
-			description: 'Automated security scanning and compliance checking for containerized applications.',
+			name: 'Sicherheits-Audit-Tool',
+			description: 'Automatisierte Sicherheitsscans und Compliance-Prüfung für containerisierte Anwendungen.',
 			tags: ['Python', 'Security', 'CI/CD'],
 			icon: '🔒',
 		},
 		{
-			name: 'Real-time Monitoring Dashboard',
-			description: 'Full-stack monitoring solution with real-time metrics, alerting, and incident management.',
+			name: 'Echtzeit-Monitoring-Dashboard',
+			description: 'Vollständige Monitoring-Lösung mit Echtzeit-Metriken, Alerting und Incident Management.',
 			tags: ['React', 'Grafana', 'Prometheus'],
 			icon: '📊',
 		},
 		{
 			name: 'API Gateway',
-			description: 'High-performance API gateway with rate limiting, authentication, and request transformation.',
+			description: 'Hochperformantes API Gateway mit Rate Limiting, Authentifizierung und Request-Transformation.',
 			tags: ['Rust', 'Redis', 'OAuth'],
 			icon: '🚀',
 		},
 		{
-			name: 'DevOps Pipeline',
-			description: 'End-to-end CI/CD pipeline with automated testing, deployment, and rollback capabilities.',
+			name: 'DevOps-Pipeline',
+			description: 'End-to-End CI/CD-Pipeline mit automatisierten Tests, Deployment und Rollback-Funktionen.',
 			tags: ['CI/CD', 'Docker'],
 			icon: '⚙️',
 		},
@@ -49,8 +49,8 @@
 	{/if}
 
 	<div class="toolbar">
-		<h2>My Projects</h2>
-		<p class="subtitle">{projects.length} projects</p>
+		<h2>Meine Projekte</h2>
+		<p class="subtitle">{projects.length} Projekte</p>
 	</div>
 
 	<div class="grid">
