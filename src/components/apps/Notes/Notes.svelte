@@ -8,19 +8,19 @@
 <section class="container" class:ios={ios_mode}>
 	{#if !ios_mode}
 		<header class="titlebar app-window-drag-handle">
-			<span>Notes</span>
+			<span>Notizen</span>
 		</header>
 	{/if}
 
 	<div class="body">
 		{#if !ios_mode}
 			<aside class:light={preferences.theme.scheme === 'light'}>
-				<div class="sidebar-header">Notes</div>
+				<div class="sidebar-header">Notizen</div>
 				<button class="note-item active">
 					<NoteIcon />
 					<div class="note-preview">
-						<strong>Resume (Draft)</strong>
-						<span>Experience, Skills, Education...</span>
+						<strong>Lebenslauf (Entwurf)</strong>
+						<span>Erfahrung, Fähigkeiten, Ausbildung...</span>
 					</div>
 				</button>
 			</aside>
@@ -28,20 +28,20 @@
 
 		<div class="content">
 			<div class="note-content">
-				<h1>Resume (Draft)</h1>
+				<h1>Lebenslauf (Entwurf)</h1>
 
 				<div class="section">
-					<h2>Experience</h2>
+					<h2>Erfahrung</h2>
 
 					<div class="entry">
 						<div class="entry-header">
 							<h3>CTO / Vorstand</h3>
-							<span class="date">2019 - Present</span>
+							<span class="date">2019 - Heute</span>
 						</div>
 						<p class="company">Stylite AG</p>
 						<ul>
-							<li>Leading technical strategy for managed IT services and SaaS/IaaS hosting</li>
-							<li>Overseeing infrastructure architecture, platform operations, and service delivery</li>
+							<li>Technische Strategie für Managed IT Services und SaaS/IaaS-Hosting</li>
+							<li>Verantwortung für Infrastruktur-Architektur, Plattformbetrieb und Servicebereitstellung</li>
 						</ul>
 					</div>
 
@@ -52,20 +52,20 @@
 						</div>
 						<p class="company">Udicom AG</p>
 						<ul>
-							<li>Managed IT services and hosting infrastructure</li>
-							<li>Responsible for technical direction and platform architecture</li>
+							<li>Managed IT Services und Hosting-Infrastruktur</li>
+							<li>Verantwortlich für technische Ausrichtung und Plattform-Architektur</li>
 						</ul>
 					</div>
 
 					<div class="entry">
 						<div class="entry-header">
-							<h3>Freelancer</h3>
+							<h3>Freiberufler</h3>
 							<span class="date">2000 - 2003</span>
 						</div>
-						<p class="company">Self-employed</p>
+						<p class="company">Selbstständig</p>
 						<ul>
-							<li>Linux infrastructure setup and administration</li>
-							<li>IT consulting and system design for businesses</li>
+							<li>Linux-Infrastruktur Aufbau und Administration</li>
+							<li>IT-Beratung und Systemdesign für Unternehmen</li>
 						</ul>
 					</div>
 
@@ -76,28 +76,28 @@
 						</div>
 						<p class="company">Kiss GmbH — Internet Provider Kaiserslautern</p>
 						<ul>
-							<li>Built and operated a local ISP offering Dial-up, ISDN, and fixed-line internet access</li>
-							<li>Managed web hosting services and server infrastructure</li>
+							<li>Aufbau und Betrieb eines lokalen ISP mit Dial-up, ISDN und Festnetz-Internetzugang</li>
+							<li>Verwaltung von Webhosting-Diensten und Server-Infrastruktur</li>
 						</ul>
 					</div>
 
 					<div class="entry">
 						<div class="entry-header">
-							<h3>Co-Founder</h3>
+							<h3>Mitgründer</h3>
 							<span class="date">1990 - 1994</span>
 						</div>
 						<p class="company">Antares GbR</p>
 						<ul>
-							<li>Co-founded IT venture focused on system administration and infrastructure</li>
+							<li>Mitgründung eines IT-Unternehmens mit Fokus auf Systemadministration und Infrastruktur</li>
 						</ul>
 					</div>
 				</div>
 
 				<div class="section">
-					<h2>Skills</h2>
+					<h2>Fähigkeiten</h2>
 					<div class="skills-grid">
 						<div>
-							<h4>Infrastructure</h4>
+							<h4>Infrastruktur</h4>
 							<p>Docker, Linux</p>
 						</div>
 						<div>
@@ -109,7 +109,7 @@
 							<p>Proxmox, VMware, Docker</p>
 						</div>
 						<div>
-							<h4>Languages</h4>
+							<h4>Sprachen</h4>
 							<p>Go, Python, TypeScript, Rust, Perl, Bash</p>
 						</div>
 						<div>
@@ -117,28 +117,28 @@
 							<p>Prometheus, Grafana</p>
 						</div>
 						<div>
-							<h4>Architecture</h4>
+							<h4>Architektur</h4>
 							<p>Systemanalyse, Systemdesign, Microservices, Monitoring, Debugging</p>
 						</div>
 						<div>
-							<h4>AI</h4>
-							<p>AI-Benutzer</p>
+							<h4>KI</h4>
+							<p>KI-Anwender</p>
 						</div>
 					</div>
 				</div>
 
 				<div class="section">
-					<h2>Achievements</h2>
+					<h2>Erfolge</h2>
 					<ul>
-						<li>Built one of the first Internet Service Providers in Kaiserslautern</li>
-						<li>Self-taught programming with AI</li>
-						<li>Found several security vulnerabilities, e.g. in cloud telephone provisioning systems</li>
-						<li>Jack of all trades in IT</li>
+						<li>Aufbau eines der ersten Internet Service Provider in Kaiserslautern</li>
+						<li>Autodidaktisches Programmieren mit KI</li>
+						<li>Mehrere Sicherheitslücken entdeckt, z.B. in Cloud-Telefonie-Provisionierungssystemen</li>
+						<li>Allrounder in der IT</li>
 					</ul>
 				</div>
 
 				<div class="section">
-					<h2>Education</h2>
+					<h2>Ausbildung</h2>
 					<div class="entry">
 						<div class="entry-header">
 							<h3>Bachelor Elektrotechnik</h3>
