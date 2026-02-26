@@ -4,6 +4,8 @@
 /// <reference types="unplugin-icons/types/svelte" />
 /// <reference types="@neodrag/svelte/globals" />
 
+declare const __APP_VERSION__: string;
+
 declare module 'cloudflare:sockets' {
 	interface SocketOptions {
 		secureTransport?: 'on' | 'off' | 'starttls';

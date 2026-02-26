@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import UnpluginIcons from 'unplugin-icons/vite';
 import { defineConfig } from 'vite';
@@ -9,6 +10,9 @@ import browserslist from 'browserslist';
 import { prefetch } from './prefetch-plugin';
 import { blogSeo } from './blog-seo-plugin';
 import { photosManifest } from './photos-plugin';
+
+const commitDate = execSync('git log -1 --format="%cd" --date=format:"%Y.%m.%d %H:%M"').toString().trim();
+const commitHash = execSync('git log -1 --format="%h"').toString().trim();
 
 export default defineConfig({
 	plugins: [
@@ -71,6 +75,9 @@ export default defineConfig({
 	build: {
 		minify: 'terser',
 		cssMinify: 'lightningcss',
+	},
+	define: {
+		__APP_VERSION__: JSON.stringify(`${commitDate} (${commitHash})`),
 	},
 	css: {
 		transformer: 'lightningcss',

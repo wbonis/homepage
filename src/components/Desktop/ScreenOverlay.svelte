@@ -79,7 +79,8 @@
 			<div class="about-header">
 				<img src="/app-icons/finder/256.webp" alt="macOS" class="about-icon" />
 				<h1>macOS Web</h1>
-				<p class="about-subtitle">Portfolio of Wolfgang Bonis</p>
+				<p class="about-version">Version {__APP_VERSION__}</p>
+				<p class="about-subtitle">Portfolio of Wim Bonis</p>
 			</div>
 			<div class="about-info">
 				<div class="info-row"><span class="info-label">Browser</span><span>{info.browser}</span></div>
@@ -177,6 +178,12 @@
 	.about-header h1 {
 		font-size: 1.5rem;
 		font-weight: 500;
+		margin: 0;
+	}
+
+	.about-version {
+		font-size: 0.8rem;
+		opacity: 0.4;
 		margin: 0;
 	}
 
