@@ -56,14 +56,17 @@
 			</div>
 		{/if}
 	</section>
-</section>
 
-{#if selected}
-	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-	<div class="lightbox" role="dialog" tabindex="-1" onclick={close_lightbox} onkeydown={(e) => e.key === 'Escape' && close_lightbox()}>
-		<img src="/photos/{selected}" alt={selected} />
-	</div>
-{/if}
+	{#if selected}
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+		<div class="lightbox" role="dialog" tabindex="-1" onkeydown={(e) => e.key === 'Escape' && close_lightbox()}>
+			<button class="lightbox-close" onclick={close_lightbox} aria-label="Close">&times;</button>
+			<div class="lightbox-scroll">
+				<img src="/photos/{selected}" alt={selected} />
+			</div>
+		</div>
+	{/if}
+</section>
 
 <style>
 	.container {
@@ -74,6 +77,7 @@
 		height: 100% !important;
 		max-height: 100%;
 		overflow-y: hidden;
+		position: relative;
 	}
 
 	.titlebar {
@@ -175,14 +179,44 @@
 	}
 
 	.lightbox {
-		position: fixed;
+		position: absolute;
 		inset: 0;
-		z-index: 999999;
-		background: rgba(0, 0, 0, 0.85);
+		z-index: 10;
+		background: rgba(0, 0, 0, 0.9);
+		display: flex;
+		flex-direction: column;
+		border-radius: inherit;
+	}
+
+	.lightbox-close {
+		position: absolute;
+		top: 0.5rem;
+		right: 0.5rem;
+		z-index: 1;
+		background: rgba(255, 255, 255, 0.15);
+		border: none;
+		color: white;
+		font-size: 1.4rem;
+		line-height: 1;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+		cursor: pointer;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		cursor: pointer;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.3);
+		}
+	}
+
+	.lightbox-scroll {
+		flex: 1;
+		overflow: auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		padding: 2rem;
 
 		img {
@@ -191,6 +225,19 @@
 			object-fit: contain;
 			border-radius: 4px;
 			box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+		}
+
+		&::-webkit-scrollbar {
+			background-color: transparent;
+			width: 10px;
+			height: 10px;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background-color: rgba(255, 255, 255, 0.4);
+			border: 3px solid transparent;
+			border-radius: 10px;
+			background-clip: content-box;
 		}
 	}
 </style>
