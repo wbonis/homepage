@@ -154,7 +154,7 @@
 
 		display: flex;
 		position: relative;
-		overflow: hidden;
+		overflow-x: clip;
 		min-width: 0;
 	}
 
