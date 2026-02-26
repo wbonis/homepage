@@ -10,6 +10,8 @@
 	import MonitorIcon from '~icons/mdi/monitor';
 	import BrainIcon from '~icons/mdi/head-cog';
 
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	type Section = 'about' | 'skills';
 	let active_section: Section = $state('about');
 
@@ -24,33 +26,40 @@
 	}
 </script>
 
-<section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<span>About Me</span>
-	</header>
+<section class="container" class:ios={ios_mode}>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>About Me</span>
+		</header>
 
-	<aside class:light={preferences.theme.scheme === 'light'}>
-		<nav>
-			<button class="nav-btn" class:active={active_section === 'about'} onclick={() => switch_section('about')}>
-				<CodeIcon /> About
-			</button>
-			<button class="nav-btn" class:active={active_section === 'skills'} onclick={() => switch_section('skills')}>
-				<WebIcon /> Skills
-			</button>
+		<aside class:light={preferences.theme.scheme === 'light'}>
+			<nav>
+				<button class="nav-btn" class:active={active_section === 'about'} onclick={() => switch_section('about')}>
+					<CodeIcon /> About
+				</button>
+				<button class="nav-btn" class:active={active_section === 'skills'} onclick={() => switch_section('skills')}>
+					<WebIcon /> Skills
+				</button>
 
-			<hr />
+				<hr />
 
-			<a href="https://github.com/WBonis" use:external>
-				<GithubIcon /> GitHub
-			</a>
-			<a href="https://www.linkedin.com/in/wbonis/" use:external>
-				<LinkedInIcon /> LinkedIn
-			</a>
-			<a href="mailto:bonis@bonis.de" use:external>
-				<EmailIcon /> Email
-			</a>
-		</nav>
-	</aside>
+				<a href="https://github.com/WBonis" use:external>
+					<GithubIcon /> GitHub
+				</a>
+				<a href="https://www.linkedin.com/in/wbonis/" use:external>
+					<LinkedInIcon /> LinkedIn
+				</a>
+				<a href="mailto:bonis@bonis.de" use:external>
+					<EmailIcon /> Email
+				</a>
+			</nav>
+		</aside>
+	{:else}
+		<div class="ios-tabs">
+			<button class="ios-tab" class:active={active_section === 'about'} onclick={() => switch_section('about')}>About</button>
+			<button class="ios-tab" class:active={active_section === 'skills'} onclick={() => switch_section('skills')}>Skills</button>
+		</div>
+	{/if}
 
 	<section class="content">
 		{#if active_section === 'about'}
@@ -205,6 +214,13 @@
 		color: var(--system-color-dark);
 	}
 
+	.container.ios {
+		display: flex;
+		flex-direction: column;
+		background-image: none;
+		background-color: hsla(var(--color), 1);
+	}
+
 	.titlebar {
 		grid-area: 1 / 1 / span 1 / span 2;
 
@@ -327,6 +343,31 @@
 		}
 	}
 
+	.ios-tabs {
+		display: flex;
+		gap: 0;
+		flex-shrink: 0;
+		border-bottom: 0.5px solid hsla(var(--system-color-dark-hsl), 0.15);
+	}
+
+	.ios-tab {
+		flex: 1;
+		padding: 10px 0;
+		background: none;
+		border: none;
+		border-bottom: 2px solid transparent;
+		font-size: 14px;
+		font-weight: 500;
+		font-family: inherit;
+		color: hsla(var(--system-color-dark-hsl), 0.5);
+		cursor: pointer;
+
+		&.active {
+			color: var(--system-color-primary);
+			border-bottom-color: var(--system-color-primary);
+		}
+	}
+
 	.content {
 		grid-area: 2 / 2 / span 1 / span 1;
 
@@ -336,6 +377,11 @@
 
 		padding: 1.5rem;
 		overflow-y: auto;
+	}
+
+	.container.ios .content {
+		grid-area: unset;
+		flex: 1;
 	}
 
 	.avatar {

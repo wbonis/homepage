@@ -240,10 +240,6 @@
 
 		cursor: var(--system-cursor-default), auto;
 
-		@media (max-width: 767px) {
-			zoom: 0.75;
-		}
-
 		&.active {
 			/* // --elevated-shadow: 0px 6.7px 12px rgba(0, 0, 0, 0.218), 0px 22.3px 40.2px rgba(0, 0, 0, 0.322),
       //   0px 100px 180px rgba(0, 0, 0, 0.54); */

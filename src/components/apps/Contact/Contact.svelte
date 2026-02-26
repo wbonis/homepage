@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { preferences } from '🍎/state/preferences.svelte.ts';
 
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	function external(node: HTMLAnchorElement) {
 		node.rel = 'noopener noreferrer';
 		node.target = '_blank';
@@ -8,9 +10,11 @@
 </script>
 
 <section class="container" class:light={preferences.theme.scheme === 'light'}>
-	<header class="titlebar app-window-drag-handle">
-		<span>Contact</span>
-	</header>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>Contact</span>
+		</header>
+	{/if}
 
 	<div class="card">
 		<div class="avatar-section">

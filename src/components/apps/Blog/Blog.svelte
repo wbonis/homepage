@@ -57,6 +57,8 @@
 		}
 	}
 
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	fetchFeed();
 
 	function openBlog() {
@@ -66,9 +68,11 @@
 </script>
 
 <section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<span>Stylite Blog</span>
-	</header>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>Stylite Blog</span>
+		</header>
+	{/if}
 
 	<div class="toolbar">
 		<div class="toolbar-left">

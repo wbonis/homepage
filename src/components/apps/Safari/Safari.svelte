@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { trackEvent } from '🍎/helpers/tracking';
 
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	let url = $state('https://stylite.de');
 	let inputUrl = $state('https://stylite.de');
 	let loading = $state(true);
@@ -20,26 +22,28 @@
 	}
 </script>
 
-<section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<span>Safari</span>
-	</header>
+<section class="container" class:ios={ios_mode}>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>Safari</span>
+		</header>
 
-	<div class="toolbar">
-		<div class="nav-buttons">
-			<button class="nav-btn" disabled title="Back">‹</button>
-			<button class="nav-btn" disabled title="Forward">›</button>
+		<div class="toolbar">
+			<div class="nav-buttons">
+				<button class="nav-btn" disabled title="Back">‹</button>
+				<button class="nav-btn" disabled title="Forward">›</button>
+			</div>
+			<form class="url-bar" onsubmit={(e) => { e.preventDefault(); navigate(); }}>
+				<input
+					type="text"
+					bind:value={inputUrl}
+					placeholder="Enter URL..."
+					spellcheck="false"
+				/>
+			</form>
+			<a class="external-btn" href={url} target="_blank" rel="noopener noreferrer" title="Open in new tab">↗</a>
 		</div>
-		<form class="url-bar" onsubmit={(e) => { e.preventDefault(); navigate(); }}>
-			<input
-				type="text"
-				bind:value={inputUrl}
-				placeholder="Enter URL..."
-				spellcheck="false"
-			/>
-		</form>
-		<a class="external-btn" href={url} target="_blank" rel="noopener noreferrer" title="Open in new tab">↗</a>
-	</div>
+	{/if}
 
 	<div class="browser-content">
 		{#if loading}
@@ -52,6 +56,19 @@
 			sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
 		></iframe>
 	</div>
+
+	{#if ios_mode}
+		<div class="ios-toolbar">
+			<form class="ios-url-bar" onsubmit={(e) => { e.preventDefault(); navigate(); }}>
+				<input
+					type="text"
+					bind:value={inputUrl}
+					placeholder="Search or enter URL"
+					spellcheck="false"
+				/>
+			</form>
+		</div>
+	{/if}
 </section>
 
 <style>
@@ -157,6 +174,10 @@
 		border-bottom-right-radius: inherit;
 	}
 
+	.container.ios .browser-content {
+		border-radius: 0;
+	}
+
 	.loading-bar {
 		position: absolute;
 		top: 0;
@@ -180,5 +201,34 @@
 		border-bottom-left-radius: inherit;
 		border-bottom-right-radius: inherit;
 		background: white;
+	}
+
+	.ios-toolbar {
+		flex-shrink: 0;
+		padding: 8px 12px;
+		background: hsla(var(--system-color-light-hsl), 0.95);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		border-top: 0.5px solid hsla(var(--system-color-dark-hsl), 0.15);
+	}
+
+	.ios-url-bar {
+		input {
+			width: 100%;
+			padding: 8px 12px;
+			border-radius: 10px;
+			border: none;
+			background: hsla(var(--system-color-dark-hsl), 0.07);
+			color: var(--system-color-dark);
+			font-size: 15px;
+			font-family: inherit;
+			outline: none;
+			text-align: center;
+
+			&:focus {
+				text-align: left;
+				background: hsla(var(--system-color-dark-hsl), 0.05);
+			}
+		}
 	}
 </style>

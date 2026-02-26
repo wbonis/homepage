@@ -18,6 +18,8 @@
 		preferences.wallpaper.id = wallpaperName;
 	}
 
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	function preload(url: string) {
 		const link = document.createElement('link');
 		link.rel = 'prefetch';
@@ -30,9 +32,11 @@
 </script>
 
 <section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<span>Wallpapers</span>
-	</header>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>Wallpapers</span>
+		</header>
+	{/if}
 
 	<section class="main-area">
 		<section class="selected-wallpaper-section">

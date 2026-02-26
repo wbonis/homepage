@@ -5,7 +5,7 @@
 	import { preferences } from '🍎/state/preferences.svelte.ts';
 	import MonthView from './MonthView.svelte';
 
-	const { view = 'month' }: { view?: 'year' | 'month' | 'week' | 'day' } = $props();
+	const { view = 'month', ios_mode = false }: { view?: 'year' | 'month' | 'week' | 'day'; ios_mode?: boolean } = $props();
 
 	let selected_date = $state(new Date());
 
@@ -22,8 +22,10 @@
 	}
 </script>
 
-<section class="container" class:dark={preferences.theme.scheme === 'dark'}>
-	<header class="app-window-drag-handle titlebar"></header>
+<section class="container" class:ios={ios_mode} class:dark={preferences.theme.scheme === 'dark'}>
+	{#if !ios_mode}
+		<header class="app-window-drag-handle titlebar"></header>
+	{/if}
 
 	<section class="main-area">
 		<div class="calendar-header">
@@ -81,6 +83,10 @@
 		position: absolute;
 		top: 0;
 		left: 0;
+	}
+
+	.container.ios {
+		--title-bar-height: 0rem;
 	}
 
 	.main-area {

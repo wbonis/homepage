@@ -15,6 +15,8 @@
 		stars: number;
 	};
 
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	type RepoGroup = {
 		name: string;
 		url: string;
@@ -102,28 +104,32 @@
 	}
 </script>
 
-<section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<span>Finder — src</span>
-	</header>
+<section class="container" class:ios={ios_mode}>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>Finder — src</span>
+		</header>
+	{/if}
 
 	<div class="sidebar-layout">
-		<aside class="sidebar">
-			<div class="sidebar-section">
-				<span class="sidebar-label">Favorites</span>
-				<div class="sidebar-item active">
-					<FolderIcon style="color: #54aef0;" /> src
+		{#if !ios_mode}
+			<aside class="sidebar">
+				<div class="sidebar-section">
+					<span class="sidebar-label">Favorites</span>
+					<div class="sidebar-item active">
+						<FolderIcon style="color: #54aef0;" /> src
+					</div>
 				</div>
-			</div>
-			<div class="sidebar-section">
-				<span class="sidebar-label">Locations</span>
-				{#each groups as group}
-					<a class="sidebar-item" href={group.url} target="_blank" rel="noopener noreferrer">
-						<RepoIcon /> {group.name}
-					</a>
-				{/each}
-			</div>
-		</aside>
+				<div class="sidebar-section">
+					<span class="sidebar-label">Locations</span>
+					{#each groups as group}
+						<a class="sidebar-item" href={group.url} target="_blank" rel="noopener noreferrer">
+							<RepoIcon /> {group.name}
+						</a>
+					{/each}
+				</div>
+			</aside>
+		{/if}
 
 		<main class="content">
 			<div class="path-bar">
@@ -230,6 +236,10 @@
 		flex: 1;
 		min-height: 0;
 		overflow: hidden;
+	}
+
+	.container.ios .sidebar-layout {
+		grid-template-columns: 1fr;
 	}
 
 	.sidebar {

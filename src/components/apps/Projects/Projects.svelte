@@ -1,4 +1,6 @@
 <script lang="ts">
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	const projects = [
 		{
 			name: 'Cloud Infrastructure Platform',
@@ -40,9 +42,11 @@
 </script>
 
 <section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<span>Projects</span>
-	</header>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>Projects</span>
+		</header>
+	{/if}
 
 	<div class="toolbar">
 		<h2>My Projects</h2>

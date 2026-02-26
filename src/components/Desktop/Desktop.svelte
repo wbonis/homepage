@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+	import type { DeviceType } from '🍎/helpers/device-detect';
+	import DeviceFrame from '../DeviceFrame/DeviceFrame.svelte';
 	import Dock from '../Dock/Dock.svelte';
 	import TopBar from '../TopBar/TopBar.svelte';
 	import Wallpaper from '../apps/WallpaperApp/Wallpaper.svelte';
@@ -7,6 +9,10 @@
 	import ScreenOverlay from './ScreenOverlay.svelte';
 	import SystemUpdate from './SystemUpdate.svelte';
 	import WindowsArea from './Window/WindowsArea.svelte';
+
+	const { deviceType = 'desktop' as DeviceType }: { deviceType?: DeviceType } = $props();
+
+	const isMobile = deviceType !== 'desktop';
 
 	const isMac = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
 
@@ -22,20 +28,29 @@
 	let mainEl;
 </script>
 
-<div bind:this={mainEl} class="container">
-	<main>
-		<TopBar />
-		<WindowsArea />
-		<Dock />
-	</main>
+<DeviceFrame device={deviceType}>
+	{#if isMobile}
+		{#await import('../IOSShell/IOSShell.svelte') then { default: IOSShell }}
+			<IOSShell device={deviceType} />
+		{/await}
+	{:else}
+		<div bind:this={mainEl} class="container">
+			<main>
+				<TopBar />
+				<WindowsArea />
+				<Dock />
+			</main>
 
-	<Wallpaper />
+			<Wallpaper />
+			<ScreenOverlay />
+			<SystemUpdate />
+
+			<ContextMenu target_element={mainEl} />
+		</div>
+	{/if}
+
 	<BootupScreen />
-	<ScreenOverlay />
-	<SystemUpdate />
-
-	<ContextMenu target_element={mainEl} />
-</div>
+</DeviceFrame>
 
 <style>
 	.container {

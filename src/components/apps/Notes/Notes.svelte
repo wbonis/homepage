@@ -1,24 +1,30 @@
 <script lang="ts">
 	import { preferences } from '🍎/state/preferences.svelte.ts';
 	import NoteIcon from '~icons/mdi/note-text-outline';
+
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
 </script>
 
-<section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<span>Notes</span>
-	</header>
+<section class="container" class:ios={ios_mode}>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>Notes</span>
+		</header>
+	{/if}
 
 	<div class="body">
-		<aside class:light={preferences.theme.scheme === 'light'}>
-			<div class="sidebar-header">Notes</div>
-			<button class="note-item active">
-				<NoteIcon />
-				<div class="note-preview">
-					<strong>Resume (Draft)</strong>
-					<span>Experience, Skills, Education...</span>
-				</div>
-			</button>
-		</aside>
+		{#if !ios_mode}
+			<aside class:light={preferences.theme.scheme === 'light'}>
+				<div class="sidebar-header">Notes</div>
+				<button class="note-item active">
+					<NoteIcon />
+					<div class="note-preview">
+						<strong>Resume (Draft)</strong>
+						<span>Experience, Skills, Education...</span>
+					</div>
+				</button>
+			</aside>
+		{/if}
 
 		<div class="content">
 			<div class="note-content">
@@ -186,6 +192,10 @@
 		border-bottom-right-radius: inherit;
 	}
 
+	.container.ios .body {
+		grid-template-columns: 1fr;
+	}
+
 	aside {
 		background-color: #f9f5ed;
 		border-right: 1px solid #e0d9ce;
@@ -269,6 +279,10 @@
 			margin-bottom: 1.5rem;
 			color: #2c2c2c;
 		}
+	}
+
+	.container.ios .note-content {
+		padding: 1rem;
 	}
 
 	.section {

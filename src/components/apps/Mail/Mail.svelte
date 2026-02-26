@@ -7,6 +7,8 @@
 	import SendIcon from '~icons/mdi/send';
 	import AlertIcon from '~icons/mdi/alert-circle-outline';
 
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	let name = $state('');
 	let email = $state('');
 	let subject = $state('');
@@ -62,33 +64,41 @@
 	}
 </script>
 
-<section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<span>Mail</span>
-	</header>
+<section class="container" class:ios={ios_mode}>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>Mail</span>
+		</header>
 
-	<aside class:light={preferences.theme.scheme === 'light'}>
-		<nav>
-			<button class="subject-btn active" onclick={() => { subject = 'Job Opportunity'; trackEvent('Contact', 'subject_selected', 'Job Opportunity'); }}>
-				<EmailIcon /> Job Opportunity
-			</button>
-			<button class="subject-btn" onclick={() => { subject = 'Freelance Work'; trackEvent('Contact', 'subject_selected', 'Freelance Work'); }}>
-				<EmailIcon /> Freelance Work
-			</button>
-			<button class="subject-btn" onclick={() => { subject = 'Just Saying Hi'; trackEvent('Contact', 'subject_selected', 'Just Saying Hi'); }}>
-				<EmailIcon /> Just Saying Hi
-			</button>
+		<aside class:light={preferences.theme.scheme === 'light'}>
+			<nav>
+				<button class="subject-btn active" onclick={() => { subject = 'Job Opportunity'; trackEvent('Contact', 'subject_selected', 'Job Opportunity'); }}>
+					<EmailIcon /> Job Opportunity
+				</button>
+				<button class="subject-btn" onclick={() => { subject = 'Freelance Work'; trackEvent('Contact', 'subject_selected', 'Freelance Work'); }}>
+					<EmailIcon /> Freelance Work
+				</button>
+				<button class="subject-btn" onclick={() => { subject = 'Just Saying Hi'; trackEvent('Contact', 'subject_selected', 'Just Saying Hi'); }}>
+					<EmailIcon /> Just Saying Hi
+				</button>
 
-			<hr />
+				<hr />
 
-			<a href="https://github.com/WBonis" use:external>
-				<GithubIcon /> GitHub
-			</a>
-			<a href="https://linkedin.com/in/wbonis" use:external>
-				<LinkedInIcon /> LinkedIn
-			</a>
-		</nav>
-	</aside>
+				<a href="https://github.com/WBonis" use:external>
+					<GithubIcon /> GitHub
+				</a>
+				<a href="https://linkedin.com/in/wbonis" use:external>
+					<LinkedInIcon /> LinkedIn
+				</a>
+			</nav>
+		</aside>
+	{:else}
+		<div class="ios-subject-bar">
+			<button class="ios-subject-btn" onclick={() => { subject = 'Job Opportunity'; }}>Job</button>
+			<button class="ios-subject-btn" onclick={() => { subject = 'Freelance Work'; }}>Freelance</button>
+			<button class="ios-subject-btn" onclick={() => { subject = 'Just Saying Hi'; }}>Say Hi</button>
+		</div>
+	{/if}
 
 	<section class="content">
 		{#if status === 'success'}
@@ -152,6 +162,14 @@
 		);
 
 		color: var(--system-color-dark);
+	}
+
+	.container.ios {
+		display: flex;
+		flex-direction: column;
+		background-image: none;
+		background-color: hsla(var(--color), 1);
+		height: 100%;
 	}
 
 	.titlebar {
@@ -255,10 +273,37 @@
 		}
 	}
 
+	.ios-subject-bar {
+		display: flex;
+		gap: 8px;
+		padding: 8px 12px;
+		flex-shrink: 0;
+		border-bottom: 0.5px solid hsla(var(--system-color-dark-hsl), 0.15);
+	}
+
+	.ios-subject-btn {
+		flex: 1;
+		padding: 6px 8px;
+		border-radius: 8px;
+		border: none;
+		background: hsla(var(--system-color-primary-hsl), 0.12);
+		color: var(--system-color-primary);
+		font-size: 13px;
+		font-weight: 500;
+		font-family: inherit;
+		cursor: pointer;
+	}
+
 	.content {
 		grid-area: 2 / 2 / span 1 / span 1;
 		padding: 1.5rem;
 		overflow-y: auto;
+	}
+
+	.container.ios .content {
+		grid-area: unset;
+		flex: 1;
+		padding: 1rem;
 	}
 
 	form {

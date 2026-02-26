@@ -11,6 +11,8 @@
 		{ command: '', output: 'Welcome to WBonis Terminal v1.0\nType "help" for available commands.\n' },
 	]);
 	let currentInput = $state('');
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	let terminalEl: HTMLDivElement | undefined = $state();
 
 	const commands: Record<string, () => string> = {
@@ -105,14 +107,16 @@ LinkedIn: linkedin.com/in/wbonis`,
 </script>
 
 <section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<div class="title-dots">
-			<span class="dot red"></span>
-			<span class="dot yellow"></span>
-			<span class="dot green"></span>
-		</div>
-		<span class="title-text">WBonis — zsh — 80x24</span>
-	</header>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<div class="title-dots">
+				<span class="dot red"></span>
+				<span class="dot yellow"></span>
+				<span class="dot green"></span>
+			</div>
+			<span class="title-text">WBonis — zsh — 80x24</span>
+		</header>
+	{/if}
 
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->

@@ -13,6 +13,8 @@
 	type Category = 'featured' | 'websites' | 'github' | 'easter-eggs';
 
 	let active_category: Category = $state('featured');
+	const { ios_mode = false }: { ios_mode?: boolean } = $props();
+
 	let konami_progress = $state(0);
 	let show_nyan = $state(false);
 	let download_clicks: Record<string, number> = $state({});
@@ -154,25 +156,39 @@
 
 <svelte:window onkeydown={handle_keydown} />
 
-<section class="container">
-	<header class="titlebar app-window-drag-handle">
-		<span>App Store</span>
-	</header>
+<section class="container" class:ios={ios_mode}>
+	{#if !ios_mode}
+		<header class="titlebar app-window-drag-handle">
+			<span>App Store</span>
+		</header>
 
-	<aside class:light={preferences.theme.scheme === 'light'}>
-		<div class="sidebar-section-title">Discover</div>
-		<nav>
+		<aside class:light={preferences.theme.scheme === 'light'}>
+			<div class="sidebar-section-title">Discover</div>
+			<nav>
+				{#each categories as cat}
+					<button
+						class="nav-btn"
+						class:active={active_category === cat.id}
+						onclick={() => { active_category = cat.id; trackEvent('AppStore', 'category_changed', cat.id); }}
+					>
+						<cat.icon /> {cat.label}
+					</button>
+				{/each}
+			</nav>
+		</aside>
+	{:else}
+		<div class="ios-tabs">
 			{#each categories as cat}
 				<button
-					class="nav-btn"
+					class="ios-tab"
 					class:active={active_category === cat.id}
-					onclick={() => { active_category = cat.id; trackEvent('AppStore', 'category_changed', cat.id); }}
+					onclick={() => { active_category = cat.id; }}
 				>
-					<cat.icon /> {cat.label}
+					{cat.label}
 				</button>
 			{/each}
-		</nav>
-	</aside>
+		</div>
+	{/if}
 
 	<section class="content">
 		{#if show_nyan}
@@ -321,6 +337,44 @@
 		);
 
 		color: var(--system-color-dark);
+	}
+
+	.container.ios {
+		display: flex;
+		flex-direction: column;
+		background-image: none;
+		background-color: hsla(var(--color), 1);
+		height: 100%;
+	}
+
+	.ios-tabs {
+		display: flex;
+		gap: 0;
+		flex-shrink: 0;
+		border-bottom: 0.5px solid hsla(var(--system-color-dark-hsl), 0.15);
+	}
+
+	.ios-tab {
+		flex: 1;
+		padding: 10px 0;
+		background: none;
+		border: none;
+		border-bottom: 2px solid transparent;
+		font-size: 12px;
+		font-weight: 500;
+		font-family: inherit;
+		color: hsla(var(--system-color-dark-hsl), 0.5);
+		cursor: pointer;
+
+		&.active {
+			color: var(--system-color-primary);
+			border-bottom-color: var(--system-color-primary);
+		}
+	}
+
+	.container.ios .content {
+		grid-area: unset;
+		flex: 1;
 	}
 
 	.titlebar {
