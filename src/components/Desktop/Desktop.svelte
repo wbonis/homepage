@@ -24,8 +24,7 @@
 			import('@fontsource/inter/latin-ext-600.css'),
 		]);
 	}
-	/** @type {HTMLElement} */
-	let mainEl;
+	let mainEl = $state<HTMLElement>();
 </script>
 
 <DeviceFrame device={deviceType}>

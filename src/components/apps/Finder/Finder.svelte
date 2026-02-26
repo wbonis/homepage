@@ -354,7 +354,7 @@
 					class:active={active_folder === key}
 					onclick={() => sidebar_navigate(key)}
 				>
-					<span class="sidebar-icon"><svelte:component this={entry.icon} /></span>
+					<span class="sidebar-icon"><entry.icon /></span>
 					{entry.label}
 				</button>
 			{/each}
@@ -376,6 +376,7 @@
 		<div class="main-area">
 			<div class="file-grid">
 				{#each fs[active_folder]?.items ?? [] as item}
+					{@const Icon = item.kind === 'folder' ? FolderOpenIcon : item.icon}
 					<button
 						class="file-item"
 						class:selected={selected_item === item.name}
@@ -383,7 +384,7 @@
 						ondblclick={() => handle_dblclick(item)}
 					>
 						<div class="file-icon" class:folder={item.kind === 'folder'} class:app={!!item.opens}>
-							<svelte:component this={item.kind === 'folder' ? FolderOpenIcon : item.icon} />
+							<Icon />
 						</div>
 						<span class="file-name">{item.name}</span>
 					</button>

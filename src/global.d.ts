@@ -1,4 +1,8 @@
 /// <reference types="svelte" />
+/// <reference types="vite/client" />
+/// <reference types="vite-plugin-pwa/client" />
+/// <reference types="unplugin-icons/types/svelte" />
+/// <reference types="@neodrag/svelte/globals" />
 
 declare module 'cloudflare:sockets' {
 	interface SocketOptions {
@@ -12,10 +16,6 @@ declare module 'cloudflare:sockets' {
 	}
 	export function connect(address: string, options?: SocketOptions): Socket;
 }
-/// <reference types="vite/client" />
-/// <reference types="vite-plugin-pwa/client" />
-/// <reference types="unplugin-icons/types/svelte" />
-/// <reference types="@neodrag/svelte/globals" />
 
 type ObjectKeys<Obj> = Obj extends object
 	? (keyof Obj)[]
