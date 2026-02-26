@@ -26,9 +26,9 @@
   clear       - Terminal leeren
   help        - Diese Hilfe anzeigen`,
 
-		whoami: () => 'WBonis - System Architekt',
+		whoami: () => 'Wim Bonis - System Architekt',
 
-		about: () => `WBonis - System Architekt
+		about: () => `Wim Bonis - System Architekt
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 Erfahrener System Architekt mit Spezialisierung
 auf Cloud-Infrastruktur, verteilte Systeme

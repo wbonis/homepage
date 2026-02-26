@@ -69,7 +69,7 @@
 
 			<br />
 
-			<h1>WBonis</h1>
+			<h1>Wim Bonis</h1>
 			<h2>System Architekt</h2>
 
 			<br />

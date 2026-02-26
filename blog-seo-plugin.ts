@@ -60,7 +60,7 @@ function buildJsonLd(posts: BlogPost[]): object {
 			{
 				'@type': 'Person',
 				'@id': 'https://www.bonis.de/#person',
-				name: 'WBonis',
+				name: 'Wim Bonis',
 				jobTitle: 'System Architekt',
 				email: 'bonis@bonis.de',
 				url: 'https://www.bonis.de',
@@ -102,7 +102,7 @@ function buildJsonLd(posts: BlogPost[]): object {
 				'@type': 'WebSite',
 				'@id': 'https://www.bonis.de/#website',
 				url: 'https://www.bonis.de',
-				name: 'WBonis | System Architekt',
+				name: 'Wim Bonis | System Architekt',
 				author: { '@id': 'https://www.bonis.de/#person' },
 			},
 			{

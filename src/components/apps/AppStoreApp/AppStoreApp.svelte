@@ -89,7 +89,7 @@
 		},
 		{
 			id: 'wbonis',
-			name: 'WBonis',
+			name: 'Wim Bonis',
 			subtitle: 'GitHub Profile',
 			description: 'Alle öffentlichen Repositories und Open-Source-Beiträge.',
 			url: 'https://github.com/WBonis',
@@ -204,7 +204,7 @@
 				<div class="banner-content">
 					<span class="banner-tag">PORTFOLIO-KOLLEKTION</span>
 					<h1>Willkommen im App Store</h1>
-					<p>Entdecke Wolfgang Bonis' Websites, Open-Source-Projekte und ein paar versteckte Überraschungen.</p>
+					<p>Entdecke Wim Bonis' Websites, Open-Source-Projekte und ein paar versteckte Überraschungen.</p>
 				</div>
 			</div>
 

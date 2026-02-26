@@ -19,7 +19,7 @@
 	<div class="card">
 		<div class="avatar-section">
 			<div class="avatar">WB</div>
-			<h1 class="name">WBonis</h1>
+			<h1 class="name">Wim Bonis</h1>
 			<p class="role">System Architekt</p>
 		</div>
 
