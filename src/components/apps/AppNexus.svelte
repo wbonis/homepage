@@ -60,6 +60,10 @@
 	{#await import('./Calculator/Calculator.svelte') then { default: Calculator }}
 		<Calculator {ios_mode} />
 	{/await}
+{:else if app_id === 'fotos'}
+	{#await import('./Fotos/Fotos.svelte') then { default: Fotos }}
+		<Fotos {ios_mode} />
+	{/await}
 {:else if app_id === 'wallpapers'}
 	{#await import('./WallpaperApp/WallpaperSelectorApp.svelte') then { default: WallpaperSelector }}
 		<WallpaperSelector {ios_mode} />

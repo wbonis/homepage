@@ -7,6 +7,13 @@ const finder = create_app_config({
 	width: 900,
 });
 
+const fotos = create_app_config({
+	title: 'Fotos',
+	resizable: true,
+	height: 600,
+	width: 800,
+});
+
 const wallpapers = create_app_config({
 	title: 'Wallpapers',
 	resizable: true,
@@ -128,6 +135,7 @@ export const apps_config = {
 	safari,
 	calendar,
 	calculator,
+	fotos,
 	wallpapers,
 	'view-source': viewSource,
 };

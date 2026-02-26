@@ -8,12 +8,14 @@ import browserslist from 'browserslist';
 
 import { prefetch } from './prefetch-plugin';
 import { blogSeo } from './blog-seo-plugin';
+import { photosManifest } from './photos-plugin';
 
 export default defineConfig({
 	plugins: [
 		svelte(),
 		prefetch(),
 		blogSeo(),
+		photosManifest(),
 
 		UnpluginIcons({ autoInstall: true, compiler: 'svelte' }),
 		VitePWA({
