@@ -109,11 +109,6 @@ LinkedIn: linkedin.com/in/wbonis`,
 <section class="container">
 	{#if !ios_mode}
 		<header class="titlebar app-window-drag-handle">
-			<div class="title-dots">
-				<span class="dot red"></span>
-				<span class="dot yellow"></span>
-				<span class="dot green"></span>
-			</div>
 			<span class="title-text">WBonis — zsh — 80x24</span>
 		</header>
 	{/if}
@@ -161,34 +156,16 @@ LinkedIn: linkedin.com/in/wbonis`,
 
 	.titlebar {
 		display: flex;
+		justify-content: center;
 		align-items: center;
 		padding: 0.6rem 1rem;
 		background-color: #2d2d2d;
 		border-top-left-radius: inherit;
 		border-top-right-radius: inherit;
 		flex-shrink: 0;
-		position: relative;
-	}
-
-	.title-dots {
-		display: flex;
-		gap: 6px;
-	}
-
-	.dot {
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-
-		&.red { background-color: #ff5f57; }
-		&.yellow { background-color: #febc2e; }
-		&.green { background-color: #28c840; }
 	}
 
 	.title-text {
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
 		color: rgba(255, 255, 255, 0.5);
 		font-size: 0.75rem;
 	}
