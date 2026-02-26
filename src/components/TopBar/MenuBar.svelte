@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AppleIcon from '~icons/mdi/apple';
+	import LaptopIcon from '~icons/mdi/laptop';
 	import { click_outside, elevation, focus_outside } from '🍎/actions';
 	import { trackEvent } from '🍎/helpers/tracking';
 	import { menubar_state } from '🍎/state/menubar.svelte';
@@ -116,7 +116,7 @@
 					onfocus={() => (menubar_state.active = menuID)}
 				>
 					{#if menuID === 'apple'}
-						<AppleIcon />
+						<LaptopIcon />
 					{:else}
 						{menuConfig.title}
 					{/if}
