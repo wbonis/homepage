@@ -154,12 +154,36 @@
 
 <style>
 	.container {
+		--notes-bg-titlebar: #f5f0e8;
+		--notes-bg-sidebar: #f9f5ed;
+		--notes-bg-content: #fffef7;
+		--notes-border: #e0d9ce;
+		--notes-text: #3c3c3c;
+		--notes-text-heading: #2c2c2c;
+		--notes-text-muted: #8a8178;
+		--notes-accent: #c4a84d;
+		--notes-active-bg: #fbe9a2;
+		--notes-section-border: #e8e0d0;
+
 		display: flex;
 		flex-direction: column;
 		height: 100%;
 		overflow: hidden;
 		border-radius: inherit;
-		color: var(--system-color-dark);
+		color: var(--notes-text);
+	}
+
+	:global(body.dark) .container {
+		--notes-bg-titlebar: #2a2a2a;
+		--notes-bg-sidebar: #252525;
+		--notes-bg-content: #1e1e1e;
+		--notes-border: #3a3a3a;
+		--notes-text: #d4d4d4;
+		--notes-text-heading: #e8e8e8;
+		--notes-text-muted: #8a8a8a;
+		--notes-accent: #d4a84d;
+		--notes-active-bg: #3d3520;
+		--notes-section-border: #3a3a3a;
 	}
 
 	.titlebar {
@@ -172,11 +196,11 @@
 		border-top-right-radius: inherit;
 		user-select: none;
 		flex-shrink: 0;
-		background-color: #f5f0e8;
-		border-bottom: 1px solid #e0d9ce;
+		background-color: var(--notes-bg-titlebar);
+		border-bottom: 1px solid var(--notes-border);
 
 		span {
-			color: #3c3c3c;
+			color: var(--notes-text);
 			font-weight: 500;
 			font-size: 0.9rem;
 			letter-spacing: 0.5px;
@@ -197,8 +221,8 @@
 	}
 
 	aside {
-		background-color: #f9f5ed;
-		border-right: 1px solid #e0d9ce;
+		background-color: var(--notes-bg-sidebar);
+		border-right: 1px solid var(--notes-border);
 		display: flex;
 		flex-direction: column;
 		overflow-y: auto;
@@ -211,7 +235,7 @@
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
-		color: #8a8178;
+		color: var(--notes-text-muted);
 	}
 
 	.note-item {
@@ -229,7 +253,7 @@
 		width: calc(100% - 0.8rem);
 
 		&.active {
-			background-color: #fbe9a2;
+			background-color: var(--notes-active-bg);
 		}
 
 		:global(svg) {
@@ -237,7 +261,7 @@
 			width: 1rem;
 			height: 1rem;
 			margin-top: 0.1rem;
-			color: #c4a84d;
+			color: var(--notes-accent);
 		}
 	}
 
@@ -250,12 +274,12 @@
 		strong {
 			font-size: 0.8rem;
 			font-weight: 600;
-			color: #3c3c3c;
+			color: var(--notes-text);
 		}
 
 		span {
 			font-size: 0.7rem;
-			color: #8a8178;
+			color: var(--notes-text-muted);
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -263,7 +287,7 @@
 	}
 
 	.content {
-		background-color: #fffef7;
+		background-color: var(--notes-bg-content);
 		overflow-y: auto;
 		border-bottom-right-radius: inherit;
 	}
@@ -271,13 +295,13 @@
 	.note-content {
 		padding: 2rem;
 		max-width: 550px;
-		color: #3c3c3c;
+		color: var(--notes-text);
 
 		h1 {
 			font-size: 1.5rem;
 			font-weight: 700;
 			margin-bottom: 1.5rem;
-			color: #2c2c2c;
+			color: var(--notes-text-heading);
 		}
 	}
 
@@ -293,10 +317,10 @@
 			font-weight: 700;
 			text-transform: uppercase;
 			letter-spacing: 1px;
-			color: #c4a84d;
+			color: var(--notes-accent);
 			margin-bottom: 0.6rem;
 			padding-bottom: 0.3rem;
-			border-bottom: 1px solid #e8e0d0;
+			border-bottom: 1px solid var(--notes-section-border);
 		}
 	}
 
