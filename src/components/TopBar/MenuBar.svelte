@@ -5,7 +5,7 @@
 	import { menubar_state } from '🍎/state/menubar.svelte';
 	import { apps } from '🍎/state/apps.svelte';
 	import type { AppID } from '🍎/state/apps.svelte';
-	import { screen_overlay } from '🍎/state/screen-overlay.svelte';
+	import { screen_overlay, trigger_glitch } from '🍎/state/screen-overlay.svelte';
 	import Menu from './Menu.svelte';
 
 	function handle_menu_action(key: string) {
@@ -42,6 +42,9 @@
 
 			// Edit menu
 			'show-clipboard': () => show_clippy(),
+
+			// View menu
+			'use-stacks': () => { trackEvent('EasterEgg', 'found', 'kernel-panic-menu'); trigger_glitch(); },
 
 			// Window menu
 			'bring-all-to-front': () => reset_z_indices(),

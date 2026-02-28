@@ -2,6 +2,7 @@
 	import { preferences } from '🍎/state/preferences.svelte.ts';
 	import { apps } from '🍎/state/apps.svelte';
 	import type { AppID } from '🍎/state/apps.svelte';
+	import { trigger_glitch } from '🍎/state/screen-overlay.svelte';
 	import FolderIcon from '~icons/mdi/folder';
 	import FolderOpenIcon from '~icons/mdi/folder-open';
 	import ImageIcon from '~icons/mdi/image-outline';
@@ -313,7 +314,13 @@
 		preview_content = item.preview ?? null;
 	}
 
+	const glitch_files = new Set(['free-ram.exe', 'segfault.wav']);
+
 	function handle_dblclick(item: FileItem) {
+		if (glitch_files.has(item.name)) {
+			trigger_glitch();
+			return;
+		}
 		if (item.kind === 'folder' && item.target && fs[item.target]) {
 			navigate_to(item.target);
 		} else if (item.opens) {

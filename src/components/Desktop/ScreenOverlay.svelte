@@ -3,12 +3,110 @@
 	import { screen_overlay } from '🍎/state/screen-overlay.svelte';
 
 	let clock = $state(get_time());
+	let corrupt_canvas: HTMLCanvasElement | undefined = $state();
 
 	$effect(() => {
 		if (screen_overlay.mode !== 'lock') return;
 		clock = get_time();
 		const interval = setInterval(() => (clock = get_time()), 1000);
 		return () => clearInterval(interval);
+	});
+
+	$effect(() => {
+		if (screen_overlay.mode !== 'vram-corrupt' || !corrupt_canvas) return;
+
+		const canvas = corrupt_canvas;
+		const ctx = canvas.getContext('2d')!;
+		const w = (canvas.width = window.innerWidth);
+		const h = (canvas.height = window.innerHeight);
+		let frame_id: number;
+		let start = performance.now();
+
+		function draw_corruption(time: number) {
+			const elapsed = time - start;
+			const intensity = Math.min(elapsed / 3000, 1);
+
+			ctx.clearRect(0, 0, w, h);
+
+			// Displaced horizontal bands — like VRAM row offset corruption
+			const band_count = Math.floor(3 + intensity * 12);
+			for (let i = 0; i < band_count; i++) {
+				const y = Math.random() * h;
+				const band_h = 2 + Math.random() * (8 + intensity * 40);
+				const offset_x = (Math.random() - 0.5) * (20 + intensity * 200);
+
+				ctx.save();
+				ctx.globalAlpha = 0.3 + intensity * 0.5;
+				// Draw a displaced copy of that screen band
+				ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, ${20 + Math.random() * 30}%)`;
+				ctx.fillRect(offset_x, y, w, band_h);
+				ctx.restore();
+			}
+
+			// Random colored block artifacts — corrupted VRAM cells
+			const block_count = Math.floor(intensity * 60);
+			for (let i = 0; i < block_count; i++) {
+				const bx = Math.random() * w;
+				const by = Math.random() * h;
+				const bw = 4 + Math.random() * (30 + intensity * 80);
+				const bh = 2 + Math.random() * (10 + intensity * 20);
+
+				ctx.globalAlpha = 0.15 + Math.random() * intensity * 0.6;
+				const colors = ['#ff0050', '#00ff88', '#0088ff', '#ff00ff', '#ffff00', '#00ffff', '#ffffff', '#000000'];
+				ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+				ctx.fillRect(bx, by, bw, bh);
+			}
+
+			// Horizontal scanline tears
+			const tear_count = Math.floor(2 + intensity * 8);
+			for (let i = 0; i < tear_count; i++) {
+				const y = Math.random() * h;
+				ctx.globalAlpha = 0.4 + intensity * 0.4;
+				ctx.fillStyle = Math.random() > 0.5 ? '#ffffff' : '#000000';
+				ctx.fillRect(0, y, w, 1 + Math.random() * 2);
+			}
+
+			// RGB channel split blocks — shifted color planes
+			if (intensity > 0.3) {
+				const split_count = Math.floor((intensity - 0.3) * 15);
+				for (let i = 0; i < split_count; i++) {
+					const sx = Math.random() * w;
+					const sy = Math.random() * h;
+					const sw = 20 + Math.random() * 120;
+					const sh = 10 + Math.random() * 60;
+
+					// Red channel shift
+					ctx.globalAlpha = 0.15 + intensity * 0.2;
+					ctx.globalCompositeOperation = 'screen';
+					ctx.fillStyle = '#ff0000';
+					ctx.fillRect(sx + 3 + intensity * 8, sy, sw, sh);
+
+					// Cyan channel shift
+					ctx.fillStyle = '#00ffff';
+					ctx.fillRect(sx - 3 - intensity * 8, sy, sw, sh);
+
+					ctx.globalCompositeOperation = 'source-over';
+				}
+			}
+
+			// Static noise at high intensity
+			if (intensity > 0.6) {
+				const noise_density = (intensity - 0.6) * 400;
+				for (let i = 0; i < noise_density; i++) {
+					const nx = Math.random() * w;
+					const ny = Math.random() * h;
+					ctx.globalAlpha = Math.random() * 0.8;
+					ctx.fillStyle = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`;
+					ctx.fillRect(nx, ny, 1 + Math.random() * 3, 1 + Math.random() * 2);
+				}
+			}
+
+			ctx.globalAlpha = 1;
+			frame_id = requestAnimationFrame(draw_corruption);
+		}
+
+		frame_id = requestAnimationFrame(draw_corruption);
+		return () => cancelAnimationFrame(frame_id);
 	});
 
 	function get_time() {
@@ -43,6 +141,72 @@
 		};
 	}
 
+	let bug_report_text = $state('');
+	let bug_report_email = $state('');
+	let bug_sending = $state(false);
+	let bug_status = $state<'idle' | 'success' | 'error'>('idle');
+	let bug_error = $state('');
+
+	async function submit_bug_report() {
+		bug_sending = true;
+		bug_status = 'idle';
+		bug_error = '';
+
+		const system_info = [
+			`Browser: ${navigator.userAgent}`,
+			`Viewport: ${window.innerWidth}x${window.innerHeight}`,
+			`Screen: ${window.screen.width}x${window.screen.height}`,
+			`Pixel Ratio: ${window.devicePixelRatio}x`,
+		].join('\n');
+
+		const message = [
+			bug_report_text.trim() || '(Keine Beschreibung)',
+			'',
+			'--- System Info ---',
+			system_info,
+		].join('\n');
+
+		const payload = {
+			name: bug_report_email.trim() || 'Anonym',
+			email: bug_report_email.trim() || 'noreply@bonis.de',
+			subject: 'Bug Report: macOS Web Kernel Panic',
+			message,
+		};
+
+		try {
+			const res = await fetch('/api/contact', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(payload),
+			});
+
+			if (!res.ok) {
+				const data = await res.json();
+				throw new Error(data.error || 'Senden fehlgeschlagen.');
+			}
+
+			bug_status = 'success';
+		} catch (err) {
+			bug_status = 'error';
+			bug_error = err instanceof Error ? err.message : 'Etwas ist schiefgelaufen.';
+		} finally {
+			bug_sending = false;
+		}
+	}
+
+	function reset_bug_form() {
+		bug_report_text = '';
+		bug_report_email = '';
+		bug_sending = false;
+		bug_status = 'idle';
+		bug_error = '';
+	}
+
+	function close_bug_report() {
+		screen_overlay.mode = 'none';
+		reset_bug_form();
+	}
+
 	function dismiss() {
 		screen_overlay.mode = 'none';
 	}
@@ -67,6 +231,66 @@
 {#if screen_overlay.mode === 'shutdown'}
 	<div class="overlay shutdown" use:elevation={'screen-overlay'} onclick={() => location.reload()} role="button" tabindex="0" onkeydown={() => location.reload()}>
 		<span class="hint">Click anywhere to start</span>
+	</div>
+{/if}
+
+{#if screen_overlay.mode === 'vram-corrupt'}
+	<canvas class="corrupt-canvas" bind:this={corrupt_canvas} use:elevation={'screen-overlay'}></canvas>
+{/if}
+
+{#if screen_overlay.mode === 'kernel-panic'}
+	<div class="overlay kernel-panic" use:elevation={'screen-overlay'} onclick={() => (screen_overlay.mode = 'bug-report')} role="button" tabindex="0" onkeydown={() => (screen_overlay.mode = 'bug-report')}>
+		<div class="panic-content">
+			<div class="panic-icon">⚠</div>
+			<p class="panic-main">You need to restart your computer. Hold down the Power button for several seconds or press the Restart button.</p>
+			<div class="panic-translations">
+				<p>Vous devez redémarrer votre ordinateur. Maintenez la touche d'alimentation enfoncée pendant plusieurs secondes ou appuyez sur le bouton de redémarrage.</p>
+				<p>Sie müssen den Computer neu starten. Halten Sie den Ein-/Ausschalter einige Sekunden gedrückt oder klicken Sie auf „Neustart".</p>
+				<p>コンピュータを再起動する必要があります。パワーボタンを数秒間押し続けるか、「再起動」ボタンを押してください。</p>
+			</div>
+		</div>
+		<span class="hint">Click anywhere to restart</span>
+	</div>
+{/if}
+
+{#if screen_overlay.mode === 'bug-report'}
+	<div class="overlay bug-report-backdrop" use:elevation={'screen-overlay'}>
+		<div class="bug-report-dialog" role="dialog">
+			<div class="bug-report-header">
+				<div class="bug-report-icon">🪲</div>
+				<h1>Problem Report</h1>
+				<p class="bug-report-subtitle">macOS Web ist unerwartet beendet worden. Möchten Sie einen Fehlerbericht senden?</p>
+			</div>
+
+			{#if bug_status === 'success'}
+				<div class="bug-report-success">
+					<div class="success-icon">✓</div>
+					<h2>Bericht gesendet!</h2>
+					<p>Danke für das Feedback. Der Bug wird untersucht.</p>
+					<button class="bug-btn primary" onclick={close_bug_report}>Schließen</button>
+				</div>
+			{:else}
+				<form class="bug-report-form" onsubmit={(e) => { e.preventDefault(); submit_bug_report(); }}>
+					{#if bug_status === 'error'}
+						<div class="bug-report-error">{bug_error}</div>
+					{/if}
+					<label>
+						<span>Was haben Sie getan, als das Problem auftrat?</span>
+						<textarea bind:value={bug_report_text} rows="4" placeholder="Beschreiben Sie das Problem..." disabled={bug_sending}></textarea>
+					</label>
+					<label>
+						<span>E-Mail (optional, für Rückfragen)</span>
+						<input type="email" bind:value={bug_report_email} placeholder="ihre@email.de" disabled={bug_sending} />
+					</label>
+					<div class="bug-report-actions">
+						<button type="button" class="bug-btn secondary" onclick={close_bug_report} disabled={bug_sending}>Ignorieren</button>
+						<button type="submit" class="bug-btn primary" disabled={bug_sending}>
+							{bug_sending ? 'Wird gesendet…' : 'Bug melden'}
+						</button>
+					</div>
+				</form>
+			{/if}
+		</div>
 	</div>
 {/if}
 
@@ -226,5 +450,286 @@
 		&:hover {
 			background: rgba(255, 255, 255, 0.2);
 		}
+	}
+
+	/* Bug Report Dialog */
+	.bug-report-backdrop {
+		background-color: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(12px);
+		cursor: default;
+		animation: panic-fade-in 400ms ease;
+	}
+
+	.bug-report-dialog {
+		background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%);
+		border-radius: 14px;
+		padding: 2rem 2.5rem;
+		min-width: 380px;
+		max-width: 460px;
+		color: #1d1d1f;
+		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+	}
+
+	:global(body.dark) .bug-report-dialog {
+		background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+		color: #f5f5f7;
+	}
+
+	.bug-report-header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.4rem;
+		margin-bottom: 1.5rem;
+		text-align: center;
+	}
+
+	.bug-report-icon {
+		font-size: 3rem;
+		line-height: 1;
+		margin-bottom: 0.25rem;
+	}
+
+	.bug-report-header h1 {
+		font-size: 1.2rem;
+		font-weight: 600;
+		margin: 0;
+	}
+
+	.bug-report-subtitle {
+		font-size: 0.82rem;
+		opacity: 0.6;
+		margin: 0;
+		line-height: 1.4;
+	}
+
+	.bug-report-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+
+		label {
+			display: flex;
+			flex-direction: column;
+			gap: 0.3rem;
+
+			span {
+				font-size: 0.78rem;
+				font-weight: 500;
+				opacity: 0.7;
+			}
+		}
+
+		textarea,
+		input {
+			background: rgba(0, 0, 0, 0.05);
+			border: 1px solid rgba(0, 0, 0, 0.12);
+			border-radius: 8px;
+			padding: 0.6rem 0.75rem;
+			font-size: 0.85rem;
+			font-family: inherit;
+			color: inherit;
+			resize: vertical;
+			outline: none;
+			transition: border-color 150ms;
+
+			&:focus {
+				border-color: var(--system-color-primary);
+			}
+		}
+	}
+
+	:global(body.dark) .bug-report-form textarea,
+	:global(body.dark) .bug-report-form input {
+		background: rgba(255, 255, 255, 0.08);
+		border-color: rgba(255, 255, 255, 0.15);
+	}
+
+	.bug-report-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.6rem;
+		margin-top: 0.5rem;
+	}
+
+	.bug-btn {
+		border: none;
+		border-radius: 6px;
+		padding: 0.45rem 1.2rem;
+		font-size: 0.82rem;
+		font-family: inherit;
+		cursor: pointer;
+		font-weight: 500;
+		transition: background 150ms, opacity 150ms;
+	}
+
+	.bug-btn.secondary {
+		background: rgba(0, 0, 0, 0.08);
+		color: inherit;
+
+		&:hover {
+			background: rgba(0, 0, 0, 0.14);
+		}
+	}
+
+	:global(body.dark) .bug-btn.secondary {
+		background: rgba(255, 255, 255, 0.1);
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.18);
+		}
+	}
+
+	.bug-btn.primary {
+		background: var(--system-color-primary);
+		color: white;
+
+		&:hover {
+			opacity: 0.85;
+		}
+	}
+
+	.bug-report-success {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 1.5rem 0;
+		text-align: center;
+
+		h2 {
+			font-size: 1.1rem;
+			font-weight: 600;
+			margin: 0;
+		}
+
+		p {
+			font-size: 0.82rem;
+			opacity: 0.6;
+			margin: 0;
+		}
+
+		.bug-btn {
+			margin-top: 0.75rem;
+		}
+	}
+
+	.success-icon {
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 50%;
+		background: hsl(130, 50%, 45%);
+		color: white;
+		font-size: 1.3rem;
+		font-weight: 700;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 0.25rem;
+	}
+
+	.bug-report-error {
+		padding: 0.6rem 0.75rem;
+		border-radius: 8px;
+		background: hsla(0, 70%, 50%, 0.1);
+		color: hsl(0, 70%, 45%);
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+	/* VRAM Corruption Canvas */
+	.corrupt-canvas {
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	/* Kernel Panic */
+	.kernel-panic {
+		background-color: #2a2a2a;
+		flex-direction: column;
+		cursor: pointer;
+		animation: panic-fade-in 500ms ease;
+	}
+
+	.panic-content {
+		max-width: 520px;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
+	.panic-icon {
+		font-size: 4rem;
+		line-height: 1;
+		opacity: 0.9;
+	}
+
+	.panic-main {
+		color: white;
+		font-size: 1.25rem;
+		font-weight: 400;
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	.panic-translations {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+
+		p {
+			color: rgba(255, 255, 255, 0.5);
+			font-size: 0.85rem;
+			line-height: 1.5;
+			margin: 0;
+		}
+	}
+
+	@keyframes panic-fade-in {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
+	/* Glitch effect — applied to body via :global */
+	:global(body.glitch-active) {
+		animation: glitch-shake 150ms infinite;
+	}
+
+	:global(body.glitch-active)::after {
+		content: '';
+		position: fixed;
+		inset: 0;
+		z-index: 99999;
+		pointer-events: none;
+		animation: glitch-flash 200ms steps(1) infinite;
+		mix-blend-mode: screen;
+	}
+
+	@keyframes glitch-shake {
+		0% { transform: translate(0); }
+		20% { transform: translate(-3px, 2px); }
+		40% { transform: translate(3px, -1px); }
+		60% { transform: translate(-2px, -3px); }
+		80% { transform: translate(2px, 3px); }
+		100% { transform: translate(0); }
+	}
+
+	@keyframes glitch-flash {
+		0% { background: transparent; }
+		10% { background: rgba(255, 0, 80, 0.08); }
+		20% { background: transparent; }
+		30% { background: rgba(0, 255, 200, 0.06); }
+		40% { background: transparent; }
+		50% { background: rgba(255, 255, 255, 0.12); }
+		55% { background: transparent; }
+		70% { background: rgba(255, 0, 80, 0.05); }
+		80% { background: transparent; }
+		90% { background: rgba(0, 100, 255, 0.08); }
+		100% { background: transparent; }
 	}
 </style>

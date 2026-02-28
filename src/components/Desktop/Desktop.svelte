@@ -9,6 +9,7 @@
 	import ScreenOverlay from './ScreenOverlay.svelte';
 	import SystemUpdate from './SystemUpdate.svelte';
 	import WindowsArea from './Window/WindowsArea.svelte';
+	import { trigger_glitch, screen_overlay } from '🍎/state/screen-overlay.svelte';
 
 	const { deviceType = 'desktop' as DeviceType }: { deviceType?: DeviceType } = $props();
 
@@ -25,6 +26,33 @@
 		]);
 	}
 	let mainEl = $state<HTMLElement>();
+
+	// Idle glitch: trigger after 2 minutes of no interaction
+	const IDLE_TIMEOUT = 2 * 60 * 1000;
+	let idle_timer: ReturnType<typeof setTimeout>;
+	let idle_triggered = false;
+
+	function reset_idle() {
+		clearTimeout(idle_timer);
+		if (idle_triggered) return;
+		idle_timer = setTimeout(() => {
+			if (screen_overlay.mode === 'none') {
+				idle_triggered = true;
+				trigger_glitch();
+			}
+		}, IDLE_TIMEOUT);
+	}
+
+	$effect(() => {
+		if (isMobile) return;
+		const events = ['pointermove', 'pointerdown', 'keydown', 'scroll', 'touchstart'] as const;
+		reset_idle();
+		for (const e of events) window.addEventListener(e, reset_idle, { passive: true });
+		return () => {
+			clearTimeout(idle_timer);
+			for (const e of events) window.removeEventListener(e, reset_idle);
+		};
+	});
 </script>
 
 <DeviceFrame device={deviceType}>
