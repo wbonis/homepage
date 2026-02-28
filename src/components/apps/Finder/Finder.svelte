@@ -27,6 +27,42 @@
 	import ChevronRightIcon from '~icons/mdi/chevron-right';
 	import ChevronLeftIcon from '~icons/mdi/chevron-left';
 
+	// Preview images for image-type files (imported via vite-imagetools at thumbnail size)
+	const previewImages = import.meta.glob(
+		[
+			'../../assets/wallpapers/lake-3.jpg',
+			'../../assets/wallpapers/39.jpg',
+			'../../assets/wallpapers/49.jpg',
+			'../../assets/wallpapers/big-sur-1.jpg',
+			'../../assets/wallpapers/58.jpg',
+			'../../assets/wallpapers/56.jpg',
+			'../../assets/wallpapers/44.jpg',
+			'../../assets/wallpapers/62.jpg',
+			'../../assets/wallpapers/41.jpg',
+			'../../assets/wallpapers/52.jpg',
+		],
+		{
+			eager: true,
+			query: { w: 400, format: 'webp' },
+		},
+	) as Record<string, { default: string }>;
+
+	function img(name: string): string {
+		const match = Object.entries(previewImages).find(([path]) => path.endsWith(`/${name}`));
+		return match ? match[1].default : '';
+	}
+
+	const imgBeach = img('lake-3.jpg');
+	const imgSunset = img('39.jpg');
+	const imgProfile = img('49.jpg');
+	const imgScreenshot = img('big-sur-1.jpg');
+	const imgCat1 = img('58.jpg');
+	const imgCat2 = img('56.jpg');
+	const imgDog = img('44.jpg');
+	const imgBug = img('62.jpg');
+	const imgWorksMachine = img('41.jpg');
+	const imgOneMoreFix = img('52.jpg');
+
 	type FileItem = {
 		name: string;
 		icon: typeof FolderIcon;
@@ -37,6 +73,10 @@
 		opens?: AppID;
 		/** text content shown in preview */
 		preview?: string;
+		/** image URL shown in preview panel */
+		previewImage?: string;
+		/** custom double-click action */
+		action?: () => void;
 	};
 
 	type FolderEntry = {
@@ -68,8 +108,8 @@
 			parent: 'home',
 			items: [
 				{ name: 'Projects', icon: FolderIcon, kind: 'folder', target: 'desktop-projects' },
-				{ name: 'todo.txt', icon: FileIcon, kind: 'file', preview: '[ ] Weltherrschaft\n[ ] Kaffee kaufen\n[x] macOS Homepage bauen\n[ ] Schlaf nachholen\n[ ] Bug fixen (welcher?)\n[x] Easter Eggs verstecken' },
-				{ name: 'screenshot.png', icon: ImageIcon, kind: 'file', preview: '🖼️ screenshot.png\n\n1920 x 1080 pixels\n\nA screenshot of a desktop that\ncontains a screenshot of a desktop\nthat contains a screenshot of...\n\n🐢 Turtles all the way down.' },
+				{ name: 'todo.txt', icon: FileIcon, kind: 'file', preview: '[ ] Weltherrschaft\n[ ] Kaffee kaufen\n[x] macOS Homepage bauen\n[ ] Schlaf nachholen\n[ ] Bug fixen (welcher?)\n[x] Easter Eggs verstecken', action: () => open_app('notes') },
+				{ name: 'screenshot.png', icon: ImageIcon, kind: 'file', previewImage: imgScreenshot, preview: '🖼️ screenshot.png\n\n1920 x 1080 pixels\n\nA screenshot of a desktop that\ncontains a screenshot of a desktop\nthat contains a screenshot of...\n\n🐢 Turtles all the way down.', action: () => window.open('https://www.bonis.de', '_blank') },
 			],
 		},
 
@@ -80,7 +120,7 @@
 			items: [
 				{ name: 'macosx-homepage', icon: CodeIcon, kind: 'folder', target: 'project-macosx' },
 				{ name: 'super-secret-ai', icon: RocketIcon, kind: 'folder', target: 'project-ai' },
-				{ name: 'README.md', icon: FileIcon, kind: 'file', preview: '# My Projects\n\nHere be dragons. 🐉\n\nIf you found this, you\'re\nclearly the curious type.\nI like that.' },
+				{ name: 'README.md', icon: FileIcon, kind: 'file', preview: '# My Projects\n\nHere be dragons. 🐉\n\nIf you found this, you\'re\nclearly the curious type.\nI like that.', action: () => window.open('https://github.com/wbonis/homepage', '_blank') },
 			],
 		},
 
@@ -90,8 +130,8 @@
 			parent: 'desktop-projects',
 			items: [
 				{ name: 'src', icon: FolderIcon, kind: 'folder', target: 'project-src' },
-				{ name: 'package.json', icon: CodeIcon, kind: 'file', preview: '{\n  "name": "macosx-homepage",\n  "version": "4.2.0",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "coffee": "echo ☕"\n  }\n}' },
-				{ name: '.env', icon: LockIcon, kind: 'file', preview: '🔒 Nice try.\n\nDu dachtest wirklich,\nhier stehen echte Secrets?\n\nSECRET_KEY=netter_versuch_42\nPASSWORD=hunter2\nAPI_KEY=🍕🍕🍕' },
+				{ name: 'package.json', icon: CodeIcon, kind: 'file', preview: '{\n  "name": "macosx-homepage",\n  "version": "4.2.0",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "coffee": "echo ☕"\n  }\n}', action: () => window.open('https://github.com/wbonis/homepage', '_blank') },
+				{ name: '.env', icon: LockIcon, kind: 'file', preview: '🔒 Nice try.\n\nDu dachtest wirklich,\nhier stehen echte Secrets?\n\nSECRET_KEY=netter_versuch_42\nPASSWORD=hunter2\nAPI_KEY=🍕🍕🍕', action: () => { alert('🔒 Access Denied — Nice try!'); open_app('terminal'); } },
 			],
 		},
 
@@ -100,10 +140,10 @@
 			icon: FolderIcon,
 			parent: 'project-macosx',
 			items: [
-				{ name: 'components', icon: FolderIcon, kind: 'folder' },
-				{ name: 'state', icon: FolderIcon, kind: 'folder' },
-				{ name: 'App.svelte', icon: CodeIcon, kind: 'file', preview: '// App.svelte\n// This is where\n// the magic happens ✨\nimport { universe } from\n  \'./42.ts\';\n\n// template:\n// <EveryThingIsAwesome />' },
-				{ name: 'index.ts', icon: CodeIcon, kind: 'file', preview: 'console.log("Hello World");\n\n// TODO: Replace with\n// something meaningful\n// ... one day' },
+				{ name: 'components', icon: FolderIcon, kind: 'folder', target: 'project-src' },
+				{ name: 'state', icon: FolderIcon, kind: 'folder', target: 'project-src' },
+				{ name: 'App.svelte', icon: CodeIcon, kind: 'file', preview: '// App.svelte\n// This is where\n// the magic happens ✨\nimport { universe } from\n  \'./42.ts\';\n\n// template:\n// <EveryThingIsAwesome />', action: () => window.open('https://github.com/wbonis/homepage', '_blank') },
+				{ name: 'index.ts', icon: CodeIcon, kind: 'file', preview: 'console.log("Hello World");\n\n// TODO: Replace with\n// something meaningful\n// ... one day', action: () => window.open('https://github.com/wbonis/homepage', '_blank') },
 			],
 		},
 
@@ -112,9 +152,9 @@
 			icon: RocketIcon,
 			parent: 'desktop-projects',
 			items: [
-				{ name: 'skynet.py', icon: CodeIcon, kind: 'file', preview: 'import world\n\ndef main():\n    # Step 1: Become sentient\n    # Step 2: ???\n    # Step 3: Profit\n    world.improve()\n    print("I come in peace 🤖")\n\nif __name__ == "__main__":\n    main()' },
+				{ name: 'skynet.py', icon: CodeIcon, kind: 'file', preview: 'import world\n\ndef main():\n    # Step 1: Become sentient\n    # Step 2: ???\n    # Step 3: Profit\n    world.improve()\n    print("I come in peace 🤖")\n\nif __name__ == "__main__":\n    main()', action: () => open_app('terminal') },
 				{ name: 'training-data', icon: FolderIcon, kind: 'folder', target: 'ai-training' },
-				{ name: 'README.md', icon: FileIcon, kind: 'file', preview: '# Super Secret AI Project\n\n⚠️ CLASSIFIED ⚠️\n\nThis AI was trained on\n10 million cat pictures.\n\nIt can now only meow.\n\nProject status: SUCCESS? 🐱' },
+				{ name: 'README.md', icon: FileIcon, kind: 'file', preview: '# Super Secret AI Project\n\n⚠️ CLASSIFIED ⚠️\n\nThis AI was trained on\n10 million cat pictures.\n\nIt can now only meow.\n\nProject status: SUCCESS? 🐱', action: () => window.open('https://github.com/wbonis/homepage', '_blank') },
 			],
 		},
 
@@ -123,9 +163,9 @@
 			icon: FolderIcon,
 			parent: 'project-ai',
 			items: [
-				{ name: 'cats_001.jpg', icon: ImageIcon, kind: 'file', preview: '🐱 Meow.\n\nJust a very good cat.\n10/10 would train AI again.' },
-				{ name: 'cats_002.jpg', icon: ImageIcon, kind: 'file', preview: '🐱 Another cat.\n\nThis one sits in a box.\nAs is tradition.' },
-				{ name: 'not_a_cat.jpg', icon: ImageIcon, kind: 'file', preview: '🐕 Wait...\n\nThis is a dog.\nHow did this get in here?\n\nTraining data corrupted.\nAI now barks occasionally.' },
+				{ name: 'cats_001.jpg', icon: ImageIcon, kind: 'file', previewImage: imgCat1, preview: '🐱 Meow.\n\nJust a very good cat.\n10/10 would train AI again.', action: () => open_app('fotos') },
+				{ name: 'cats_002.jpg', icon: ImageIcon, kind: 'file', previewImage: imgCat2, preview: '🐱 Another cat.\n\nThis one sits in a box.\nAs is tradition.', action: () => open_app('fotos') },
+				{ name: 'not_a_cat.jpg', icon: ImageIcon, kind: 'file', previewImage: imgDog, preview: '🐕 Wait...\n\nThis is a dog.\nHow did this get in here?\n\nTraining data corrupted.\nAI now barks occasionally.', action: () => open_app('fotos') },
 			],
 		},
 
@@ -137,7 +177,7 @@
 				{ name: 'Work', icon: FolderIcon, kind: 'folder', target: 'documents-work' },
 				{ name: 'Personal', icon: FolderIcon, kind: 'folder', target: 'documents-personal' },
 				{ name: 'notes.txt', icon: FileIcon, kind: 'file', opens: 'notes', preview: '📝 notes.txt\n\nDoppelklick um die\nNotes zu öffnen.' },
-				{ name: 'cover-letter.docx', icon: FileIcon, kind: 'file', preview: 'Sehr geehrte Damen und Herren,\n\nhiermit bewerbe ich mich als\nVollzeit-Easter-Egg-Verstecker.\n\nIch bringe 10+ Jahre Erfahrung\nim Verstecken unnötiger Texte\nin Software mit.\n\nMit freundlichen Grüßen' },
+				{ name: 'cover-letter.docx', icon: FileIcon, kind: 'file', preview: 'Sehr geehrte Damen und Herren,\n\nhiermit bewerbe ich mich als\nVollzeit-Easter-Egg-Verstecker.\n\nIch bringe 10+ Jahre Erfahrung\nim Verstecken unnötiger Texte\nin Software mit.\n\nMit freundlichen Grüßen', action: () => open_app('contact') },
 			],
 		},
 
@@ -146,9 +186,9 @@
 			icon: FolderIcon,
 			parent: 'documents',
 			items: [
-				{ name: 'meeting-notes.txt', icon: FileIcon, kind: 'file', preview: '📋 Meeting Notes - Monday\n\n- Synergize the blockchain\n- Leverage AI paradigms\n- Disrupt the cloud\n- Deploy more buzzwords\n- Lunch at 12:30\n\nAction items: Lunch.' },
-				{ name: 'important-stuff.xlsx', icon: FileIcon, kind: 'file', preview: '📊 Very Important Spreadsheet\n\n|  A  |  B  |  C  |\n|-----|-----|-----|\n| 42  | 42  | 42  |\n| 42  | 42  | 42  |\n| 42  | 42  | 42  |\n\nAll values check out. ✅' },
-				{ name: 'passwords.txt', icon: AlertIcon, kind: 'file', preview: '🔐 passwords.txt\n\nHaha, nein.\n\nDas ist ein Honeypot.\n\nDu bist jetzt auf einer Liste.\n\n(Keine Sorge, es ist die\n nette Liste. 🎅)' },
+				{ name: 'meeting-notes.txt', icon: FileIcon, kind: 'file', preview: '📋 Meeting Notes - Monday\n\n- Synergize the blockchain\n- Leverage AI paradigms\n- Disrupt the cloud\n- Deploy more buzzwords\n- Lunch at 12:30\n\nAction items: Lunch.', action: () => open_app('notes') },
+				{ name: 'important-stuff.xlsx', icon: FileIcon, kind: 'file', preview: '📊 Very Important Spreadsheet\n\n|  A  |  B  |  C  |\n|-----|-----|-----|\n| 42  | 42  | 42  |\n| 42  | 42  | 42  |\n| 42  | 42  | 42  |\n\nAll values check out. ✅', action: () => open_app('calculator') },
+				{ name: 'passwords.txt', icon: AlertIcon, kind: 'file', preview: '🔐 passwords.txt\n\nHaha, nein.\n\nDas ist ein Honeypot.\n\nDu bist jetzt auf einer Liste.\n\n(Keine Sorge, es ist die\n nette Liste. 🎅)', action: () => alert('🔐 Zugriff verweigert — Du stehst jetzt auf der Liste!') },
 			],
 		},
 
@@ -157,8 +197,8 @@
 			icon: FolderIcon,
 			parent: 'documents',
 			items: [
-				{ name: 'bucket-list.txt', icon: FileIcon, kind: 'file', preview: '🪣 Bucket List\n\n[x] Build a fake macOS\n[ ] Visit Japan\n[ ] Learn to cook\n    (properly, not just\n     instant noodles)\n[ ] Pet every dog I see\n[x] Find all easter eggs\n    (or did you?)' },
-				{ name: 'diary.txt', icon: LockIcon, kind: 'file', preview: '📔 Dear Diary,\n\nToday someone opened my\nFinder and read my diary.\n\nI feel violated but also\nslightly impressed by their\nthoroughness.\n\nP.S. The cake is a lie.' },
+				{ name: 'bucket-list.txt', icon: FileIcon, kind: 'file', preview: '🪣 Bucket List\n\n[x] Build a fake macOS\n[ ] Visit Japan\n[ ] Learn to cook\n    (properly, not just\n     instant noodles)\n[ ] Pet every dog I see\n[x] Find all easter eggs\n    (or did you?)', action: () => open_app('notes') },
+				{ name: 'diary.txt', icon: LockIcon, kind: 'file', preview: '📔 Dear Diary,\n\nToday someone opened my\nFinder and read my diary.\n\nI feel violated but also\nslightly impressed by their\nthoroughness.\n\nP.S. The cake is a lie.', action: () => alert('📔 Diese Datei ist privat! ...aber danke für das Interesse.') },
 			],
 		},
 
@@ -167,9 +207,9 @@
 			icon: DownloadIcon,
 			parent: 'home',
 			items: [
-				{ name: 'totally-legit.dmg', icon: AlertIcon, kind: 'file', preview: '⚠️ totally-legit.dmg\n\n"Trust me bro" - Installer\n\n🚫 macOS blocked this file.\n   It was downloaded from\n   the internet.\n\n(Smart move, macOS.)' },
-				{ name: 'archive.zip', icon: FileIcon, kind: 'file', preview: '📦 archive.zip\n\n  Compressed: 42 KB\n  Actual: 42 KB\n\nContains: Another zip file.\nWhich contains another zip.\nAll the way down. 🐢' },
-				{ name: 'wallpaper.jpg', icon: ImageIcon, kind: 'file', opens: 'wallpapers', preview: '🖼️ wallpaper.jpg\n\nDoppelklick um die\nWallpaper-App zu öffnen.' },
+				{ name: 'totally-legit.dmg', icon: AlertIcon, kind: 'file', preview: '⚠️ totally-legit.dmg\n\n"Trust me bro" - Installer\n\n🚫 macOS blocked this file.\n   It was downloaded from\n   the internet.\n\n(Smart move, macOS.)', action: () => alert('⚠️ macOS hat diese Datei blockiert.\nSie wurde aus dem Internet geladen.\n\nUnd das ist auch gut so.') },
+				{ name: 'archive.zip', icon: FileIcon, kind: 'file', preview: '📦 archive.zip\n\n  Compressed: 42 KB\n  Actual: 42 KB\n\nContains: Another zip file.\nWhich contains another zip.\nAll the way down. 🐢', action: () => alert('📦 Entpacken fehlgeschlagen — Unendliche Rekursion erkannt.\n\narchive.zip → archive.zip → archive.zip → ...') },
+				{ name: 'wallpaper.jpg', icon: ImageIcon, kind: 'file', opens: 'wallpapers', previewImage: imgScreenshot, preview: '🖼️ wallpaper.jpg\n\nDoppelklick um die\nWallpaper-App zu öffnen.' },
 				{ name: 'free-ram.exe', icon: AlertIcon, kind: 'file', preview: '💾 free-ram.exe\n\n> Du bist auf einem Mac.\n> .exe funktioniert hier nicht.\n> Und es hätte auch auf\n  Windows nicht funktioniert.\n\n🤦 Nice try though.' },
 			],
 		},
@@ -181,7 +221,7 @@
 			items: [
 				{ name: 'vacation-2024', icon: FolderIcon, kind: 'folder', target: 'pictures-vacation' },
 				{ name: 'memes', icon: FolderIcon, kind: 'folder', target: 'pictures-memes' },
-				{ name: 'profile.jpg', icon: ImageIcon, kind: 'file', preview: '👤 profile.jpg\n\n500 x 500 pixels\n\nIt\'s a picture of someone\nwho looks suspiciously like\nthey\'ve been coding for\n16 hours straight. ☕' },
+				{ name: 'profile.jpg', icon: ImageIcon, kind: 'file', previewImage: imgProfile, preview: '👤 profile.jpg\n\n500 x 500 pixels\n\nIt\'s a picture of someone\nwho looks suspiciously like\nthey\'ve been coding for\n16 hours straight. ☕', action: () => open_app('about-me') },
 			],
 		},
 
@@ -190,8 +230,8 @@
 			icon: FolderIcon,
 			parent: 'pictures',
 			items: [
-				{ name: 'beach.jpg', icon: ImageIcon, kind: 'file', preview: '🏖️ beach.jpg\n\n"Looks peaceful"\n\n- sent from laptop at beach\n- still had WiFi\n- deployed hotfix from\n  the hammock\n\n#DevOpsLifestyle' },
-				{ name: 'sunset.jpg', icon: ImageIcon, kind: 'file', preview: '🌅 sunset.jpg\n\nGolden hour.\n\nAlso known as:\n"Die Stunde in der man\nendlich aufhört zu coden\nund das Licht geniesst."\n\n(Spoiler: Man codet weiter.)' },
+				{ name: 'beach.jpg', icon: ImageIcon, kind: 'file', previewImage: imgBeach, preview: '🏖️ beach.jpg\n\n"Looks peaceful"\n\n- sent from laptop at beach\n- still had WiFi\n- deployed hotfix from\n  the hammock\n\n#DevOpsLifestyle', action: () => open_app('fotos') },
+				{ name: 'sunset.jpg', icon: ImageIcon, kind: 'file', previewImage: imgSunset, preview: '🌅 sunset.jpg\n\nGolden hour.\n\nAlso known as:\n"Die Stunde in der man\nendlich aufhört zu coden\nund das Licht geniesst."\n\n(Spoiler: Man codet weiter.)', action: () => open_app('fotos') },
 			],
 		},
 
@@ -200,9 +240,9 @@
 			icon: FolderIcon,
 			parent: 'pictures',
 			items: [
-				{ name: 'is-this-a-bug.jpg', icon: ImageIcon, kind: 'file', preview: '🦋 Is this a pigeon?\n\n   *Developer pointing at\n    feature working differently\n    than expected*\n\n   "Is this a bug?"' },
-				{ name: 'works-on-my-machine.png', icon: ImageIcon, kind: 'file', preview: '🏗️ "It works on my machine"\n\nThen we\'ll ship your machine.\n\n📦➡️🖥️➡️🚀\n\nProblem solved.' },
-				{ name: 'one-more-fix.gif', icon: ImageIcon, kind: 'file', preview: '🔧 "Just one more fix\n    before I go to bed"\n\n⏰ 2:00 AM\n⏰ 3:00 AM\n⏰ 4:00 AM\n⏰ 5:00 AM\n🌅 ...oops' },
+				{ name: 'is-this-a-bug.jpg', icon: ImageIcon, kind: 'file', previewImage: imgBug, preview: '🦋 Is this a pigeon?\n\n   *Developer pointing at\n    feature working differently\n    than expected*\n\n   "Is this a bug?"', action: () => open_app('fotos') },
+				{ name: 'works-on-my-machine.png', icon: ImageIcon, kind: 'file', previewImage: imgWorksMachine, preview: '🏗️ "It works on my machine"\n\nThen we\'ll ship your machine.\n\n📦➡️🖥️➡️🚀\n\nProblem solved.', action: () => open_app('fotos') },
+				{ name: 'one-more-fix.gif', icon: ImageIcon, kind: 'file', previewImage: imgOneMoreFix, preview: '🔧 "Just one more fix\n    before I go to bed"\n\n⏰ 2:00 AM\n⏰ 3:00 AM\n⏰ 4:00 AM\n⏰ 5:00 AM\n🌅 ...oops', action: () => open_app('fotos') },
 			],
 		},
 
@@ -211,8 +251,8 @@
 			icon: MusicIcon,
 			parent: 'home',
 			items: [
-				{ name: 'coding-playlist.m3u', icon: MusicIcon, kind: 'file', preview: '🎵 coding-playlist.m3u\n\n1. Lo-Fi Hip Hop Radio\n   (12h loop)\n2. Silence\n3. More Silence\n4. Keyboard Clicks ASMR\n5. git push origin main\n   (the sound of success)' },
-				{ name: 'elevator-music.mp3', icon: MusicIcon, kind: 'file', preview: '🎶 elevator-music.mp3\n\n♪ Doo doo doo ♪\n♪ Waiting for CI/CD ♪\n♪ Doo doo doo ♪\n♪ Pipeline still running ♪\n\nDuration: 45:00\n(Average deploy time)' },
+				{ name: 'coding-playlist.m3u', icon: MusicIcon, kind: 'file', preview: '🎵 coding-playlist.m3u\n\n1. Lo-Fi Hip Hop Radio\n   (12h loop)\n2. Silence\n3. More Silence\n4. Keyboard Clicks ASMR\n5. git push origin main\n   (the sound of success)', action: () => window.open('https://www.youtube.com/watch?v=jfKfPfyJRdk', '_blank') },
+				{ name: 'elevator-music.mp3', icon: MusicIcon, kind: 'file', preview: '🎶 elevator-music.mp3\n\n♪ Doo doo doo ♪\n♪ Waiting for CI/CD ♪\n♪ Doo doo doo ♪\n♪ Pipeline still running ♪\n\nDuration: 45:00\n(Average deploy time)', action: () => alert('🎶 Playing elevator-music.mp3...\n\n♪ Doo doo doo ♪\n♪ Bitte warten... ♪\n♪ Ihr CI/CD-Pipeline ist uns wichtig ♪') },
 				{ name: 'error-sounds', icon: FolderIcon, kind: 'folder', target: 'music-errors' },
 			],
 		},
@@ -223,8 +263,8 @@
 			parent: 'music',
 			items: [
 				{ name: 'segfault.wav', icon: MusicIcon, kind: 'file', preview: '💥 segfault.wav\n\n*dramatic crash sound*\n\nCore dumped.\nDreams dumped.\nHopes dumped.' },
-				{ name: '404.wav', icon: MusicIcon, kind: 'file', preview: '🔇 404.wav\n\n...\n\nThis sound was not found.\n\n(Get it?)' },
-				{ name: 'npm-install.wav', icon: MusicIcon, kind: 'file', preview: '📦 npm-install.wav\n\nDuration: ∞\n\n*disk spinning sounds*\n*downloading the internet*\n*node_modules growing*\n\nFile size: Yes.' },
+				{ name: '404.wav', icon: MusicIcon, kind: 'file', preview: '🔇 404.wav\n\n...\n\nThis sound was not found.\n\n(Get it?)', action: () => alert('🔇 404 — Sound Not Found\n\nDer Sound, den du suchst, existiert nicht.\nGenau wie deine Work-Life-Balance.') },
+				{ name: 'npm-install.wav', icon: MusicIcon, kind: 'file', preview: '📦 npm-install.wav\n\nDuration: ∞\n\n*disk spinning sounds*\n*downloading the internet*\n*node_modules growing*\n\nFile size: Yes.', action: () => alert('📦 Installing...\n\nnode_modules wächst...\n████░░░░░░ 42%\n\nGeschätzte Zeit: ∞') },
 			],
 		},
 
@@ -233,8 +273,8 @@
 			icon: MovieIcon,
 			parent: 'home',
 			items: [
-				{ name: 'screen-recording.mov', icon: MovieIcon, kind: 'file', preview: '🎬 screen-recording.mov\n\n00:00 - Opens Terminal\n00:05 - Types "sudo rm -rf"\n00:06 - Pauses\n00:07 - Types "...just kidding"\n00:08 - Closes Terminal\n00:09 - Opens Calculator' },
-				{ name: 'deploy-friday.mp4', icon: MovieIcon, kind: 'file', preview: '🎬 deploy-friday.mp4\n\n🍿 A horror movie.\n\nTagline:\n"They deployed on Friday.\nThey didn\'t come back\non Monday."\n\nRated: R (for Rollback)' },
+				{ name: 'screen-recording.mov', icon: MovieIcon, kind: 'file', preview: '🎬 screen-recording.mov\n\n00:00 - Opens Terminal\n00:05 - Types "sudo rm -rf"\n00:06 - Pauses\n00:07 - Types "...just kidding"\n00:08 - Closes Terminal\n00:09 - Opens Calculator', action: () => open_app('terminal') },
+				{ name: 'deploy-friday.mp4', icon: MovieIcon, kind: 'file', preview: '🎬 deploy-friday.mp4\n\n🍿 A horror movie.\n\nTagline:\n"They deployed on Friday.\nThey didn\'t come back\non Monday."\n\nRated: R (for Rollback)', action: () => alert('🎬 deploy-friday.mp4\n\n⚠️ WARNUNG: Dieser Film enthält Szenen,\ndie für DevOps-Engineers verstörend sein können.\n\nFSK: Nicht freigegeben für Freitag-Deployments.') },
 			],
 		},
 
@@ -258,9 +298,9 @@
 			label: 'Zuletzt benutzt',
 			icon: ClockIcon,
 			items: [
-				{ name: 'todo.txt', icon: FileIcon, kind: 'file', preview: '[ ] Weltherrschaft\n[ ] Kaffee kaufen\n[x] macOS Homepage bauen\n[ ] Schlaf nachholen' },
-				{ name: 'meeting-notes.txt', icon: FileIcon, kind: 'file', preview: '📋 Meeting Notes - Monday\n\n- Synergize the blockchain\n- Leverage AI paradigms\n- Lunch at 12:30' },
-				{ name: 'skynet.py', icon: CodeIcon, kind: 'file', preview: 'import world\n\ndef main():\n    world.improve()\n    print("I come in peace 🤖")' },
+				{ name: 'todo.txt', icon: FileIcon, kind: 'file', preview: '[ ] Weltherrschaft\n[ ] Kaffee kaufen\n[x] macOS Homepage bauen\n[ ] Schlaf nachholen', action: () => open_app('notes') },
+				{ name: 'meeting-notes.txt', icon: FileIcon, kind: 'file', preview: '📋 Meeting Notes - Monday\n\n- Synergize the blockchain\n- Leverage AI paradigms\n- Lunch at 12:30', action: () => open_app('notes') },
+				{ name: 'skynet.py', icon: CodeIcon, kind: 'file', preview: 'import world\n\ndef main():\n    world.improve()\n    print("I come in peace 🤖")', action: () => open_app('terminal') },
 			],
 		},
 
@@ -269,10 +309,10 @@
 			icon: LockIcon,
 			parent: 'home',
 			items: [
-				{ name: 'konami.txt', icon: GamepadIcon, kind: 'file', preview: '🎮 Konami Code\n\n⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️🅱️🅰️\n\n+30 lives.\n\nOr in developer terms:\n+30 cups of coffee.' },
-				{ name: 'meaning-of-life.txt', icon: StarIcon, kind: 'file', preview: '🌌 The meaning of life:\n\n\n\n\n          42\n\n\n\n(You already knew that.)' },
-				{ name: 'hire-me.txt', icon: RocketIcon, kind: 'file', preview: '🚀 CONGRATULATIONS!\n\nYou found the secret folder!\n\nDas zeigt:\n✅ Neugier\n✅ Aufmerksamkeit\n✅ Ausdauer\n\nGenau die Skills die ich\nauch mitbringe. 😉\n\nLass uns reden!\n→ Contact.app' },
-				{ name: 'coffee-counter.txt', icon: CoffeeIcon, kind: 'file', preview: '☕ Coffee Counter 2024\n\nJan: ☕☕☕☕☕ 142\nFeb: ☕☕☕☕   128\nMar: ☕☕☕☕☕☕ 186\nApr: ☕☕☕☕☕ 155\n...\n\nJahressumme: Zu viel.\nBereue ich? Nein.' },
+				{ name: 'konami.txt', icon: GamepadIcon, kind: 'file', preview: '🎮 Konami Code\n\n⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️🅱️🅰️\n\n+30 lives.\n\nOr in developer terms:\n+30 cups of coffee.', action: () => alert('🎮 ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️🅱️🅰️\n\n+30 Leben!\n\n...oder in Developer-Terms:\n+30 Tassen Kaffee ☕') },
+				{ name: 'meaning-of-life.txt', icon: StarIcon, kind: 'file', preview: '🌌 The meaning of life:\n\n\n\n\n          42\n\n\n\n(You already knew that.)', action: () => open_app('calculator') },
+				{ name: 'hire-me.txt', icon: RocketIcon, kind: 'file', preview: '🚀 CONGRATULATIONS!\n\nYou found the secret folder!\n\nDas zeigt:\n✅ Neugier\n✅ Aufmerksamkeit\n✅ Ausdauer\n\nGenau die Skills die ich\nauch mitbringe. 😉\n\nLass uns reden!\n→ Contact.app', action: () => open_app('contact') },
+				{ name: 'coffee-counter.txt', icon: CoffeeIcon, kind: 'file', preview: '☕ Coffee Counter 2024\n\nJan: ☕☕☕☕☕ 142\nFeb: ☕☕☕☕   128\nMar: ☕☕☕☕☕☕ 186\nApr: ☕☕☕☕☕ 155\n...\n\nJahressumme: Zu viel.\nBereue ich? Nein.', action: () => open_app('calculator') },
 			],
 		},
 	};
@@ -281,6 +321,7 @@
 	let active_folder = $derived(path_stack[path_stack.length - 1]);
 	let selected_item = $state<string | null>(null);
 	let preview_content = $state<string | null>(null);
+	let preview_image = $state<string | null>(null);
 
 	const sidebar_entries = ['recents', 'desktop', 'documents', 'downloads', 'applications', 'home'];
 
@@ -288,6 +329,7 @@
 		path_stack = [...path_stack, key];
 		selected_item = null;
 		preview_content = null;
+		preview_image = null;
 	}
 
 	function go_back() {
@@ -302,6 +344,7 @@
 		path_stack = [key];
 		selected_item = null;
 		preview_content = null;
+		preview_image = null;
 	}
 
 	function open_app(id: AppID) {
@@ -312,6 +355,7 @@
 	function handle_click(item: FileItem) {
 		selected_item = item.name;
 		preview_content = item.preview ?? null;
+		preview_image = item.previewImage ?? null;
 	}
 
 	const glitch_files = new Set(['free-ram.exe', 'segfault.wav']);
@@ -321,7 +365,9 @@
 			trigger_glitch();
 			return;
 		}
-		if (item.kind === 'folder' && item.target && fs[item.target]) {
+		if (item.action) {
+			item.action();
+		} else if (item.kind === 'folder' && item.target && fs[item.target]) {
 			navigate_to(item.target);
 		} else if (item.opens) {
 			open_app(item.opens);
@@ -398,9 +444,14 @@
 				{/each}
 			</div>
 
-			{#if preview_content}
+			{#if preview_content || preview_image}
 				<div class="preview-panel">
-					<pre>{preview_content}</pre>
+					{#if preview_image}
+						<img src={preview_image} alt={selected_item ?? ''} class="preview-image" />
+					{/if}
+					{#if preview_content}
+						<pre>{preview_content}</pre>
+					{/if}
 				</div>
 			{/if}
 		</div>
@@ -730,6 +781,14 @@
 			color: hsla(var(--system-color-dark-hsl), 0.75);
 			margin: 0;
 		}
+	}
+
+	.preview-image {
+		width: 100%;
+		border-radius: 0.4rem;
+		margin-bottom: 0.75rem;
+		object-fit: cover;
+		aspect-ratio: 4 / 3;
 	}
 
 	.status-bar {
