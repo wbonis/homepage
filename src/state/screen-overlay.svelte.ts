@@ -10,18 +10,18 @@ export function trigger_glitch() {
 	if (glitch_running || screen_overlay.mode !== 'none') return;
 	glitch_running = true;
 
-	// Phase 1: VRAM corruption (0–1.5s)
+	// Phase 1: Subtle VRAM corruption creeps in (0–6s)
 	screen_overlay.mode = 'vram-corrupt';
 
-	// Phase 2: Add screen shake (1.5–4s)
+	// Phase 2: Gentle screen shake joins (6–9.5s)
 	setTimeout(() => {
 		document.body.classList.add('glitch-active');
-	}, 1500);
+	}, 6000);
 
-	// Phase 3: Kernel panic (4s)
+	// Phase 3: Kernel panic (9.5s)
 	setTimeout(() => {
 		document.body.classList.remove('glitch-active');
 		screen_overlay.mode = 'kernel-panic';
 		glitch_running = false;
-	}, 4000);
+	}, 9500);
 }

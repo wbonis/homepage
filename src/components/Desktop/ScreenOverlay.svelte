@@ -22,82 +22,101 @@
 		let frame_id: number;
 		let start = performance.now();
 
+		// Easing: slow start, accelerating toward the end
+		function ease_in_quad(t: number) {
+			return t * t;
+		}
+
+		// Intermittent flicker — artifacts appear/disappear randomly in early phases
+		function should_flicker(intensity: number): boolean {
+			if (intensity > 0.5) return true; // always visible past halfway
+			// Early on, only show artifacts ~20-60% of frames
+			return Math.random() < 0.2 + intensity * 0.8;
+		}
+
 		function draw_corruption(time: number) {
 			const elapsed = time - start;
-			const intensity = Math.min(elapsed / 3000, 1);
+			const raw = Math.min(elapsed / 8500, 1); // ramp over 8.5s
+			const intensity = ease_in_quad(raw);
 
 			ctx.clearRect(0, 0, w, h);
 
+			if (!should_flicker(raw)) {
+				frame_id = requestAnimationFrame(draw_corruption);
+				return;
+			}
+
 			// Displaced horizontal bands — like VRAM row offset corruption
-			const band_count = Math.floor(3 + intensity * 12);
+			const band_count = Math.floor(1 + intensity * 10);
 			for (let i = 0; i < band_count; i++) {
 				const y = Math.random() * h;
-				const band_h = 2 + Math.random() * (8 + intensity * 40);
-				const offset_x = (Math.random() - 0.5) * (20 + intensity * 200);
+				const band_h = 1 + Math.random() * (4 + intensity * 30);
+				const offset_x = (Math.random() - 0.5) * (5 + intensity * 150);
 
 				ctx.save();
-				ctx.globalAlpha = 0.3 + intensity * 0.5;
-				// Draw a displaced copy of that screen band
-				ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, ${20 + Math.random() * 30}%)`;
+				ctx.globalAlpha = 0.08 + intensity * 0.45;
+				ctx.fillStyle = `hsl(${Math.random() * 360}, 50%, ${20 + Math.random() * 25}%)`;
 				ctx.fillRect(offset_x, y, w, band_h);
 				ctx.restore();
 			}
 
 			// Random colored block artifacts — corrupted VRAM cells
-			const block_count = Math.floor(intensity * 60);
-			for (let i = 0; i < block_count; i++) {
-				const bx = Math.random() * w;
-				const by = Math.random() * h;
-				const bw = 4 + Math.random() * (30 + intensity * 80);
-				const bh = 2 + Math.random() * (10 + intensity * 20);
+			if (intensity > 0.05) {
+				const block_count = Math.floor(intensity * 35);
+				for (let i = 0; i < block_count; i++) {
+					const bx = Math.random() * w;
+					const by = Math.random() * h;
+					const bw = 2 + Math.random() * (15 + intensity * 60);
+					const bh = 1 + Math.random() * (6 + intensity * 14);
 
-				ctx.globalAlpha = 0.15 + Math.random() * intensity * 0.6;
-				const colors = ['#ff0050', '#00ff88', '#0088ff', '#ff00ff', '#ffff00', '#00ffff', '#ffffff', '#000000'];
-				ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-				ctx.fillRect(bx, by, bw, bh);
+					ctx.globalAlpha = 0.05 + Math.random() * intensity * 0.4;
+					const colors = ['#ff0050', '#00ff88', '#0088ff', '#ff00ff', '#ffff00', '#00ffff', '#ffffff', '#000000'];
+					ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+					ctx.fillRect(bx, by, bw, bh);
+				}
 			}
 
-			// Horizontal scanline tears
-			const tear_count = Math.floor(2 + intensity * 8);
-			for (let i = 0; i < tear_count; i++) {
-				const y = Math.random() * h;
-				ctx.globalAlpha = 0.4 + intensity * 0.4;
-				ctx.fillStyle = Math.random() > 0.5 ? '#ffffff' : '#000000';
-				ctx.fillRect(0, y, w, 1 + Math.random() * 2);
+			// Subtle scanline tears
+			if (intensity > 0.1) {
+				const tear_count = Math.floor(1 + intensity * 5);
+				for (let i = 0; i < tear_count; i++) {
+					const y = Math.random() * h;
+					ctx.globalAlpha = 0.1 + intensity * 0.35;
+					ctx.fillStyle = Math.random() > 0.5 ? '#ffffff' : '#000000';
+					ctx.fillRect(0, y, w, 1 + Math.random() * (1 + intensity));
+				}
 			}
 
 			// RGB channel split blocks — shifted color planes
-			if (intensity > 0.3) {
-				const split_count = Math.floor((intensity - 0.3) * 15);
+			if (intensity > 0.35) {
+				const split_count = Math.floor((intensity - 0.35) * 10);
 				for (let i = 0; i < split_count; i++) {
 					const sx = Math.random() * w;
 					const sy = Math.random() * h;
-					const sw = 20 + Math.random() * 120;
-					const sh = 10 + Math.random() * 60;
+					const sw = 15 + Math.random() * 80;
+					const sh = 8 + Math.random() * 40;
 
-					// Red channel shift
-					ctx.globalAlpha = 0.15 + intensity * 0.2;
+					ctx.globalAlpha = 0.06 + intensity * 0.15;
 					ctx.globalCompositeOperation = 'screen';
 					ctx.fillStyle = '#ff0000';
-					ctx.fillRect(sx + 3 + intensity * 8, sy, sw, sh);
+					ctx.fillRect(sx + 2 + intensity * 5, sy, sw, sh);
 
-					// Cyan channel shift
 					ctx.fillStyle = '#00ffff';
-					ctx.fillRect(sx - 3 - intensity * 8, sy, sw, sh);
+					ctx.fillRect(sx - 2 - intensity * 5, sy, sw, sh);
 
 					ctx.globalCompositeOperation = 'source-over';
 				}
 			}
 
-			// Static noise at high intensity
-			if (intensity > 0.6) {
-				const noise_density = (intensity - 0.6) * 400;
+			// Static noise — only in final escalation
+			if (intensity > 0.7) {
+				const noise_density = (intensity - 0.7) * 250;
 				for (let i = 0; i < noise_density; i++) {
 					const nx = Math.random() * w;
 					const ny = Math.random() * h;
-					ctx.globalAlpha = Math.random() * 0.8;
+					ctx.globalAlpha = Math.random() * 0.5;
 					ctx.fillStyle = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`;
-					ctx.fillRect(nx, ny, 1 + Math.random() * 3, 1 + Math.random() * 2);
+					ctx.fillRect(nx, ny, 1 + Math.random() * 2, 1 + Math.random() * 2);
 				}
 			}
 
@@ -697,7 +716,7 @@
 
 	/* Glitch effect — applied to body via :global */
 	:global(body.glitch-active) {
-		animation: glitch-shake 150ms infinite;
+		animation: glitch-shake 200ms infinite;
 	}
 
 	:global(body.glitch-active)::after {
@@ -706,30 +725,28 @@
 		inset: 0;
 		z-index: 99999;
 		pointer-events: none;
-		animation: glitch-flash 200ms steps(1) infinite;
+		animation: glitch-flash 300ms steps(1) infinite;
 		mix-blend-mode: screen;
 	}
 
 	@keyframes glitch-shake {
 		0% { transform: translate(0); }
-		20% { transform: translate(-3px, 2px); }
-		40% { transform: translate(3px, -1px); }
-		60% { transform: translate(-2px, -3px); }
-		80% { transform: translate(2px, 3px); }
+		20% { transform: translate(-1.5px, 1px); }
+		40% { transform: translate(1.5px, -0.5px); }
+		60% { transform: translate(-1px, -1.5px); }
+		80% { transform: translate(1px, 1.5px); }
 		100% { transform: translate(0); }
 	}
 
 	@keyframes glitch-flash {
 		0% { background: transparent; }
-		10% { background: rgba(255, 0, 80, 0.08); }
-		20% { background: transparent; }
-		30% { background: rgba(0, 255, 200, 0.06); }
-		40% { background: transparent; }
-		50% { background: rgba(255, 255, 255, 0.12); }
-		55% { background: transparent; }
-		70% { background: rgba(255, 0, 80, 0.05); }
-		80% { background: transparent; }
-		90% { background: rgba(0, 100, 255, 0.08); }
+		12% { background: rgba(255, 0, 80, 0.04); }
+		24% { background: transparent; }
+		40% { background: rgba(0, 255, 200, 0.03); }
+		52% { background: transparent; }
+		65% { background: rgba(255, 255, 255, 0.06); }
+		72% { background: transparent; }
+		85% { background: rgba(0, 100, 255, 0.04); }
 		100% { background: transparent; }
 	}
 </style>
