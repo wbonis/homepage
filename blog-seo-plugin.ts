@@ -99,6 +99,12 @@ function buildJsonLd(posts: BlogPost[]): object {
 				],
 			},
 			{
+				'@type': 'ProfilePage',
+				'@id': 'https://www.bonis.de/#profilepage',
+				url: 'https://www.bonis.de',
+				mainEntity: { '@id': 'https://www.bonis.de/#person' },
+			},
+			{
 				'@type': 'WebSite',
 				'@id': 'https://www.bonis.de/#website',
 				url: 'https://www.bonis.de',
