@@ -73,6 +73,25 @@ When app content changes (e.g. new job, new skill), update the `<noscript>` bloc
 
 Wallpapers and assets are optimized via `vite-imagetools`. Import images with query params (e.g. `?w=800&format=webp`) to get optimized variants at build time.
 
+## Security — Contact Form
+
+The `/api/contact` Cloudflare Pages Function (in `functions/api/contact.ts`) sends emails via a custom SMTP client (`src/helpers/smtp.ts`). It is protected by:
+
+- **Cloudflare Turnstile** (invisible CAPTCHA) — verified server-side before sending. Site key (`0x4AAAAAACkT4xd2e6qXbNEA`) is public and embedded in frontend code. Secret key is in Cloudflare env var `TURNSTILE_SECRET_KEY` — never commit it.
+- **CORS** — restricted to `bonis.de` origins
+- **Input length limits** — name: 100, email: 254, subject: 200, message: 5000 chars
+- **SMTP error sanitization** — generic error messages returned to client, details only in server logs
+
+Two forms use this endpoint:
+1. **Mail app** (`src/components/apps/Mail/Mail.svelte`)
+2. **Bug report dialog** (`src/components/Desktop/ScreenOverlay.svelte`)
+
+Both load Turnstile invisibly and include the token in requests. Any new form using `/api/contact` must also include a `cf-turnstile-response` field.
+
+**Cloudflare env vars** (set in Pages dashboard, not in code):
+- `SMTP_SERVER`, `SMTP_USER`, `SMTP_PASS` — SMTP credentials
+- `TURNSTILE_SECRET_KEY` — Turnstile server-side secret
+
 ## Key Conventions
 
 - **Path alias:** `🍎/*` resolves to `./src/*` (configured in tsconfig and Vite)
