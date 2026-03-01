@@ -7,6 +7,8 @@
 	import SendIcon from '~icons/mdi/send';
 	import AlertIcon from '~icons/mdi/alert-circle-outline';
 
+	const TURNSTILE_SITE_KEY = '0x4AAAAAACkT4xd2e6qXbNEA';
+
 	const { ios_mode = false }: { ios_mode?: boolean } = $props();
 
 	let name = $state('');
@@ -16,6 +18,40 @@
 	let sending = $state(false);
 	let status = $state<'idle' | 'success' | 'error'>('idle');
 	let errorMessage = $state('');
+	let turnstileToken = $state('');
+	let turnstileWidgetId: string | undefined;
+	let turnstileContainer: HTMLDivElement | undefined;
+
+	function loadTurnstile() {
+		if (document.querySelector('script[src*="turnstile"]')) {
+			renderWidget();
+			return;
+		}
+		const script = document.createElement('script');
+		script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
+		script.async = true;
+		(window as any).onTurnstileLoad = renderWidget;
+		document.head.appendChild(script);
+	}
+
+	function renderWidget() {
+		if (!turnstileContainer || !(window as any).turnstile) return;
+		if (turnstileWidgetId !== undefined) {
+			(window as any).turnstile.reset(turnstileWidgetId);
+			return;
+		}
+		turnstileWidgetId = (window as any).turnstile.render(turnstileContainer, {
+			sitekey: TURNSTILE_SITE_KEY,
+			size: 'invisible',
+			callback: (token: string) => { turnstileToken = token; },
+			'error-callback': () => { turnstileToken = ''; },
+			'expired-callback': () => { turnstileToken = ''; },
+		});
+	}
+
+	$effect(() => {
+		loadTurnstile();
+	});
 
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
@@ -25,8 +61,25 @@
 		status = 'idle';
 		errorMessage = '';
 
-		const payload = { name, email, subject, message };
-		console.log('[Contact] Sending...', payload);
+		// Reset and await a fresh Turnstile token
+		if ((window as any).turnstile && turnstileWidgetId !== undefined) {
+			turnstileToken = '';
+			(window as any).turnstile.reset(turnstileWidgetId);
+			// Wait for the token callback (up to 10s)
+			const start = Date.now();
+			while (!turnstileToken && Date.now() - start < 10_000) {
+				await new Promise((r) => setTimeout(r, 100));
+			}
+		}
+
+		if (!turnstileToken) {
+			status = 'error';
+			errorMessage = 'Security verification failed. Please try again.';
+			sending = false;
+			return;
+		}
+
+		const payload = { name, email, subject, message, 'cf-turnstile-response': turnstileToken };
 
 		try {
 			const res = await fetch('/api/contact', {
@@ -35,26 +88,27 @@
 				body: JSON.stringify(payload),
 			});
 
-			console.log('[Contact] Response status:', res.status);
 			const data = await res.json();
-			console.log('[Contact] Response body:', data);
 
 			if (!res.ok) {
 				throw new Error(data.error || 'Failed to send message.');
 			}
 
-			console.log('[Contact] Success!');
 			status = 'success';
 			name = '';
 			email = '';
 			subject = '';
 			message = '';
 		} catch (err) {
-			console.error('[Contact] Error:', err);
 			status = 'error';
 			errorMessage = err instanceof Error ? err.message : 'Something went wrong.';
 		} finally {
 			sending = false;
+			// Reset Turnstile for next submission
+			if ((window as any).turnstile && turnstileWidgetId !== undefined) {
+				turnstileToken = '';
+				(window as any).turnstile.reset(turnstileWidgetId);
+			}
 		}
 	}
 
@@ -133,6 +187,7 @@
 					<label for="message">Nachricht</label>
 					<textarea id="message" bind:value={message} placeholder="Deine Nachricht..." rows="5" required disabled={sending}></textarea>
 				</div>
+				<div bind:this={turnstileContainer}></div>
 				<button type="submit" class="send-btn" disabled={sending}>
 					{#if sending}
 						Wird gesendet…
