@@ -165,11 +165,64 @@
 	let bug_sending = $state(false);
 	let bug_status = $state<'idle' | 'success' | 'error'>('idle');
 	let bug_error = $state('');
+	let turnstileToken = $state('');
+	let turnstileWidgetId: string | undefined;
+	let turnstileContainer: HTMLDivElement | undefined;
+
+	const TURNSTILE_SITE_KEY = '0x4AAAAAACkT4xd2e6qXbNEA';
+
+	function loadTurnstile() {
+		if (document.querySelector('script[src*="turnstile"]')) {
+			renderTurnstileWidget();
+			return;
+		}
+		const script = document.createElement('script');
+		script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
+		script.async = true;
+		(window as any).onTurnstileLoad = renderTurnstileWidget;
+		document.head.appendChild(script);
+	}
+
+	function renderTurnstileWidget() {
+		if (!turnstileContainer || !(window as any).turnstile) return;
+		if (turnstileWidgetId !== undefined) {
+			(window as any).turnstile.reset(turnstileWidgetId);
+			return;
+		}
+		turnstileWidgetId = (window as any).turnstile.render(turnstileContainer, {
+			sitekey: TURNSTILE_SITE_KEY,
+			size: 'invisible',
+			callback: (token: string) => { turnstileToken = token; },
+			'error-callback': () => { turnstileToken = ''; },
+			'expired-callback': () => { turnstileToken = ''; },
+		});
+	}
+
+	$effect(() => {
+		if (screen_overlay.mode === 'bug-report') loadTurnstile();
+	});
 
 	async function submit_bug_report() {
 		bug_sending = true;
 		bug_status = 'idle';
 		bug_error = '';
+
+		// Reset and await a fresh Turnstile token
+		if ((window as any).turnstile && turnstileWidgetId !== undefined) {
+			turnstileToken = '';
+			(window as any).turnstile.reset(turnstileWidgetId);
+			const start = Date.now();
+			while (!turnstileToken && Date.now() - start < 10_000) {
+				await new Promise((r) => setTimeout(r, 100));
+			}
+		}
+
+		if (!turnstileToken) {
+			bug_status = 'error';
+			bug_error = 'Security verification failed. Please try again.';
+			bug_sending = false;
+			return;
+		}
 
 		const system_info = [
 			`Browser: ${navigator.userAgent}`,
@@ -190,6 +243,7 @@
 			email: bug_report_email.trim() || 'noreply@bonis.de',
 			subject: 'Bug Report: macOS Web Kernel Panic',
 			message,
+			'cf-turnstile-response': turnstileToken,
 		};
 
 		try {
@@ -210,6 +264,10 @@
 			bug_error = err instanceof Error ? err.message : 'Etwas ist schiefgelaufen.';
 		} finally {
 			bug_sending = false;
+			if ((window as any).turnstile && turnstileWidgetId !== undefined) {
+				turnstileToken = '';
+				(window as any).turnstile.reset(turnstileWidgetId);
+			}
 		}
 	}
 
@@ -301,6 +359,7 @@
 						<span>E-Mail (optional, für Rückfragen)</span>
 						<input type="email" bind:value={bug_report_email} placeholder="ihre@email.de" disabled={bug_sending} />
 					</label>
+					<div bind:this={turnstileContainer}></div>
 					<div class="bug-report-actions">
 						<button type="button" class="bug-btn secondary" onclick={close_bug_report} disabled={bug_sending}>Ignorieren</button>
 						<button type="submit" class="bug-btn primary" disabled={bug_sending}>
