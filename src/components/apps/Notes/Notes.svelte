@@ -36,7 +36,7 @@
 					<div class="entry">
 						<div class="entry-header">
 							<h3>CTO / Vorstand</h3>
-							<span class="date">2019 - Heute</span>
+							<span class="date">April 2019 - Heute</span>
 						</div>
 						<p class="company">Stylite AG</p>
 						<ul>
@@ -48,7 +48,7 @@
 					<div class="entry">
 						<div class="entry-header">
 							<h3>CTO</h3>
-							<span class="date">2004 - 2018</span>
+							<span class="date">2004 - 2019</span>
 						</div>
 						<p class="company">Udicom AG</p>
 						<ul>
