@@ -8,6 +8,13 @@ let glitch_running = false;
 
 export function trigger_glitch() {
 	if (glitch_running || screen_overlay.mode !== 'none') return;
+
+	// Skip the entire glitch sequence for users who prefer reduced motion
+	if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		screen_overlay.mode = 'kernel-panic';
+		return;
+	}
+
 	glitch_running = true;
 
 	// Phase 1: Subtle VRAM corruption creeps in (0–6s)

@@ -154,9 +154,15 @@
 		font-size: 0.9rem;
 		color: #007aff;
 		text-decoration: none;
+		border-radius: 0.2rem;
 
 		&:hover {
 			text-decoration: underline;
+		}
+
+		&:focus-visible {
+			text-decoration: underline;
+			box-shadow: var(--system-focus-outline);
 		}
 	}
 </style>
