@@ -210,14 +210,13 @@
 	out:windowCloseTransition
 >
 	<div class="tl-container {app_id}" use:elevation={'window-traffic-lights'}>
-		<TrafficLights {app_id} on_maximize_click={maximizeApp} on_close_app={closeApp} />
+		<TrafficLights {app_id} on_minimize_click={closeApp} on_maximize_click={maximizeApp} on_close_app={closeApp} />
 	</div>
 
 	<AppNexus {app_id} is_being_dragged={apps.is_being_dragged} />
 
 	{#if resizable}
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="resize-handle" onpointerdown={onResizeStart}></div>
+		<div class="resize-handle" role="separator" aria-label="Resize window" onpointerdown={onResizeStart}></div>
 	{/if}
 </section>
 
@@ -232,8 +231,6 @@
 		grid-template-rows: 1fr;
 
 		position: absolute;
-
-		will-change: width, height;
 
 		border-radius: 0.75rem;
 		box-shadow: var(--elevated-shadow);

@@ -64,11 +64,13 @@
 	bind:this={dockContainerEl}
 	use:elevation={'dock'}
 >
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		class="dock-el"
 		class:hidden={is_dock_hidden.value}
 		class:scaled={dockScale < 1}
+		role="toolbar"
+		aria-label="Application dock"
+		tabindex="-1"
 		bind:this={dockElRef}
 		style:--dock-scale={dockScale}
 		onmousemove={(event) => (dock_mouse_x = event.x)}

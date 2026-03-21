@@ -163,10 +163,6 @@
 </button>
 
 <style>
-	img {
-		will-change: width;
-	}
-
 	button {
 		display: flex;
 		flex-direction: column;

@@ -20,19 +20,21 @@ body {
 
 * {
 	box-sizing: border-box;
+}
 
+button,
+a,
+input,
+select,
+textarea,
+[role='button'] {
 	transition:
 		background-color 150ms ease-in,
 		background 150ms ease-in;
 }
 
-*:focus {
-	outline: none;
-}
-
 *:focus-visible {
 	outline: none;
-
 	box-shadow: var(--system-focus-outline);
 }
 
@@ -76,7 +78,13 @@ button {
 	cursor: var(--system-cursor-default), auto;
 }
 
-/* Scrollbar Stuffs */
+/* Scrollbar — standards-based (Firefox, future Chrome) */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: #888 transparent;
+}
+
+/* Scrollbar — WebKit */
 ::-webkit-scrollbar {
 	width: 5px;
 }

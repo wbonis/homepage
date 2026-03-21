@@ -13,7 +13,7 @@
 
 	let name = $state('');
 	let email = $state('');
-	let subject = $state('');
+	let subject = $state('Jobangebot');
 	let message = $state('');
 	let sending = $state(false);
 	let status = $state<'idle' | 'success' | 'error'>('idle');
@@ -65,10 +65,21 @@
 		if ((window as any).turnstile && turnstileWidgetId !== undefined) {
 			turnstileToken = '';
 			(window as any).turnstile.reset(turnstileWidgetId);
-			// Wait for the token callback (up to 10s)
-			const start = Date.now();
-			while (!turnstileToken && Date.now() - start < 10_000) {
-				await new Promise((r) => setTimeout(r, 100));
+			try {
+				await new Promise<void>((resolve, reject) => {
+					const timeout = setTimeout(() => reject(new Error('timeout')), 10_000);
+					const check = () => {
+						if (turnstileToken) {
+							clearTimeout(timeout);
+							resolve();
+						} else {
+							requestAnimationFrame(check);
+						}
+					};
+					requestAnimationFrame(check);
+				});
+			} catch {
+				// Token did not arrive in time
 			}
 		}
 
@@ -126,13 +137,13 @@
 
 		<aside class:light={preferences.theme.scheme === 'light'}>
 			<nav>
-				<button class="subject-btn active" onclick={() => { subject = 'Jobangebot'; trackEvent('Contact', 'subject_selected', 'Jobangebot'); }}>
+				<button class="subject-btn" class:active={subject === 'Jobangebot'} aria-current={subject === 'Jobangebot' ? 'true' : undefined} onclick={() => { subject = 'Jobangebot'; trackEvent('Contact', 'subject_selected', 'Jobangebot'); }}>
 					<EmailIcon /> Jobangebot
 				</button>
-				<button class="subject-btn" onclick={() => { subject = 'Freelance-Arbeit'; trackEvent('Contact', 'subject_selected', 'Freelance-Arbeit'); }}>
+				<button class="subject-btn" class:active={subject === 'Freelance-Arbeit'} aria-current={subject === 'Freelance-Arbeit' ? 'true' : undefined} onclick={() => { subject = 'Freelance-Arbeit'; trackEvent('Contact', 'subject_selected', 'Freelance-Arbeit'); }}>
 					<EmailIcon /> Freelance-Arbeit
 				</button>
-				<button class="subject-btn" onclick={() => { subject = 'Einfach Hallo sagen'; trackEvent('Contact', 'subject_selected', 'Einfach Hallo sagen'); }}>
+				<button class="subject-btn" class:active={subject === 'Einfach Hallo sagen'} aria-current={subject === 'Einfach Hallo sagen' ? 'true' : undefined} onclick={() => { subject = 'Einfach Hallo sagen'; trackEvent('Contact', 'subject_selected', 'Einfach Hallo sagen'); }}>
 					<EmailIcon /> Einfach Hallo sagen
 				</button>
 
@@ -173,19 +184,19 @@
 				{/if}
 				<div class="field">
 					<label for="name">Name</label>
-					<input id="name" type="text" bind:value={name} placeholder="Dein Name" required disabled={sending} />
+					<input id="name" type="text" bind:value={name} placeholder="Dein Name" required disabled={sending} maxlength="100" />
 				</div>
 				<div class="field">
 					<label for="email">E-Mail</label>
-					<input id="email" type="email" bind:value={email} placeholder="deine@email.de" required disabled={sending} />
+					<input id="email" type="email" bind:value={email} placeholder="deine@email.de" required disabled={sending} maxlength="254" />
 				</div>
 				<div class="field">
 					<label for="subject">Betreff</label>
-					<input id="subject" type="text" bind:value={subject} placeholder="Worum geht es?" disabled={sending} />
+					<input id="subject" type="text" bind:value={subject} placeholder="Worum geht es?" disabled={sending} maxlength="200" />
 				</div>
 				<div class="field">
 					<label for="message">Nachricht</label>
-					<textarea id="message" bind:value={message} placeholder="Deine Nachricht..." rows="5" required disabled={sending}></textarea>
+					<textarea id="message" bind:value={message} placeholder="Deine Nachricht..." rows="5" required disabled={sending} maxlength="5000"></textarea>
 				</div>
 				<div bind:this={turnstileContainer}></div>
 				<button type="submit" class="send-btn" disabled={sending}>
@@ -323,6 +334,12 @@
 
 				&:hover {
 					background-color: hsla(var(--system-color-dark-hsl), 0.2);
+				}
+
+				&.active {
+					background-color: hsla(var(--system-color-primary-hsl), 0.15);
+					color: var(--system-color-primary);
+					font-weight: 500;
 				}
 			}
 		}
