@@ -44,6 +44,7 @@
 		align-items: center;
 
 		position: relative;
+		z-index: 55;
 
 		width: 100%;
 		height: 1.8rem;
