@@ -46,12 +46,13 @@
 		style:transform="translate({x_pos}px, {y_pos}px)"
 		out:fade_out
 		use:elevation={'context-menu'}
+		role="menu"
 	>
 		{#each Object.values(context_menu_config.default) as contents}
-			<button class="menu-item">{contents.title}</button>
+			<button class="menu-item" role="menuitem">{contents.title}</button>
 
 			{#if contents.breakAfter}
-				<div class="divider"></div>
+				<div class="divider" role="separator"></div>
 			{/if}
 		{/each}
 	</div>
@@ -121,8 +122,8 @@
 
 		width: 100%;
 
-		padding: 0.3rem 0.4rem;
-		margin: 0.2rem 0;
+		padding: 0.45rem 0.6rem;
+		margin: 0.15rem 0;
 
 		letter-spacing: 0.4px;
 		font-weight: 400;

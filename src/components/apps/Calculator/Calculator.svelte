@@ -107,7 +107,7 @@
 		<header class="app-window-drag-handle"></header>
 	{/if}
 
-	<section class="show-area" style:font-size={display_font_size}>{display_value}</section>
+	<section class="show-area" style:font-size={display_font_size} role="status" aria-live="polite" aria-label="Calculator display">{display_value}</section>
 
 	<section class="buttons-container">
 		<button class="top-row-button" onclick={clear_all}> AC </button>

@@ -113,22 +113,22 @@ LinkedIn: linkedin.com/in/wbonis`,
 		</header>
 	{/if}
 
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div class="terminal" bind:this={terminalEl} onclick={() => {
 		const input = document.getElementById('terminal-input');
 		if (input) input.focus();
-	}}>
-		{#each history as entry}
-			{#if entry.command}
-				<div class="line">
-					<span class="prompt">wbonis@portfolio</span><span class="prompt-sep">:</span><span class="prompt-dir">~</span><span class="prompt-dollar">$</span> {entry.command}
-				</div>
-			{/if}
-			{#if entry.output}
-				<pre class="output">{entry.output}</pre>
-			{/if}
-		{/each}
+	}} role="log" aria-label="Terminal output">
+		<div aria-live="polite" aria-atomic="false">
+			{#each history as entry}
+				{#if entry.command}
+					<div class="line">
+						<span class="prompt">wbonis@portfolio</span><span class="prompt-sep">:</span><span class="prompt-dir">~</span><span class="prompt-dollar">$</span> {entry.command}
+					</div>
+				{/if}
+				{#if entry.output}
+					<pre class="output">{entry.output}</pre>
+				{/if}
+			{/each}
+		</div>
 
 		<div class="line input-line">
 			<span class="prompt">wbonis@portfolio</span><span class="prompt-sep">:</span><span class="prompt-dir">~</span><span class="prompt-dollar">$</span>
@@ -139,6 +139,7 @@ LinkedIn: linkedin.com/in/wbonis`,
 				onkeydown={handleKeydown}
 				spellcheck="false"
 				autocomplete="off"
+				aria-label="Terminal command input"
 			/>
 		</div>
 	</div>

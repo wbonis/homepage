@@ -287,16 +287,23 @@
 	function dismiss() {
 		screen_overlay.mode = 'none';
 	}
+
+	function dismiss_on_key(e: KeyboardEvent) {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			dismiss();
+		}
+	}
 </script>
 
 {#if screen_overlay.mode === 'sleep'}
-	<div class="overlay sleep" use:elevation={'screen-overlay'} onclick={dismiss} role="button" tabindex="0" onkeydown={dismiss}>
+	<div class="overlay sleep" use:elevation={'screen-overlay'} onclick={dismiss} role="button" tabindex="0" onkeydown={dismiss_on_key} aria-label="Click or press Enter to wake">
 		<span class="hint">Click anywhere to wake</span>
 	</div>
 {/if}
 
 {#if screen_overlay.mode === 'lock'}
-	<div class="overlay lock" use:elevation={'screen-overlay'} onclick={dismiss} role="button" tabindex="0" onkeydown={dismiss}>
+	<div class="overlay lock" use:elevation={'screen-overlay'} onclick={dismiss} role="button" tabindex="0" onkeydown={dismiss_on_key} aria-label="Click or press Enter to unlock">
 		<div class="lock-content">
 			<div class="lock-time">{clock.time}</div>
 			<div class="lock-date">{clock.date}</div>
@@ -306,7 +313,7 @@
 {/if}
 
 {#if screen_overlay.mode === 'shutdown'}
-	<div class="overlay shutdown" use:elevation={'screen-overlay'} onclick={() => location.reload()} role="button" tabindex="0" onkeydown={() => location.reload()}>
+	<div class="overlay shutdown" use:elevation={'screen-overlay'} onclick={() => location.reload()} role="button" tabindex="0" onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') location.reload(); }} aria-label="Click or press Enter to restart">
 		<span class="hint">Click anywhere to start</span>
 	</div>
 {/if}
@@ -316,7 +323,7 @@
 {/if}
 
 {#if screen_overlay.mode === 'kernel-panic'}
-	<div class="overlay kernel-panic" use:elevation={'screen-overlay'} onclick={() => (screen_overlay.mode = 'bug-report')} role="button" tabindex="0" onkeydown={() => (screen_overlay.mode = 'bug-report')}>
+	<div class="overlay kernel-panic" use:elevation={'screen-overlay'} onclick={() => (screen_overlay.mode = 'bug-report')} role="button" tabindex="0" onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') screen_overlay.mode = 'bug-report'; }} aria-label="Click or press Enter to report bug">
 		<div class="panic-content">
 			<div class="panic-icon">⚠</div>
 			<p class="panic-main">You need to restart your computer. Hold down the Power button for several seconds or press the Restart button.</p>
@@ -332,10 +339,10 @@
 
 {#if screen_overlay.mode === 'bug-report'}
 	<div class="overlay bug-report-backdrop" use:elevation={'screen-overlay'}>
-		<div class="bug-report-dialog" role="dialog">
+		<div class="bug-report-dialog" role="dialog" aria-labelledby="bug-report-title">
 			<div class="bug-report-header">
 				<div class="bug-report-icon">🪲</div>
-				<h1>Problem Report</h1>
+				<h1 id="bug-report-title">Problem Report</h1>
 				<p class="bug-report-subtitle">macOS Web ist unerwartet beendet worden. Möchten Sie einen Fehlerbericht senden?</p>
 			</div>
 
@@ -374,13 +381,13 @@
 
 {#if screen_overlay.mode === 'about'}
 	{@const info = get_about_info()}
-	<div class="overlay about-backdrop" use:elevation={'screen-overlay'} onclick={dismiss} role="button" tabindex="0" onkeydown={dismiss}>
+	<div class="overlay about-backdrop" use:elevation={'screen-overlay'} onclick={dismiss} role="button" tabindex="0" onkeydown={dismiss_on_key}>
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_interactive_supports_focus -->
-		<div class="about-dialog" onclick={(e) => e.stopPropagation()} role="dialog">
+		<div class="about-dialog" onclick={(e) => e.stopPropagation()} role="dialog" aria-labelledby="about-dialog-title">
 			<div class="about-header">
 				<img src="/app-icons/finder/256.webp" alt="macOS" class="about-icon" />
-				<h1>macOS Web</h1>
+				<h1 id="about-dialog-title">macOS Web</h1>
 				<p class="about-version">Version {__APP_VERSION__}</p>
 				<p class="about-subtitle">Portfolio of Wim Bonis</p>
 			</div>
