@@ -6,19 +6,6 @@
 
 declare const __APP_VERSION__: string;
 
-declare module 'cloudflare:sockets' {
-	interface SocketOptions {
-		secureTransport?: 'on' | 'off' | 'starttls';
-		allowHalfOpen?: boolean;
-	}
-	interface Socket {
-		readable: ReadableStream<Uint8Array>;
-		writable: WritableStream<Uint8Array>;
-		close(): void;
-	}
-	export function connect(address: string, options?: SocketOptions): Socket;
-}
-
 type ObjectKeys<Obj> = Obj extends object
 	? (keyof Obj)[]
 	: Obj extends number
