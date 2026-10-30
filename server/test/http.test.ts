@@ -2,7 +2,7 @@
 // Starts the real server on a free port with a temporary client/ folder. Run: npm test (in server/)
 import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import type { AddressInfo } from 'node:net';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -26,6 +26,8 @@ before(async () => {
 	await writeFile(join(client, 'robots.txt'), 'User-agent: *');
 	await writeFile(join(client, '.htaccess'), 'secret');
 	await writeFile(join(dir, 'outside.txt'), 'outside');
+	await writeFile(join(client, 'unreadable.txt'), 'x');
+	await chmod(join(client, 'unreadable.txt'), 0o000);
 	const handler = createContactHandler({
 		env: () => ({ ALTCHA_HMAC_KEY: 'k'.repeat(40), CLIENT_IP_HEADER: 'socket' }),
 		dev: false,
@@ -117,4 +119,12 @@ test('a body larger than the limit is refused with 413', async () => {
 	});
 	assert.equal(res.status, 413);
 	assert.deepEqual(await res.json(), { success: false, error: 'too-large' });
+});
+
+test('a file that cannot be read does not crash the server', async () => {
+	const res = await fetch(`${base}/unreadable.txt`).catch(() => null);
+	await res?.body?.cancel();
+	const next = await fetch(`${base}/robots.txt`);
+	assert.equal(next.status, 200);
+	await next.body?.cancel();
 });
