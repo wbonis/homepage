@@ -1,15 +1,14 @@
 # Deploy: Plesk (web-prod)
 
-The site moves from Cloudflare Pages to Plesk on web-prod, like truenas-deutschland and
-sty-blog. Server side (subscriptions, Git deploy key, Node.js, env vars, nginx plan): the
+The site runs on Plesk on web-prod, like truenas-deutschland and sty-blog (moved from
+Cloudflare Pages on 2026-10-30). Server side (subscriptions, Git deploy key, Node.js, env vars, nginx plan): the
 web-prod repo, `../web-prod/docs/new-site-plesk.md`. This file is the site side.
 
-Status (2026-10-30):
-- **staging.bonis.de**: Plesk, plan "App website", deploys branch `deploy-staging`.
-- **www.bonis.de**: still Cloudflare Pages, built from `main`. Stays there until Wim says go.
-- The migration lives on branch `plesk`. `main` must keep working on Cloudflare (its Pages
-  Function `functions/api/contact.ts` still serves the live contact form with Turnstile), so
-  `plesk` is merged into `main` only at go-live.
+- **staging.bonis.de**: Plesk subscription of its own, plan "App website", branch `deploy-staging`,
+  `X-Robots-Tag: noindex`.
+- **www.bonis.de** (subscription bonis.de; bonis.de redirects 301 to www): plan "App website",
+  branch `deploy-live`.
+- Source branch: `main`. Pushing `main` deploys nothing; only `release.sh` does.
 
 ## Layout
 
@@ -65,8 +64,7 @@ at once through the webhook: `PLESK_WEBHOOK_STAGING` / `PLESK_WEBHOOK_LIVE` in t
 `.env`, reachable only from the admin network). When `package-lock.json` changed, release.sh
 skips the webhook; the cron deploys, runs `npm install` and restarts together.
 
-Builds run locally, not in GitHub Actions (the Cloudflare branch model keeps `main` as is
-until go-live; `gh workflow run` needs the workflow on the default branch).
+Builds run locally (as sty-blog), not in GitHub Actions.
 
 ## Contact form
 
@@ -131,11 +129,3 @@ done
 Then the browser: desktop loads, no CSP errors in the console, Mail app sends (watch the
 Node.js log in Plesk: `client address headers (first request)` should show
 `"source":"x-real-ip","xRealIp":"ip"`).
-
-## Go-live (when Wim says go)
-
-1. web-prod: subscription for www.bonis.de on "App website", Node.js, env vars.
-2. `./release.sh live`, check as above on the live host.
-3. DNS www.bonis.de / bonis.de to Plesk (Wim's OK).
-4. Merge `plesk` into `main`; then delete `functions/`, `src/helpers/smtp.ts`, `wrangler.toml`,
-   `vercel.json` and the Cloudflare env vars.

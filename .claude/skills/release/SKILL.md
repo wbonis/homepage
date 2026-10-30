@@ -8,8 +8,7 @@ description: Deploy bonis.de to Plesk with release.sh: staging (staging.bonis.de
 Targets (details: `docs/deploy.md`):
 - **staging**: https://staging.bonis.de. Safe; do it whenever asked.
 - **live**: https://www.bonis.de. Only the commit staging already shows, and only after an
-  explicit "ja"/"yes" from Wim in this conversation. Until go-live, www.bonis.de is still
-  Cloudflare (from `main`): do not run `release.sh live` before Wim says go.
+  explicit "ja"/"yes" from Wim in this conversation.
 
 ## Hard rules
 

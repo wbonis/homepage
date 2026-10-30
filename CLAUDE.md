@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A macOS desktop experience recreated in the browser as a personal portfolio site. Built with **Svelte 5** (runes), **TypeScript**, and **Vite**. Live **https://www.bonis.de** is still on **Cloudflare Pages** (built from `main`); it moves to **Plesk on web-prod** (staging: **https://staging.bonis.de**, branch `plesk`). Deploy, contact form, CSP: `docs/deploy.md`. The server and Plesk belong to `../web-prod`; header/CSP changes go through it (`../web-prod/docs/headers.md`).
+A macOS desktop experience recreated in the browser as a personal portfolio site. Built with **Svelte 5** (runes), **TypeScript**, and **Vite**. Hosted on **Plesk on web-prod**: **https://www.bonis.de** (live) and **https://staging.bonis.de** (staging), deployed from `main` by `release.sh`. Deploy, contact form, CSP: `docs/deploy.md`. The server and Plesk belong to `../web-prod`; header/CSP changes go through it (`../web-prod/docs/headers.md`).
 
 - **GitHub:** https://github.com/wbonis/homepage
 - **LinkedIn:** https://www.linkedin.com/in/wbonis/
@@ -83,8 +83,6 @@ Wallpapers and assets are optimized via `vite-imagetools`. Import images with qu
 Two forms use it, both through `src/helpers/contact.ts`:
 1. **Mail app** (`src/components/apps/Mail/Mail.svelte`)
 2. **Bug report dialog** (`src/components/Desktop/ScreenOverlay.svelte`)
-
-Until go-live, `main` keeps the Cloudflare Pages Function (`functions/api/contact.ts`, Turnstile) for www.bonis.de; it is deleted when `plesk` is merged.
 
 **CSP:** no inline scripts, no `<style>` elements; `style=""` attributes are allowed. `pnpm test:csp` checks the build against `deploy/nginx-directives.conf`.
 
