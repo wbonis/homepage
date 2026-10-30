@@ -72,6 +72,10 @@ export default defineConfig({
 			'🍎': new URL('./src/', import.meta.url).pathname,
 		},
 	},
+	server: {
+		// pnpm dev:api runs the contact server (server/) on 8788
+		proxy: { '/api': 'http://localhost:8788' },
+	},
 	build: {
 		minify: 'terser',
 		cssMinify: 'lightningcss',

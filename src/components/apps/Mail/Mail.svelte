@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { prepareAltcha, sendContact } from '🍎/helpers/contact';
 	import { trackEvent } from '🍎/helpers/tracking';
 	import { preferences } from '🍎/state/preferences.svelte.ts';
 	import EmailIcon from '~icons/mdi/email-outline';
@@ -6,8 +7,6 @@
 	import LinkedInIcon from '~icons/mdi/linkedin';
 	import SendIcon from '~icons/mdi/send';
 	import AlertIcon from '~icons/mdi/alert-circle-outline';
-
-	const TURNSTILE_SITE_KEY = '0x4AAAAAACkT4xd2e6qXbNEA';
 
 	const { ios_mode = false }: { ios_mode?: boolean } = $props();
 
@@ -18,41 +17,6 @@
 	let sending = $state(false);
 	let status = $state<'idle' | 'success' | 'error'>('idle');
 	let errorMessage = $state('');
-	let turnstileToken = $state('');
-	let turnstileWidgetId: string | undefined;
-	let turnstileContainer: HTMLDivElement | undefined;
-
-	function loadTurnstile() {
-		if (document.querySelector('script[src*="turnstile"]')) {
-			renderWidget();
-			return;
-		}
-		const script = document.createElement('script');
-		script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
-		script.async = true;
-		(window as any).onTurnstileLoad = renderWidget;
-		document.head.appendChild(script);
-	}
-
-	function renderWidget() {
-		if (!turnstileContainer || !(window as any).turnstile) return;
-		if (turnstileWidgetId !== undefined) {
-			(window as any).turnstile.reset(turnstileWidgetId);
-			return;
-		}
-		turnstileWidgetId = (window as any).turnstile.render(turnstileContainer, {
-			sitekey: TURNSTILE_SITE_KEY,
-			size: 'invisible',
-			callback: (token: string) => { turnstileToken = token; },
-			'error-callback': () => { turnstileToken = ''; },
-			'expired-callback': () => { turnstileToken = ''; },
-		});
-	}
-
-	$effect(() => {
-		loadTurnstile();
-	});
-
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
 		trackEvent('Contact', 'form_submitted', subject);
@@ -61,50 +25,8 @@
 		status = 'idle';
 		errorMessage = '';
 
-		// Reset and await a fresh Turnstile token
-		if ((window as any).turnstile && turnstileWidgetId !== undefined) {
-			turnstileToken = '';
-			(window as any).turnstile.reset(turnstileWidgetId);
-			try {
-				await new Promise<void>((resolve, reject) => {
-					const timeout = setTimeout(() => reject(new Error('timeout')), 10_000);
-					const check = () => {
-						if (turnstileToken) {
-							clearTimeout(timeout);
-							resolve();
-						} else {
-							requestAnimationFrame(check);
-						}
-					};
-					requestAnimationFrame(check);
-				});
-			} catch {
-				// Token did not arrive in time
-			}
-		}
-
-		if (!turnstileToken) {
-			status = 'error';
-			errorMessage = 'Security verification failed. Please try again.';
-			sending = false;
-			return;
-		}
-
-		const payload = { name, email, subject, message, 'cf-turnstile-response': turnstileToken };
-
 		try {
-			const res = await fetch('/api/contact', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(payload),
-			});
-
-			const data = await res.json();
-
-			if (!res.ok) {
-				throw new Error(data.error || 'Failed to send message.');
-			}
-
+			await sendContact({ name, email, subject: subject.trim() || 'Kein Betreff', message });
 			status = 'success';
 			name = '';
 			email = '';
@@ -112,14 +34,9 @@
 			message = '';
 		} catch (err) {
 			status = 'error';
-			errorMessage = err instanceof Error ? err.message : 'Something went wrong.';
+			errorMessage = err instanceof Error ? err.message : 'Etwas ist schiefgelaufen.';
 		} finally {
 			sending = false;
-			// Reset Turnstile for next submission
-			if ((window as any).turnstile && turnstileWidgetId !== undefined) {
-				turnstileToken = '';
-				(window as any).turnstile.reset(turnstileWidgetId);
-			}
 		}
 	}
 
@@ -176,7 +93,7 @@
 				</button>
 			</div>
 		{:else}
-			<form onsubmit={handleSubmit}>
+			<form onsubmit={handleSubmit} onfocusin={() => prepareAltcha().catch(() => {})}>
 				{#if status === 'error'}
 					<div class="error-message">
 						<AlertIcon /> {errorMessage}
@@ -198,7 +115,6 @@
 					<label for="message">Nachricht</label>
 					<textarea id="message" bind:value={message} placeholder="Deine Nachricht..." rows="5" required disabled={sending} maxlength="5000"></textarea>
 				</div>
-				<div bind:this={turnstileContainer}></div>
 				<button type="submit" class="send-btn" disabled={sending}>
 					{#if sending}
 						Wird gesendet…
