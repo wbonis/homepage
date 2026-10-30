@@ -7,9 +7,9 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { browserslistToTargets } from 'lightningcss';
 import browserslist from 'browserslist';
 
-import { prefetch } from './prefetch-plugin';
-import { blogSeo } from './blog-seo-plugin';
-import { photosManifest } from './photos-plugin';
+import { prefetch } from './prefetch-plugin.ts';
+import { blogSeo } from './blog-seo-plugin.ts';
+import { photosManifest } from './photos-plugin.ts';
 
 const commitDate = execSync('git log -1 --format="%cd" --date=format:"%Y.%m.%d %H:%M"').toString().trim();
 const commitHash = execSync('git log -1 --format="%h"').toString().trim();
