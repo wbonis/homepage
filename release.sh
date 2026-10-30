@@ -32,6 +32,7 @@ fail() { echo -e "${RED}[ERROR]${NC} $1" >&2; exit 1; }
 
 confirm() {
     [ -n "${YES:-}" ] && return 0
+    [ -t 0 ] || fail "No terminal for the question \"$1\": run with --yes (e.g. in Claude's ! mode)."
     read -r -p "$1 (y/N): " reply
     [[ $reply =~ ^[Yy]$ ]]
 }
