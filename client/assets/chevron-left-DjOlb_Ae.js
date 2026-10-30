@@ -1,0 +1,1 @@
+import{R as t,V as e,b as s,w as a}from"./index-B_bwLiPU.js";var o=new Set(["$$slots","$$events","$$legacy"]),l=e('<svg><path fill="currentColor" d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6z"></path></svg>');function r(e,r){const i=s(r,o);var n=l();a(n,()=>({viewBox:"0 0 24 24",width:"1.2em",height:"1.2em",...i})),t(e,n)}export{r as t};
