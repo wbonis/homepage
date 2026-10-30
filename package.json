@@ -7,7 +7,12 @@
 		"dev:api": "node server/entry.mjs --dev --client dist",
 		"build": "vite build",
 		"serve": "vite preview",
-		"check": "svelte-check --tsconfig ./tsconfig.json"
+		"prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
+		"check": "pnpm typecheck && pnpm test:server && pnpm test:tools && pnpm build && pnpm test:csp",
+		"typecheck": "svelte-check --tsconfig ./tsconfig.json && npm --prefix server run --silent typecheck",
+		"test:server": "npm --prefix server test",
+		"test:tools": "node --test \"tests/*.test.ts\"",
+		"test:csp": "node tools/check-csp.mjs"
 	},
 	"devDependencies": {
 		"@iconify-json/gg": "^1.2.1",
@@ -23,6 +28,7 @@
 		"@types/node": "^25.3.1",
 		"browserslist": "^4.24.2",
 		"lightningcss": "^1.27.0",
+		"parse5": "^8.0.1",
 		"prettier-plugin-svelte": "^3.4.0",
 		"svelte": "5.34.8",
 		"svelte-check": "^4.0.5",

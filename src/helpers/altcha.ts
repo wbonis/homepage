@@ -14,7 +14,7 @@ export interface AltchaChallenge {
 		salt: string;
 		[key: string]: unknown;
 	};
-	signature: string;
+	signature?: string;
 }
 
 /** Counters tried in parallel per round */

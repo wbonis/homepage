@@ -1,0 +1,14 @@
+#!/bin/sh
+# Runs the release checks before every push (pnpm check). There is no code review,
+# so this is the gate for main. Enabled by `pnpm install` (script "prepare" sets core.hooksPath).
+# Quiet when green; the full log only when a check fails.
+log=$(mktemp -t pre-push-check)
+echo "pre-push: pnpm check ..." >&2
+if pnpm -s check > "$log" 2>&1; then
+  echo "pre-push: checks passed" >&2
+  rm -f "$log"
+  exit 0
+fi
+cat "$log" >&2
+echo "pre-push: checks FAILED, push stopped (log: $log)" >&2
+exit 1
