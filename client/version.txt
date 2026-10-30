@@ -1,3 +1,3 @@
-Commit: 0ba9233 (fix: cache headers via client/.htaccess; release.sh reads only the webhook from .env)
-Built: 2026-10-30 15:14 CET
+Commit: 64008be (fix: immutable only for existing /assets/ files, not for 404s)
+Built: 2026-10-30 15:18 CET
 Target: live
