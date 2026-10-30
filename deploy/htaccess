@@ -3,7 +3,7 @@
 # Security headers come from the Plesk plan (deploy/nginx-directives.conf), not from here.
 <IfModule mod_headers.c>
   # Vite writes content-hashed names into /assets/
-  <If "%{REQUEST_URI} =~ m#^/assets/#">
+  <If "%{REQUEST_URI} =~ m#^/assets/# && -f %{REQUEST_FILENAME}">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </If>
   # Unhashed entry points: revalidate, so a deploy (and the PWA update) is seen at once
