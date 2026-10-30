@@ -2,11 +2,11 @@
 // desktop app from client/. nginx serves existing files itself ("smart static"), so Node mostly
 // sees "/" and missing files; it still serves client/ completely (also for local runs) and sets
 // the cache headers itself: hashed /assets/ immutable, everything else revalidated. Unit tests: server/test/http.test.ts.
-import { createReadStream } from 'node:fs';
-import { stat } from 'node:fs/promises';
+import { open } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { extname, resolve, sep } from 'node:path';
 import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import type { createContactHandler } from './handler.ts';
 import type { Logger } from './log.ts';
 
@@ -95,16 +95,25 @@ async function serveStatic(
 		return sendText(res, 405, 'Method Not Allowed\n', { allow: 'GET, HEAD' });
 	}
 	const file = fileFor(clientDir, pathname);
-	const info = file ? await stat(file).catch(() => null) : null;
-	if (!file || !info?.isFile()) return sendText(res, 404, 'Not Found\n');
+	// Open before answering: a file that vanished (deploy) or is unreadable is a clean 404
+	const handle = file ? await open(file).catch(() => null) : null;
+	const info = handle ? await handle.stat().catch(() => null) : null;
+	if (!file || !handle || !info?.isFile()) {
+		await handle?.close();
+		return sendText(res, 404, 'Not Found\n');
+	}
 	res.writeHead(200, {
 		'content-type': TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream',
 		'content-length': String(info.size),
 		'cache-control': cacheControl(pathname),
 		'x-content-type-options': 'nosniff',
 	});
-	if (req.method === 'HEAD') return res.end();
-	createReadStream(file).pipe(res);
+	if (req.method === 'HEAD') {
+		await handle.close();
+		return res.end();
+	}
+	// pipeline forwards stream errors to the caller (try/catch in createAppServer)
+	await pipeline(handle.createReadStream(), res);
 }
 
 /** Request body up to MAX_REQUEST_BYTES, or null when it is larger. */
@@ -131,7 +140,7 @@ function toHeaders(req: IncomingMessage): Headers {
 async function writeResponse(res: ServerResponse, response: Response) {
 	res.writeHead(response.status, Object.fromEntries(response.headers));
 	if (!response.body) return res.end();
-	Readable.fromWeb(response.body as import('node:stream/web').ReadableStream).pipe(res);
+	await pipeline(Readable.fromWeb(response.body as import('node:stream/web').ReadableStream), res);
 }
 
 const API_ROUTES: Record<string, { method: string; run: 'post' | 'challenge' }> = {
@@ -159,7 +168,8 @@ async function serveApi(
 		});
 		return res.end(JSON.stringify({ success: false, error: 'too-large' }));
 	}
-	const request = new Request(`http://localhost${req.url}`, {
+	const { pathname: path, search } = new URL(req.url ?? '/', 'http://localhost');
+	const request = new Request(`http://localhost${path}${search}`, {
 		method: req.method,
 		headers: toHeaders(req),
 		body: body ? new Uint8Array(body) : undefined,
