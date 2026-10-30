@@ -1,6 +1,7 @@
 import { mount } from 'svelte';
 import Desktop from './components/Desktop/Desktop.svelte';
 import './css/global.css';
+import './helpers/matomo';
 import './helpers/tracking';
 import { detectDeviceType } from './helpers/device-detect';
 
