@@ -9,7 +9,7 @@
 #
 # Builds the committed HEAD in a temporary worktree (uncommitted changes are never shipped) and
 # runs pnpm check there (staging: VITE_STAGING=1, no Matomo, robots.txt Disallow: /). The deploy
-# branch gets client/ (docroot, with version.txt), server/ (Node entry and sources), package.json
+# branch gets client/ (docroot, with version.txt and .htaccess cache headers), server/ (Node entry and sources), package.json
 # with runtime dependencies only, a matching trimmed package-lock.json, .nvmrc and
 # tmp/restart.txt (new content every build: Passenger restarts the app on the next request).
 # Right after the push, release.sh calls the Plesk Git webhook (URLs in .env, see .env.example),
@@ -58,6 +58,7 @@ build_head() {
 compose() {
     local out=$1 src="$WORK/src"
     cp -R "$src/dist" "$out/client"
+    cp "$src/deploy/htaccess" "$out/client/.htaccess"
     if [ -n "$STAGING" ]; then
         printf 'User-agent: *\nDisallow: /\n' > "$out/client/robots.txt"
     fi
@@ -124,7 +125,8 @@ push_deploy_branch() {
 trigger_plesk() {
     local var url
     var=PLESK_WEBHOOK_$(echo "$TARGET" | tr '[:lower:]' '[:upper:]')
-    url=${!var:-}
+    # only this one line of .env: never export the file into the build (npm scripts, tests)
+    url=$( [ -f .env ] && sed -n "s/^${var}=//p" .env | tail -1 | tr -d '\r"' || true)
     if [ -n "$1" ]; then
         info "package-lock.json changed: the Plesk cron deploys and installs within 5 minutes."
     elif [ -z "$url" ]; then
@@ -175,9 +177,6 @@ main() {
         live) SITE=https://www.bonis.de STAGING= ;;
         *) fail "Usage: ./release.sh staging|live [--yes]" ;;
     esac
-    # PLESK_WEBHOOK_STAGING, PLESK_WEBHOOK_LIVE (optional, see .env.example)
-    # shellcheck source=/dev/null
-    if [ -f .env ]; then set -a; . ./.env; set +a; fi
     SHA=$(git rev-parse HEAD)
     WORK=$(mktemp -d -t bonis-release)
     [ "$TARGET" = live ] && require_on_staging

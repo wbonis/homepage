@@ -23,10 +23,11 @@ release.sh          build + push deploy-staging / deploy-live
 
 Request chain on Plesk: nginx -> Apache -> Passenger -> `node server/entry.mjs`. nginx serves
 every existing file under `client/` itself ("smart static"); Node sees `/`, missing files and
-`/api/*`. So the Node server also serves `client/` (`/` -> `index.html`) and sets cache
-headers for what it serves (`/assets/*` immutable, everything else `no-cache`). Headers on
-files nginx serves come only from the plan (`deploy/nginx-directives.conf`); `.htaccess` would
-not apply to them.
+`/api/*`. In practice Apache answers existing files (also `/` -> `index.html`) through nginx's
+static location, so cache headers come from `client/.htaccess` (`deploy/htaccess`: `/assets/*`
+immutable, entry points like `sw.js` and `index.html` `no-cache`; checked on staging). The Node
+server serves `client/` too, with the same headers, for whatever reaches it and for local runs.
+Security headers come only from the plan (`deploy/nginx-directives.conf`).
 
 Node 26 runs the TypeScript in `server/src/` directly (type stripping): no server build. Server
 dependencies are managed with npm in `server/` (Plesk installs from `package-lock.json`); the
@@ -51,7 +52,7 @@ First time: `pnpm install` (sets `core.hooksPath .githooks`: pre-push runs `pnpm
 Matomo, `robots.txt` `Disallow: /`) and pushes `deploy-staging` / `deploy-live`:
 
 ```
-client/                 dist/ + version.txt (commit, build time, target)
+client/                 dist/ + version.txt (commit, build time, target) + .htaccess (deploy/htaccess)
 server/entry.mjs, server/src/
 package.json            runtime dependencies only (tools/deploy-package.mjs)
 package-lock.json       server/package-lock.json, trimmed to match
@@ -83,8 +84,9 @@ rate limit -> size and type -> honeypot -> fields -> ALTCHA -> global mail limit
 SMTP requires STARTTLS (except loopback), port 465 is implicit TLS. Logs never contain form
 contents, addresses or secrets.
 
-Environment variables (Plesk, per domain; names in `.env.example`, never values: the repo is
-public). Read at request time from `process.env`.
+Environment variables (Plesk only, per domain, set by web-prod; never in a local `.env` or the
+repo, which is public). Read at request time from `process.env`. Staging: relay.stylite.eu:2525
+(STARTTLS, no auth), from noreply@bonis.de to bonis@bonis.de.
 
 | Variable | Required | Meaning |
 |---|---|---|
