@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A macOS desktop experience recreated in the browser as a personal portfolio site. Built with **Svelte 5** (runes), **TypeScript**, and **Vite**. Hosted on **Cloudflare Pages** under **https://www.bonis.de**.
+A macOS desktop experience recreated in the browser as a personal portfolio site. Built with **Svelte 5** (runes), **TypeScript**, and **Vite**. Live **https://www.bonis.de** is still on **Cloudflare Pages** (built from `main`); it moves to **Plesk on web-prod** (staging: **https://staging.bonis.de**, branch `plesk`). Deploy, contact form, CSP: `docs/deploy.md`. The server and Plesk belong to `../web-prod`; header/CSP changes go through it (`../web-prod/docs/headers.md`).
 
 - **GitHub:** https://github.com/wbonis/homepage
 - **LinkedIn:** https://www.linkedin.com/in/wbonis/
@@ -17,13 +17,16 @@ A macOS desktop experience recreated in the browser as a personal portfolio site
 ## Commands
 
 ```bash
-pnpm dev        # Start Vite dev server
+pnpm dev        # Start Vite dev server (proxies /api to :8788)
+pnpm dev:api    # Contact server (server/) in dev mode on :8788
 pnpm build      # Production build (Terser + Lightning CSS)
 pnpm serve      # Preview production build
-pnpm check      # Type-check with svelte-check
+pnpm typecheck  # svelte-check + server tsc
+pnpm check      # Gate (pre-push): typecheck, server + tool tests, build, CSP check
+./release.sh staging|live   # Deploy to Plesk via deploy-* branches (docs/deploy.md)
 ```
 
-No test runner or linter is configured. Formatting uses Prettier (tabs, single quotes, 100-char width).
+Server tests: `node --test` (`server/test/`, `tests/`); TDD for server and tools. Formatting uses Prettier (tabs, single quotes, 100-char width). Node 26 (`.nvmrc`); server deps via npm in `server/`, app deps via pnpm.
 
 ## Architecture
 
@@ -75,22 +78,15 @@ Wallpapers and assets are optimized via `vite-imagetools`. Import images with qu
 
 ## Security — Contact Form
 
-The `/api/contact` Cloudflare Pages Function (in `functions/api/contact.ts`) sends emails via a custom SMTP client (`src/helpers/smtp.ts`). It is protected by:
+`/api/contact` and `/api/altcha` are served by the Node server in `server/` (Plesk/Passenger), ported from truenas-deutschland: self-hosted **ALTCHA** proof of work, honeypot, rate limits, same-origin check, nodemailer with STARTTLS required, input limits (name 2–100, email 254, subject 200, message 5000), generic errors to the client. Details and env var names: `docs/deploy.md`, `.env.example` (names only, the repo is public: never commit values).
 
-- **Cloudflare Turnstile** (invisible CAPTCHA) — verified server-side before sending. Site key (`0x4AAAAAACkT4xd2e6qXbNEA`) is public and embedded in frontend code. Secret key is in Cloudflare env var `TURNSTILE_SECRET_KEY` — never commit it.
-- **CORS** — restricted to `bonis.de` origins
-- **Input length limits** — name: 100, email: 254, subject: 200, message: 5000 chars
-- **SMTP error sanitization** — generic error messages returned to client, details only in server logs
-
-Two forms use this endpoint:
+Two forms use it, both through `src/helpers/contact.ts`:
 1. **Mail app** (`src/components/apps/Mail/Mail.svelte`)
 2. **Bug report dialog** (`src/components/Desktop/ScreenOverlay.svelte`)
 
-Both load Turnstile invisibly and include the token in requests. Any new form using `/api/contact` must also include a `cf-turnstile-response` field.
+Until go-live, `main` keeps the Cloudflare Pages Function (`functions/api/contact.ts`, Turnstile) for www.bonis.de; it is deleted when `plesk` is merged.
 
-**Cloudflare env vars** (set in Pages dashboard, not in code):
-- `SMTP_SERVER`, `SMTP_USER`, `SMTP_PASS` — SMTP credentials
-- `TURNSTILE_SECRET_KEY` — Turnstile server-side secret
+**CSP:** no inline scripts, no `<style>` elements; `style=""` attributes are allowed. `pnpm test:csp` checks the build against `deploy/nginx-directives.conf`.
 
 ## Key Conventions
 
@@ -101,6 +97,6 @@ Both load Turnstile invisibly and include the token in requests. Any new form us
 - **Icons:** Via `unplugin-icons` with multiple `@iconify-json/*` icon sets
 - **Animations:** Custom spring physics in `state/spring.svelte.ts`; dragging via `@neodrag/svelte`
 - **PWA:** Configured via `vite-plugin-pwa` with workbox service worker
-- **Node version:** 20 (see `.node-version`)
+- **Node version:** 26 (see `.nvmrc`, `.node-version`)
 - **Package manager:** pnpm 10.12.3
 - **Browser targets:** `defaults, not IE 11, not IE_Mob 11, not dead` (via browserslist + Lightning CSS)
